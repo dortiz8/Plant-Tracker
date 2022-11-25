@@ -1,0 +1,49 @@
+
+<p *ngIf="!updatedPlantList"><em>Loading plants...</em></p>
+<div *ngIf="updatedPlantList" class="container">
+  <div row justify-content-sm-center>
+    <ul *ngFor="let plant of updatedPlantList" class="list-group list-group-light">
+      <li style="margin-top: 1rem; margin-left: 5%; width: 90%">
+        <div class="card" >
+          <div class="card-header" [ngStyle]="styleMethods.applyBackgroundColor(plant.waterState)">
+            <h3 class="card-title">{{ plant.name }}</h3>
+            <span class="card-subtitle">{{plant.genus}}</span>
+            <p>Added: {{plant.dateAdded | date}}</p>
+          </div>
+          <div class="card-body">
+            <div class="d-flex flex-column mb-2">
+              <div class="p-2">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <p>Watered: {{plant.dateWatered | date}}</p>
+                    <p>Interval: {{plant.waterInterval}}</p>
+                  </div>
+                  <div>
+                    <a href="#" class="btn btn-primary">Water</a>
+                    <a href="#" class="btn btn-secondary" style="margin-left: .5rem">Edit</a>
+                  </div>
+                </div>
+              </div>
+              <div class="p-2">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <p>Fertilized: {{plant.dateFertilized | date}}</p>
+                    <p>Interval: {{plant.fertilizeInterval}}</p>
+                  </div>
+                  <div>
+                    <a href="#" class="btn btn-danger">Fertilize</a>
+                    <a href="#" class="btn btn-secondary" style="margin-left: .5rem">Edit</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <!--<mat-slide-toggle>Toggle me!</mat-slide-toggle>-->
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+</div>

@@ -1,0 +1,2 @@
+C:\Users\dortiz\source\repos\PlantTracker\obj\Debug\RetailRewardsProgramAngular.esproj.SuggestedBindingRedirects.cache
+C:\Users\dortiz\source\repos\PlantTracker\obj\Debug\RetailRewardsProgramAngular.esproj.CoreCompileInputs.cache
