@@ -5,7 +5,10 @@ import { User } from '../../shared/models/User';
 import { PlantService } from '../../shared/services/plants/PlantService';
 
 import { PlantDateService } from '../../shared/services/dates/PlantDateService';
-import { StyleMethods } from '../../shared/services/utils/styleMethods'; 
+
+
+// Route information
+import{ActivatedRoute, Router, ParamMap} from '@angular/router'; 
 @Component({
   selector: 'plant-list',
   templateUrl: './plantList.component.html',
@@ -15,9 +18,10 @@ import { StyleMethods } from '../../shared/services/utils/styleMethods';
 export class PlantListComponent {
   plants: Plant[] = [];
   updatedPlantList: Plant[] = [];
-  styleMethods = StyleMethods; 
+  
+  name: string = ''; 
   // Move this to a service...  
-  constructor( private readonly plantService: PlantService, private readonly dateService: PlantDateService) {
+  constructor( private readonly plantService: PlantService, private readonly dateService: PlantDateService, private readonly route: ActivatedRoute) {
 
   }
 

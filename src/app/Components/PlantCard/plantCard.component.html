@@ -1,0 +1,39 @@
+<div class="card">
+    <div class="card-header" [ngStyle]="styleMethods.applyBackgroundColor(plant.waterState)">
+        <h3 class="card-title">{{ plant.name }}</h3>
+        <span class="card-subtitle">{{plant.genus}}</span>
+        <p>Added: {{plant.dateAdded | date}}</p>
+        <span><a class="nav-link" [routerLink]="['/plantDetails', plant.id]">Details</a></span>
+    </div>
+    <div class="card-body">
+        <div class="d-flex flex-column mb-2">
+            <div class="p-2">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p>Watered: {{plant.dateWatered | date}}</p>
+                        <p>Interval: {{plant.waterInterval}} days</p>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary" (click)="waterFertilizePlantPatch('water')">Water</a>
+                        <a href="#" class="btn btn-secondary" style="margin-left: .5rem">Edit</a>
+                    </div>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p>Fertilized: {{plant.dateFertilized | date}}</p>
+                        <p>Interval: {{plant.fertilizeInterval}} days</p>
+                    </div>
+                    <div>
+                        <a class="btn btn-danger" (click)="waterFertilizePlantPatch('fertilize')">Fertilize</a>
+                        <a href="#" class="btn btn-secondary" style="margin-left: .5rem">Edit</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <em *ngIf="showError">{{errorMessage}}</em>
+            </div>
+        </div>
+    </div>
+</div>
