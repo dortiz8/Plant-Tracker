@@ -9,11 +9,13 @@ import { PlantDetailsComponent } from './Components/PlantDetails/plantDetails.co
 import { PageNotFoundComponent } from './Components/WildCards/PageNotFound/pageNotFound.component';
 import { PlantGeneralInformationComponent } from './Components/PlantDetails/PlantGeneralInformation/plantGeneralInformation.component';
 import { PlantScheduleComponent } from './Components/PlantDetails/PlantSchedule/plantSchedule.component';
+import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm.component';
 
 const routes: Routes = [
   // have your most specific routes at the top
   // The route titles can be dinamic using a TitleStrategy
   // for more information visit: https://angular.io/guide/router
+  {path: 'editPlant/:plantId', title: 'Edit Plant Component', component: PlantEditFormComponent},
   { 
     path: 'plantDetails/:plantId', 
     component: PlantDetailsComponent, 
@@ -28,8 +30,14 @@ const routes: Routes = [
     ],
     canActivate: [AuthGuard]
   },
-  { path: 'home', title: 'Home Component', component: PlantListComponent, canActivate: [AuthGuard]},
-  { path: 'addPlant', title: 'Plant Form Component', component: PlantFormComponent, canActivate: [AuthGuard] },
+  { 
+    path: 'home', title: 'Home Component', component: PlantListComponent, 
+      //canActivate: [AuthGuard]
+    },
+  { 
+    path: 'addPlant', title: 'Plant Form Component', component: PlantFormComponent, 
+    //canActivate: [AuthGuard] 
+  },
   { path: 'login', title: 'Login Component',  component: LoginFormComponent},
   // This route is a redirect route if user tries to acces
   // the intial relative URL localhost:**/

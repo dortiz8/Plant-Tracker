@@ -1,13 +1,19 @@
 
-<p *ngIf="!updatedPlantList"><em>Loading plants...</em></p>
+<!-- We are subscribing to the plants$ observable using the async pipe  -->
+
 <h1>{{name}}</h1>
-<div *ngIf="updatedPlantList" class="container">
+<div>
+  <span class="badge bg-info">{{today}}</span>
+</div>
+<div *ngIf="(loading$ | async)"><page-loading></page-loading></div>
+<div *ngIf="(errMessage$ | async)"><page-failed [componentMessage]="errMessage$"></page-failed></div>
+<div *ngIf="(plants$ | async)" class="container">
   <div row justify-content-sm-center>
-    <ul *ngFor="let plant of updatedPlantList" class="list-group list-group-light">
+    <ul *ngFor="let plant of (plants$ | async)" class="list-group list-group-light">
       <li style="margin-top: 1rem; margin-left: 5%; width: 90%">
         <plant-card [plant]="plant"></plant-card>
       </li>
     </ul>
   </div>
-  
 </div>
+

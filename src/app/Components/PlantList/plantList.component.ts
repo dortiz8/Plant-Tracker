@@ -1,35 +1,40 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Plant } from '../../shared/models/Plant';
-import { User } from '../../shared/models/User';
-import { PlantService } from '../../shared/services/plants/PlantService';
-
-import { PlantDateService } from '../../shared/services/dates/PlantDateService';
-
 
 // Route information
-import{ActivatedRoute, Router, ParamMap} from '@angular/router'; 
+import { from, Observable } from 'rxjs';
+import { Store, createAction } from '@ngrx/store';
+import * as fromStore from '../../shared/store'; 
 @Component({
   selector: 'plant-list',
   templateUrl: './plantList.component.html',
   styleUrls: ['./plantList.component.css'],
-  providers: [PlantService]
+  providers: []
 })
 export class PlantListComponent {
-  plants: Plant[] = [];
-  updatedPlantList: Plant[] = [];
+  // The $ sign means that this will be an observable variable
+  // Purely conventional but not necessary
+  plants$: Observable<Plant[]>;
+  loading$: Observable<boolean>; 
+  loadingFailed$: Observable<boolean>; 
+  errMessage$: Observable<string>; 
   
   name: string = ''; 
+  today: String = new Date().toDateString(); 
   // Move this to a service...  
-  constructor( private readonly plantService: PlantService, private readonly dateService: PlantDateService, private readonly route: ActivatedRoute) {
+  constructor(
+     private store: Store<fromStore.ProductsState>) {
 
   }
 
   ngOnInit() {
-    this.plantService.getPlantList(1).subscribe(plantList => {
-      this.plants = plantList as Plant[]
-      this.updatedPlantList = this.dateService.changePlantStateBasedOnDate(this.plants); 
-    });
+    
+    this.plants$ = this.store.select(fromStore.getAllPlants);  
+    this.loading$ = this.store.select(fromStore.getPlantsLoading); 
+    this.loadingFailed$ = this.store.select(fromStore.getPlantsLoaded); 
+    this.errMessage$ = this.store.select(fromStore.getPlantsErrMessage); 
+    // We are going to load all plants by dispatching an action 
+    this.store.dispatch(new fromStore.LoadPlants()); 
     
   }
 

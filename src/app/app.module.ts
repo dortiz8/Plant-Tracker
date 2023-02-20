@@ -17,23 +17,38 @@ import { PageNotFoundComponent } from './Components/WildCards/PageNotFound/pageN
 import { PlantScheduleComponent } from './Components/PlantDetails/PlantSchedule/plantSchedule.component';
 import { PlantGeneralInformationComponent } from './Components/PlantDetails/PlantGeneralInformation/plantGeneralInformation.component';
 import { PlantCardComponent } from './Components/PlantCard/plantCard.component';
-
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+//import { MatCalendar } from '@angular/material/datepicker/';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm.component';
+//import { PlantsEffects } from './shared/store/effects/plant.effects';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import {reducers, effects} from './shared/store'; 
+import { PageLoadingComponent } from './Components/WildCards/PageLoading/pageLoading.component';
+import { PageFailedComponent } from './Components/WildCards/PageFailed/pageFailed.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlantListComponent,
     PlantCardComponent,
+    PlantEditFormComponent,
     LoginFormComponent, 
     PlantDetailsComponent,
     NavigationComponent, 
     PageNotFoundComponent, 
     PlantScheduleComponent, 
-    PlantGeneralInformationComponent
+    PlantGeneralInformationComponent, 
+    PageLoadingComponent, 
+    PageFailedComponent
   ],
   imports: [
-    BrowserModule, FormsModule, ReactiveFormsModule, AppSharedModule, HttpClientModule, NgbModule, AppRoutingModule, AppJwtModule, 
+    BrowserModule, FormsModule, ReactiveFormsModule, AppSharedModule, HttpClientModule, NgbModule, AppRoutingModule, AppJwtModule, BrowserAnimationsModule, MatInputModule,
+    MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, StoreModule.forRoot({}), StoreModule.forFeature('products', reducers), EffectsModule.forRoot([]), EffectsModule.forFeature(effects)
     
   ],
   providers: [],

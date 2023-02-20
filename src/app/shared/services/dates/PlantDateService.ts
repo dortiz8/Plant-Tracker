@@ -11,33 +11,20 @@ export class PlantDateService {
   constructor() {
     
   }
+
+  dayDiff: number | undefined; 
+  dayDiff2: number | undefined; 
+  waterInterval: number; 
+  fertilizeInterval: number; 
   private getDayDiff(startDate: any, endDate: any) {
     const msInDay = 24 * 60 * 60 * 1000;
     return Math.round(Math.abs(endDate - startDate) / msInDay);
   }
 
-  changePlantStateBasedOnDate(plantList: Plant[]): any{
+  public changePlantStateBasedOnDate(plantList: Plant[]): any{
     if (plantList.length) {
       plantList.map((plant) => {
-        if (plant.dateWatered !== undefined) {
-          const dayDiff = this.getDayDiff(new Date(plant.dateWatered).getTime(), new Date().getTime());
-
-          if (dayDiff > 0) {
-            switch (true) {
-              case (dayDiff <= 5):
-                plant.waterState = WaterState.good;
-                break;
-              case (dayDiff == 6):
-                plant.waterState = WaterState.warning;
-                break;
-              case (dayDiff > 6):
-                plant.waterState = WaterState.danger;
-                break;
-              default:
-            }
-
-          }
-        }
+        this.changeSinglePlantStateBasedOnDate(plant); 
       });
 
       return plantList; 
@@ -56,6 +43,92 @@ export class PlantDateService {
     // Generate yyyy-mm-dd date string
     var formattedDate = year + "-" + month + "-" + day;
     return formattedDate; 
+  }
+
+  public changeSinglePlantStateBasedOnDate(plant: Plant): any{
+    if (plant.dateWatered !== undefined && plant.dateFertilized !== undefined) {
+      this.dayDiff = this.getDayDiff(new Date(plant.dateWatered).getTime(), new Date().getTime());
+      this.dayDiff2 = this.getDayDiff(new Date(plant.dateFertilized).getTime(), new Date().getTime());
+      // default days to 7 if no interval exists
+      this.waterInterval = plant.waterInterval != null ? plant.waterInterval : 7;
+      this.fertilizeInterval = plant.fertilizeInterval != null ? plant.fertilizeInterval : 7;
+
+      //console.log( ' interval ' + this.fertilizeInterval)
+      // Switch for water intervals
+      if (this.dayDiff > 0) {
+        switch (true) {
+          case (this.dayDiff <= (this.waterInterval - 1)):
+            plant.waterState = WaterState.good;
+            break;
+          case (this.dayDiff == this.waterInterval):
+            plant.waterState = WaterState.warning;
+            break;
+          case (this.dayDiff > this.waterInterval):
+            plant.waterState = WaterState.danger;
+            break;
+          default:
+        }
+      }
+      if (this.dayDiff2 > 0) {
+        switch (true) {
+          case (this.dayDiff2 <= (this.fertilizeInterval - 1)):
+            plant.fertilizeState = WaterState.good;
+            break;
+          case (this.dayDiff2 == this.fertilizeInterval):
+            plant.fertilizeState = WaterState.warning;
+            break;
+          case (this.dayDiff2 > this.fertilizeInterval):
+            plant.fertilizeState = WaterState.danger;
+            break;
+          default:
+        }
+      }
+
+      //console.log(plant.waterState + " -- water state \n" + plant.fertilizeState + " -- fertilize state")
+    }
+  }
+
+  public changeSinglePlantStateBasedOnDateAndReturn(plant: Plant): any {
+    if (plant.dateWatered !== undefined && plant.dateFertilized !== undefined) {
+      this.dayDiff = this.getDayDiff(new Date(plant.dateWatered).getTime(), new Date().getTime());
+      this.dayDiff2 = this.getDayDiff(new Date(plant.dateFertilized).getTime(), new Date().getTime());
+      // default days to 7 if no interval exists
+      this.waterInterval = plant.waterInterval != null ? plant.waterInterval : 7;
+      this.fertilizeInterval = plant.fertilizeInterval != null ? plant.fertilizeInterval : 7;
+
+      //console.log( ' interval ' + this.fertilizeInterval)
+      // Switch for water intervals
+      if (this.dayDiff > 0) {
+        switch (true) {
+          case (this.dayDiff <= (this.waterInterval - 1)):
+            plant.waterState = WaterState.good;
+            break;
+          case (this.dayDiff == this.waterInterval):
+            plant.waterState = WaterState.warning;
+            break;
+          case (this.dayDiff > this.waterInterval):
+            plant.waterState = WaterState.danger;
+            break;
+          default:
+        }
+      }
+      if (this.dayDiff2 > 0) {
+        switch (true) {
+          case (this.dayDiff2 <= (this.fertilizeInterval - 1)):
+            plant.fertilizeState = WaterState.good;
+            break;
+          case (this.dayDiff2 == this.fertilizeInterval):
+            plant.fertilizeState = WaterState.warning;
+            break;
+          case (this.dayDiff2 > this.fertilizeInterval):
+            plant.fertilizeState = WaterState.danger;
+            break;
+          default:
+        }
+      }
+      return plant; 
+      //console.log(plant.waterState + " -- water state \n" + plant.fertilizeState + " -- fertilize state")
+    }
   }
  
 }

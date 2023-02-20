@@ -1,0 +1,89 @@
+
+
+<div *ngIf="(loading$ | async)">
+    <page-loading></page-loading>
+</div>
+<div *ngIf="(errMessage$ | async)">
+    <page-failed [componentMessage]="errMessage$"></page-failed>
+</div>
+<div class="container" >
+    <div class="card" *ngIf="plant" style="padding: 10px;">
+    <!-- <div class="card" style="padding: 10px;"> -->
+        <div class="card-header">
+            <h3>Id: {{plant.id}}</h3>
+            You can edit all plant information except the creation date.
+        </div>
+        <div class="card-body">
+            <form [formGroup]="editForm"  autocomplete="off" novalidate (submit)="submitEdit(editForm.value)">
+            <div class="form-group row py-sm-3 mb-0">
+                <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="name" class="form-control" id="inputName" formControlName='name' placeholder="{{plant.name}}">
+                </div>
+                <div class="col-sm-10 text-danger">
+                    <em *ngIf="validateControl('name') && hasError('name', 'required')">Name cannot be empty</em>
+                </div>
+            </div>
+            <div class="form-group row py-sm-3 mb-0">
+                <label for="inputGenus" class="col-sm-2 col-form-label">Genus</label>
+                <div class="col-sm-10">
+                    <select id="inputGenus" class="form-control" formControlName='genus'>
+                        <option *ngFor="let g of genusOptions" [ngValue]="g">{{ g }}</option>
+                    </select>
+                </div>
+                <div class="col-sm-10 text-danger">
+                    <em *ngIf="validateControl('genus') && hasError('genus', 'required')">Genus cannot be empty</em>
+                </div>
+            </div>
+            <div class="form-group row py-sm-3 mb-0">
+                <label for="inputGenus" class="col-sm-3 col-form-label">Date Watered</label>
+                <div class="col-sm-9">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Angular forms</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="wateredDate">
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="form-group row py-sm-3 mb-0">
+                <label for="inputGenus" class="col-sm-5 col-form-label">Date Fertilized</label>
+                <div class="col-sm-5">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Angular forms</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="fertilizedDate">
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="form-group row py-sm-3 mb-0">
+                <label for="inputWaterInterval" class="col-sm-3 col-form-label">Water Interval</label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" id="inputWaterInterval" formControlName="wateredInterval">
+                </div>  
+                <div class="col-sm-10 text-danger">
+                    <em *ngIf="validateControl('wateredInterval') && hasError('wateredInterval', 'required')">Interval cannot be empty</em>
+                </div>
+            </div>
+            <div class="form-group row py-sm-3 mb-0">
+                <label for="inputWaterInterval" class="col-sm-3 col-form-label">Fertilize Interval</label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" id="inputFertilizeInterval" formControlName="fertilizedInterval"
+                        placeholder="{{plant.fertilizeInterval}}">
+                </div>
+                <div class="col-sm-10 text-danger">
+                    <em *ngIf="validateControl('fertilizedInterval') && hasError('fertilizedInterval', 'required')">Interval cannot be empty</em>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary btn-md btn-block" style="margin-right: 1rem;">Save</button>
+            <button type="submit" class="btn btn-danger btn-md btn-block" (click)="cancelEdit()">Cancel</button>
+        </div>
+    </div>
+</div>
+

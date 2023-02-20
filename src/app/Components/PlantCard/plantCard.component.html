@@ -1,39 +1,71 @@
 <div class="card">
-    <div class="card-header" [ngStyle]="styleMethods.applyBackgroundColor(plant.waterState)">
-        <h3 class="card-title">{{ plant.name }}</h3>
-        <span class="card-subtitle">{{plant.genus}}</span>
-        <p>Added: {{plant.dateAdded | date}}</p>
-        <span><a class="nav-link" [routerLink]="['/plantDetails', plant.id]">Details</a></span>
+    <div class="card-header">
+        <div class="card-title">
+            <h3>{{ plant.name }}</h3>
+            <a class="link-info" [routerLink]="['/plantDetails', plant.id]">Details</a>
+        </div>
+        <div class="card-subtitle">
+            <p>Genus: {{plant.genus?.name}}</p>
+            <p>Added: {{plant.dateAdded | date}}</p>
+        </div>
     </div>
     <div class="card-body">
         <div class="d-flex flex-column mb-2">
             <div class="p-2">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <p>Watered: {{plant.dateWatered | date}}</p>
+                        <p>Watered on: {{plant.dateWatered | date}}</p>
                         <p>Interval: {{plant.waterInterval}} days</p>
+                        <span *ngIf="plant.waterState == 3" class="badge bg-danger">Past Due</span>
                     </div>
                     <div>
-                        <a class="btn btn-primary" (click)="waterFertilizePlantPatch('water')">Water</a>
-                        <a href="#" class="btn btn-secondary" style="margin-left: .5rem">Edit</a>
+                        <p>Fertilized on: {{plant.dateFertilized | date}}</p>
+                        <p>Interval: {{plant.fertilizeInterval}} days</p>
+                        <span  *ngIf="plant.fertilizeState == 3" class="badge bg-danger">Past Due</span>
                     </div>
+               
                 </div>
             </div>
             <div class="p-2">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p>Fertilized: {{plant.dateFertilized | date}}</p>
-                        <p>Interval: {{plant.fertilizeInterval}} days</p>
-                    </div>
-                    <div>
-                        <a class="btn btn-danger" (click)="waterFertilizePlantPatch('fertilize')">Fertilize</a>
-                        <a href="#" class="btn btn-secondary" style="margin-left: .5rem">Edit</a>
-                    </div>
-                </div>
+               
             </div>
-            <div class="col-md-5">
-                <em *ngIf="showError">{{errorMessage}}</em>
+            
+         
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex justify-content-end">
+            <div style="margin-right: .5rem;">
+                <a class="btn btn-primary btn-sm" (click)="waterFertilizePlantPatch('water')">Water</a>
+            </div>
+            <div style="margin-right: .5rem;">
+                <a class="btn btn-success btn-sm" (click)="waterFertilizePlantPatch('fertilize')">Fertilize</a>
+            </div>
+            <div>
+                <a class="btn btn-outline-secondary btn-sm" (click)="navigateToPlantEditPage()">Edit</a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- <div class="col-md-5">
+    <em *ngIf="showError">{{errorMessage}}</em>
+</div> -->
+<!-- <div>
+    <a class="btn btn-primary" (click)="waterFertilizePlantPatch('water')">Water</a>
+</div> -->
+<!-- <div class="p-2">
+    <div class="d-flex justify-content-between">
+        <div>
+            <p>Fertilized: {{plant.dateFertilized | date}}</p>
+            <p>Interval: {{plant.fertilizeInterval}} days</p>
+            <div>
+                <p [ngStyle]="styleMethods.applyBackgroundColor(plant.fertilizeState)">Overdue</p>
+            </div>
+        </div>
+        <div>
+            <a class="btn btn-danger" (click)="waterFertilizePlantPatch('fertilize')">Fertilize</a>
+           
+        </div>
+    </div>
+</div> -->

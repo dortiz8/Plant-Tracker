@@ -1,12 +1,14 @@
+import { Genus } from "./Genus";
+
 export class Plant {
   id: number | undefined; 
   name: string | undefined;
-  genus: string | undefined;
+  genus: Genus | undefined;
   dateAdded: Date | undefined;
   dateWatered: Date | undefined;
   dateFertilized: Date | undefined;
   waterInterval: number | undefined;
   fertilizeInterval: number | undefined;
   waterState = 0;
-  fertilizeState: number | undefined; 
+  fertilizeState = 0;  
 }
