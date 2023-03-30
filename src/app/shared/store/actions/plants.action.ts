@@ -3,6 +3,7 @@
 
 import{Action} from '@ngrx/store'; 
 import { Plant } from '../../models/Plant';
+import { PlantDelete } from '../../models/PlantDelete';
 
 // plants actions
 export const LOAD_PLANTS = '[Products] Load Plants'; 
@@ -62,8 +63,26 @@ export class FertilizePlantSuccess implements Action {
     constructor(public payload: Plant) { }
 }
 
+export const DELETE_PLANT = '[Products] Delete Plant'
+export const DELETE_PLANT_FAIL = '[Products] Delete Plant Fail'
+export const DELETE_PLANT_SUCCESS = '[Products] Delete Plant Success'
+
+export class DeletePlant implements Action {
+    readonly type = DELETE_PLANT;
+    constructor(public payload: PlantDelete) { }
+}
+export class DeletePlantFail implements Action {
+    readonly type = DELETE_PLANT_FAIL;
+    constructor(public payload: any) { }
+}
+export class DeletePlantSuccess implements Action {
+    readonly type = DELETE_PLANT_SUCCESS;
+    constructor(public payload: PlantDelete) { }
+} 
+
 // Action types
 
 export type PlantsAction = LoadPlants | LoadPlantsFail | LoadPlantsSuccess | 
                             WaterPlant | WaterPlantFail | WaterPlantSuccess |
-                            FertilizePlant | FertilizePlantFail | FertilizePlantSuccess; 
+    FertilizePlant | FertilizePlantFail | FertilizePlantSuccess |
+    DeletePlant | DeletePlantFail | DeletePlantSuccess;; 

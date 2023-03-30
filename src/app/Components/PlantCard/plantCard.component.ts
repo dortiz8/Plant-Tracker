@@ -7,6 +7,9 @@ import { PlantService } from 'src/app/shared/services/plants/PlantService';
 import { StyleMethods } from '../../shared/services/utils/styleMethods';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../shared/store';
+import { AddSamePlant } from '../../shared/store';
+import { from, Observable } from 'rxjs';
+import { PlantDelete } from 'src/app/shared/models/PlantDelete';
 
 @Component({
     selector: 'plant-card',
@@ -18,16 +21,19 @@ export class PlantCardComponent {
     styleMethods = StyleMethods;
     @Input() plant: Plant; 
     errorMessage: string = '';
-    showError: boolean;
+    showError: boolean; loading$: Observable<boolean>;
     userIdFromStorage: string | null; 
     userId: number; 
     releasedAt: FormGroup; 
-
+    plantToDelete: PlantDelete; 
+    deletePanelIsOn: boolean; 
+    
     constructor(private store: Store<fromStore.ProductsState>, private readonly plantService: PlantService, private readonly router: Router) {
         
-
+        
     }
     ngOnInit(){
+        this.loading$ = this.store.select(fromStore.getPlantLoading);
         this.releasedAt = new FormGroup({
             dateInput: new FormControl("username", [Validators.required]),
         }); 
@@ -41,6 +47,21 @@ export class PlantCardComponent {
     }
     navigateToPlantEditPage(){
         this.router.navigate(['/editPlant', this.plant.id]);
+    }
+    navigateToAddPlantPage(){
+        this.store.dispatch(new fromStore.AddSamePlant(this.plant))
+    }
+
+    deletePlant(){
+        this.plantToDelete = {userId: this.userId, plantId: this.plant.id}; 
+
+        this.store.dispatch(new fromStore.DeletePlant(this.plantToDelete))
+    }
+    startDeleteProcess(){
+        this.deletePanelIsOn = true; 
+    }
+    cancelDelete(){
+        this.deletePanelIsOn = false; 
     }
 
     

@@ -8,7 +8,7 @@ import { AuthenticationService } from './shared/services/authentication/Authenti
 import { PlantDetailsComponent } from './Components/PlantDetails/plantDetails.component';
 import { PageNotFoundComponent } from './Components/WildCards/PageNotFound/pageNotFound.component';
 import { PlantGeneralInformationComponent } from './Components/PlantDetails/PlantGeneralInformation/plantGeneralInformation.component';
-import { PlantScheduleComponent } from './Components/PlantDetails/PlantSchedule/plantSchedule.component';
+import { PlantNotesComponent } from './Components/PlantDetails/PlantNotes/plantNotes.component';
 import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm.component';
 
 const routes: Routes = [
@@ -25,7 +25,7 @@ const routes: Routes = [
         path: 'generalInfo', title: 'Plant General Information Component', component: PlantGeneralInformationComponent,
       },
       {
-        path: 'schedule', title: 'Plant Schedule Component', component: PlantScheduleComponent
+        path: 'notes', title: 'Plant Notes Component', component: PlantNotesComponent
       }
     ],
     canActivate: [AuthGuard]

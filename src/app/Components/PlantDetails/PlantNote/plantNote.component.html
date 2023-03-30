@@ -1,0 +1,18 @@
+
+    <div class="d-flex justify-content-between align-items-center">
+        <form *ngIf="isEditing else descriptionSpan"  [formGroup]="editFormGroup" autocomplete="off" 
+            novalidate (submit)="saveNote(editFormGroup.value)" class="d-flex justify-content-betweem align-items-center" style="width: 100%">
+            <input type="name" class="form-control" id="inputName" formControlName='descriptionFormControl' placeholder="{{noteDescription}}" style="width: 65%" maxlength="200">
+            <div style="width: 35%">
+                <button class="btn btn-primary btn-sm" type="submit">Save</button>
+                <button class="btn btn-danger btn-sm" type="button" (click)="cancelEdit()">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <ng-template #descriptionSpan>
+        {{noteDescription}}
+        <div>
+            <button class="btn btn-primary btn-sm" type="button" (click)="editNote()">Edit</button>
+            <button class="btn btn-danger btn-sm" type="button" (click)="deleteNote()">Delete</button>
+        </div>
+    </ng-template>

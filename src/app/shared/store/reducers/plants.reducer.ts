@@ -2,6 +2,7 @@
 
 import { Plant } from "../../models/Plant";
 import * as fromPlants from "../actions/plants.action"; 
+//import * as fromPlant from "../actions/plant.action"; 
 
 export interface PlantsState {
     data: Plant[], 
@@ -80,6 +81,35 @@ export function reducer(state: PlantsState = initialState, action: fromPlants.Pl
                 loading: false, 
                 loaded: true, 
                 data,
+            }
+        }
+        case fromPlants.DELETE_PLANT: {
+            const data = action.payload;
+            return {
+                ...state,
+                loading: true,
+                loaded: false,
+            }
+        }
+        case fromPlants.DELETE_PLANT_FAIL: {
+            const { status, statusText } = action.payload;
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                errMessage: `${status}: ${statusText}`
+            }
+        }
+        case fromPlants.DELETE_PLANT_SUCCESS: {
+            const payload = action.payload;
+
+            const data = state.data.filter(plant => plant.id != payload.plantId)
+
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                data
             }
         }
 

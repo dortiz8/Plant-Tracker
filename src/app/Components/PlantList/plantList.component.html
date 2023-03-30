@@ -7,7 +7,7 @@
 </div>
 <div *ngIf="(loading$ | async)"><page-loading></page-loading></div>
 <div *ngIf="(errMessage$ | async)"><page-failed [componentMessage]="errMessage$"></page-failed></div>
-<div *ngIf="(plants$ | async)" class="container">
+<div *ngIf="(plants$ | async) && !(loading$ | async)" class="container">
   <div row justify-content-sm-center>
     <ul *ngFor="let plant of (plants$ | async)" class="list-group list-group-light">
       <li style="margin-top: 1rem; margin-left: 5%; width: 90%">

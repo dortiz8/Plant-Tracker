@@ -1,11 +1,13 @@
-<div class="card">
+
+<div *ngIf="(loading$ | async)"><page-loading></page-loading></div>
+<div *ngIf="!deletePanelIsOn && !(loading$ | async)" class="card">
     <div class="card-header">
         <div class="card-title">
             <h3>{{ plant.name }}</h3>
             <a class="link-info" [routerLink]="['/plantDetails', plant.id]">Details</a>
         </div>
         <div class="card-subtitle">
-            <p>Genus: {{plant.genus?.name}}</p>
+            <!-- <p>Genus: {{plant.genusId}}</p> -->
             <p>Added: {{plant.dateAdded | date}}</p>
         </div>
     </div>
@@ -14,13 +16,14 @@
             <div class="p-2">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <p>Watered on: {{plant.dateWatered | date}}</p>
-                        <p>Interval: {{plant.waterInterval}} days</p>
+                        
+                        <p>Watered: {{plant.dateWatered | date:'shortDate'}}</p>
+                        <!-- <p>Interval: {{plant.waterInterval}} days</p> -->
                         <span *ngIf="plant.waterState == 3" class="badge bg-danger">Past Due</span>
                     </div>
                     <div>
-                        <p>Fertilized on: {{plant.dateFertilized | date}}</p>
-                        <p>Interval: {{plant.fertilizeInterval}} days</p>
+                        <p>Fertilized: {{plant.dateFertilized | date:'shortDate'}}</p>
+                        <!-- <p>Interval: {{plant.fertilizeInterval}} days</p> -->
                         <span  *ngIf="plant.fertilizeState == 3" class="badge bg-danger">Past Due</span>
                     </div>
                
@@ -41,31 +44,22 @@
             <div style="margin-right: .5rem;">
                 <a class="btn btn-success btn-sm" (click)="waterFertilizePlantPatch('fertilize')">Fertilize</a>
             </div>
-            <div>
+            <div style="margin-right: .5rem;">
                 <a class="btn btn-outline-secondary btn-sm" (click)="navigateToPlantEditPage()">Edit</a>
+            </div>
+            <div>
+                <a class="btn btn-outline-secondary btn-sm" (click)="navigateToAddPlantPage()">Add +</a>
+            </div>
+            <div>
+                <a class="btn btn-outline-secondary btn-sm" (click)="startDeleteProcess()">Delete -</a>
             </div>
         </div>
     </div>
 </div>
-
-<!-- <div class="col-md-5">
-    <em *ngIf="showError">{{errorMessage}}</em>
-</div> -->
-<!-- <div>
-    <a class="btn btn-primary" (click)="waterFertilizePlantPatch('water')">Water</a>
-</div> -->
-<!-- <div class="p-2">
-    <div class="d-flex justify-content-between">
-        <div>
-            <p>Fertilized: {{plant.dateFertilized | date}}</p>
-            <p>Interval: {{plant.fertilizeInterval}} days</p>
-            <div>
-                <p [ngStyle]="styleMethods.applyBackgroundColor(plant.fertilizeState)">Overdue</p>
-            </div>
-        </div>
-        <div>
-            <a class="btn btn-danger" (click)="waterFertilizePlantPatch('fertilize')">Fertilize</a>
-           
-        </div>
-    </div>
-</div> -->
+<div *ngIf="deletePanelIsOn">
+    <page-delete-prompt 
+    [plantName]="plant?.name"
+    (noFunction)="cancelDelete()"
+    (yesFunction)="deletePlant()"
+     ></page-delete-prompt>
+</div>

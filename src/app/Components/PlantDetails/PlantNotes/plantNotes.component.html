@@ -1,0 +1,23 @@
+
+<div *ngIf="(loading$ | async) && !(loaded$ | async)">
+    <page-loading></page-loading>
+</div>
+<div class="container" style="margin-top: 1rem;">
+    <button class="btn btn-success btn-sm" (click)="addNote()" [disabled]='(childComponentIsEditing$ | async)'>Add</button>
+</div>
+<div *ngIf="(loaded$ | async)" class="container" style="margin-top: 1rem;">
+    <div *ngIf="(plantNotes$ | async)">
+        <ul class="list-group">
+            <li *ngFor="let note of (plantNotes$ | async)" class="list-group-item">
+                <plant-note  
+                [noteDescription] ="note.description" 
+                [noteId]="note.id"
+                (saveNote)="saveNote($event)"
+                (deleteNote)="deleteNote($event)"></plant-note>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- <div *ngIf="activateAddNote" class="container" style="margin-top: 1rem;">
+
+</div> -->

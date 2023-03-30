@@ -1,9 +1,13 @@
-<div class="card" style="width: 18rem;">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">General Information for {{plantId}}</h5>
-        <p class="card-text">Here we will include the plant's general information.</p>
-        <a href="#" class="btn btn-primary">Edit</a>
-        <a href="#" class="btn btn-danger">Delete</a>
+
+<div *ngIf="(loading$ | async) && !(loaded$ | async)">
+    <page-loading></page-loading>
+</div>
+<div *ngIf="(loaded$ | async)" class="container" style="margin-top: 1rem;">
+    <div>
+        <h5>{{plant.name}} </h5>
+        <p>Genus: {{plant.genusName}}</p>
+        <p>Added: {{plant.dateAdded | date}}</p>
+        <p>Watered: {{plant.dateWatered | date}}</p>
+        <p>Fertilized: {{plant.dateFertilized | date}}</p>
     </div>
 </div>

@@ -14,7 +14,7 @@ import { AppJwtModule } from './app-jwt.module';
 import { PlantDetailsComponent } from './Components/PlantDetails/plantDetails.component';
 import { NavigationComponent } from './Components/Navigation/navigation.component';
 import { PageNotFoundComponent } from './Components/WildCards/PageNotFound/pageNotFound.component';
-import { PlantScheduleComponent } from './Components/PlantDetails/PlantSchedule/plantSchedule.component';
+import { PlantNotesComponent } from './Components/PlantDetails/PlantNotes/plantNotes.component';
 import { PlantGeneralInformationComponent } from './Components/PlantDetails/PlantGeneralInformation/plantGeneralInformation.component';
 import { PlantCardComponent } from './Components/PlantCard/plantCard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
@@ -30,6 +30,12 @@ import { StoreModule } from '@ngrx/store';
 import {reducers, effects} from './shared/store'; 
 import { PageLoadingComponent } from './Components/WildCards/PageLoading/pageLoading.component';
 import { PageFailedComponent } from './Components/WildCards/PageFailed/pageFailed.component';
+import { FormValidators } from './shared/services/utils/formValidators';
+import { PageSuccessComponent } from './Components/WildCards/PageSuccess/pageSuccess.component';
+import { PlantFormComponent } from './Components/PlantForm/plantForm.component';
+import { PageDeletePromptComponent } from './Components/WildCards/PageDeletePrompt/pageDeletePrompt.component';
+import { PlantNote } from './shared/models/PlantNote';
+import { PlantNoteComponent } from './Components/PlantDetails/PlantNote/plantNote.component';
 
 @NgModule({
   declarations: [
@@ -37,14 +43,18 @@ import { PageFailedComponent } from './Components/WildCards/PageFailed/pageFaile
     PlantListComponent,
     PlantCardComponent,
     PlantEditFormComponent,
+    PlantFormComponent,
     LoginFormComponent, 
     PlantDetailsComponent,
     NavigationComponent, 
     PageNotFoundComponent, 
-    PlantScheduleComponent, 
+    PlantNotesComponent, 
+    PlantNoteComponent,
     PlantGeneralInformationComponent, 
     PageLoadingComponent, 
-    PageFailedComponent
+    PageFailedComponent, 
+    PageSuccessComponent, 
+    PageDeletePromptComponent
   ],
   imports: [
     BrowserModule, FormsModule, ReactiveFormsModule, AppSharedModule, HttpClientModule, NgbModule, AppRoutingModule, AppJwtModule, BrowserAnimationsModule, MatInputModule,

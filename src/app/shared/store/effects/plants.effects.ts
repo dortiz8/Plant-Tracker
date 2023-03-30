@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY, of } from 'rxjs';
-import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
+import { map, mergeMap, catchError, withLatestFrom, delay } from 'rxjs/operators';
 import { PlantDateService } from '../../services/dates/PlantDateService';
 import { PlantService } from '../../services/plants/PlantService';
 
@@ -50,5 +50,14 @@ export class PlantsEffects {
                 }),
                 catchError((err) => of(new plantActions.FertilizePlantFail(err)))
             )))); 
+    deletePlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.DELETE_PLANT), delay(2000),
+        mergeMap(({ payload }) => this.plantService.deletePlantById(payload)
+            .pipe(
+                map(data => {
+                    console.log(data, ' from effects after put request')
+                    return new plantActions.DeletePlantSuccess(payload)
+                }),
+                catchError((err) => of(new plantActions.DeletePlantFail(err)))
+            ))));
 }
   //withLatestFrom(this.store.select(fromStore.getCurrentPlant)),
