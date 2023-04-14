@@ -44,7 +44,8 @@ export class PlantGeneralInformationComponent {
         this.loadingFailed$ = this.store.select(fromStore.getPlantLoaded);
         var plantLoad: PlantLoad = {
             plantId: this.plantId,
-            info: true
+            info: true,
+            userId: localStorage.getItem('userId')?.toString()
         }; 
         this.store.dispatch(new fromStore.LoadPlant(plantLoad));
         this.plant$.subscribe(plant => {

@@ -27,7 +27,7 @@ import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm
 //import { PlantsEffects } from './shared/store/effects/plant.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import {reducers, effects} from './shared/store'; 
+import {reducers, effects, userReducers, userEffects} from './shared/store'; 
 import { PageLoadingComponent } from './Components/WildCards/PageLoading/pageLoading.component';
 import { PageFailedComponent } from './Components/WildCards/PageFailed/pageFailed.component';
 import { FormValidators } from './shared/services/utils/formValidators';
@@ -36,6 +36,7 @@ import { PlantFormComponent } from './Components/PlantForm/plantForm.component';
 import { PageDeletePromptComponent } from './Components/WildCards/PageDeletePrompt/pageDeletePrompt.component';
 import { PlantNote } from './shared/models/PlantNote';
 import { PlantNoteComponent } from './Components/PlantDetails/PlantNote/plantNote.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -57,8 +58,26 @@ import { PlantNoteComponent } from './Components/PlantDetails/PlantNote/plantNot
     PageDeletePromptComponent
   ],
   imports: [
-    BrowserModule, FormsModule, ReactiveFormsModule, AppSharedModule, HttpClientModule, NgbModule, AppRoutingModule, AppJwtModule, BrowserAnimationsModule, MatInputModule,
-    MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, StoreModule.forRoot({}), StoreModule.forFeature('products', reducers), EffectsModule.forRoot([]), EffectsModule.forFeature(effects)
+    BrowserModule, 
+    FormsModule, 
+    ReactiveFormsModule, 
+    AppSharedModule, 
+    HttpClientModule, 
+    NgbModule, 
+    AppRoutingModule, 
+    AppJwtModule, 
+    BrowserAnimationsModule, 
+    MatInputModule,
+    MatFormFieldModule, 
+    MatDatepickerModule, 
+    MatNativeDateModule, 
+    StoreModule.forRoot({}), 
+    StoreModule.forFeature('user', userReducers),
+    StoreModule.forFeature('products', reducers),  
+    EffectsModule.forRoot([]), 
+    EffectsModule.forFeature(userEffects),
+    EffectsModule.forFeature(effects),
+    FontAwesomeModule
     
   ],
   providers: [],

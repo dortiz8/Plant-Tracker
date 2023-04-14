@@ -32,7 +32,7 @@ const routes: Routes = [
   },
   { 
     path: 'home', title: 'Home Component', component: PlantListComponent, 
-      //canActivate: [AuthGuard]
+      canActivate: [AuthGuard]
     },
   { 
     path: 'addPlant', title: 'Plant Form Component', component: PlantFormComponent, 

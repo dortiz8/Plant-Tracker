@@ -14,11 +14,8 @@ export class PlantNotesEffects{
         private readonly store: Store) {
     }
 
-    // userId = localStorage.getItem('userId');
-    // userIdNum = this.userId != null ? parseInt(this.userId) : 0; 
-
     loadPlantNotes$ = createEffect(() => this.actions$.pipe(ofType(plantNotesActions.LOAD_PLANT_NOTES),
-        mergeMap(({ payload }) => this.plantService.getPlantNotesById(localStorage.getItem('userId'), payload)
+        mergeMap(({ payload }) => this.plantService.getPlantNotesById(payload)
             .pipe(
                 map(notes => {
                     return new plantNotesActions.LoadPlantNotesSuccess(notes)
@@ -37,7 +34,8 @@ export class PlantNotesEffects{
         mergeMap(({ payload }) => this.plantService.deletePlantNoteById(payload)
             .pipe(
                 map(note => {
-                    return new plantNotesActions.DeletePlantNoteSuccess(note)
+                    
+                    return new plantNotesActions.DeletePlantNoteSuccess(payload)
                 }),
                 catchError((err) => of(new plantNotesActions.DeletePlantNoteFail(err)))
             )))); 

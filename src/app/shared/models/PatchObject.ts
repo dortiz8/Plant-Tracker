@@ -1,9 +1,12 @@
 export class PatchObject{
-    op: string | undefined;
-    path: string | undefined; 
+    op: string | null | undefined;
+    path: string | null | undefined; 
     value: any  
 }
 
-export class PatchArray{
-    patchList: PatchObject[]
-}
+export class PatchListObject{
+    patchArray: PatchObject[]; 
+    userId: string | null | undefined; 
+    plantId: string | null | undefined;
+    noteId: string | null | undefined; 
+} 

@@ -3,5 +3,5 @@ export interface AuthResponseBody{
     errorMessage: string, 
     token: string, 
     refreshToken: string,
-    userId: number
+    userId: string 
 }

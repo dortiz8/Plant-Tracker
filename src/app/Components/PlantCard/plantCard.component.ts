@@ -10,11 +10,14 @@ import * as fromStore from '../../shared/store';
 import { AddSamePlant } from '../../shared/store';
 import { from, Observable } from 'rxjs';
 import { PlantDelete } from 'src/app/shared/models/PlantDelete';
+import { ObjectMapper } from 'src/app/shared/services/utils/objectMapper';
+import { PlantDateService } from 'src/app/shared/services/dates/PlantDateService';
+import {faAdd, faTrash, faPen, faDroplet, faPlantWilt, faTriangleExclamation, faCircleInfo} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'plant-card',
     templateUrl: './plantCard.component.html',
-     
+    styleUrls: ['./plantCard.component.css'],
     providers: []
 })
 export class PlantCardComponent {
@@ -26,9 +29,18 @@ export class PlantCardComponent {
     userId: number; 
     releasedAt: FormGroup; 
     plantToDelete: PlantDelete; 
-    deletePanelIsOn: boolean; 
-    
-    constructor(private store: Store<fromStore.ProductsState>, private readonly plantService: PlantService, private readonly router: Router) {
+    deletePanelIsOn: boolean;
+    //Icons
+    addIcon = faAdd; 
+    deleteIcon = faTrash; 
+    editIcon = faPen; 
+    waterIcon = faDroplet; 
+    fertilizeIcon = faPlantWilt; 
+    triangleExclamationIcon = faTriangleExclamation; 
+    infoIcon = faCircleInfo; 
+
+    constructor(private store: Store<fromStore.ProductsState>, private readonly plantService: PlantService, private readonly router: Router, 
+        private readonly dateService: PlantDateService) {
         
         
     }
@@ -42,8 +54,10 @@ export class PlantCardComponent {
     }
 
     waterFertilizePlantPatch(actionName: string){
-       actionName == 'water' ? this.store.dispatch(new fromStore.WaterPlant(this.plant.id)) : 
-                                this.store.dispatch(new fromStore.FertilizePlant(this.plant.id)); 
+        var formattedDate = this.dateService.getNewFormattedDate();
+        var patchInfo = ObjectMapper.mapPatchObject("replace", actionName == 'water' ? '/dateWatered' : '/dateFertilized', formattedDate);
+        var patchListObject = ObjectMapper.mapPatchListObject([patchInfo], null, this.plant.id?.toString(), localStorage.getItem('userId')?.toString())
+        actionName == 'water' ? this.store.dispatch(new fromStore.WaterPlant(patchListObject)) : this.store.dispatch(new fromStore.FertilizePlant(patchListObject));  
     }
     navigateToPlantEditPage(){
         this.router.navigate(['/editPlant', this.plant.id]);

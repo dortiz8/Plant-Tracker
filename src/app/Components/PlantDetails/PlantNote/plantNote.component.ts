@@ -25,18 +25,34 @@ export class PlantNoteComponent {
 
    editFormGroup: FormGroup; 
    isEditing: boolean; 
+   isAddingNewNote: Observable<boolean>; 
     constructor(private readonly route: ActivatedRoute, private store: Store<fromStore.ProductsState>) {
+       
     }
 
     ngOnInit() {
+        
+        this.isEditing = this.isNewNote(); 
+        this.mapEditFormGroup(); 
+        
+        // if(this.noteDescription == undefined || this.noteDescription == '' || this.noteDescription == null){
+        //     this.isEditing = this.noteDescription == undefined; 
+        // }
+    };
+
+    mapEditFormGroup(){
         this.editFormGroup = new FormGroup({
             descriptionFormControl: new FormControl(this.noteDescription, [Validators.required, Validators.maxLength(200)])
-        })
-        console.log(this.noteDescription)
-        if(this.noteDescription == undefined || this.noteDescription == '' || this.noteDescription == null){
-            this.isEditing = this.noteDescription == undefined; 
-        }
-    };
+        });
+    }
+    isNewNote(){
+        this.isAddingNewNote = this.store.select(fromStore.getPlantNotesAddingChildNote); 
+        var isNewNote = false; 
+        this.isAddingNewNote.subscribe((x)=>{
+            isNewNote = x; 
+        }); 
+        return isNewNote; 
+    }
 
     editNote(){
         this.isEditing = true; 
@@ -47,15 +63,17 @@ export class PlantNoteComponent {
         this.isEditing = false; 
     }
     cancelEdit(){
+        if(this.isNewNote()){
+            this.store.dispatch(new fromStore.CancelPreAddPlantNote()); 
+            return; 
+        }
+
         this.isEditing = false; 
     }
     saveNote(editFormValue: any){
-        this.saveNoteFunction.emit([this.noteId?.toString(), editFormValue.descriptionFormControl ]); 
-        //console.log(editFormValue); 
-        // this.isEditing = false; 
-        // this.noteDescription = editFormValue.descriptionFormControl; 
-        // var note: PlantNoteCreation = { plantId: this.pla }
-        // this.store.dispatch(new fromStore.AddPlantNote(new PlantNoteCreation()))
+       
+        this.saveNoteFunction.emit([this.noteId, editFormValue.descriptionFormControl]); 
+        
 
     }
 

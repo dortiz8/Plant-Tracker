@@ -1,9 +1,6 @@
 
 <header>
-  <navigation [authenticated]="authenticated" ></navigation>
-  <div class="p-5 text-center bg-light">
-    <h1 class="mb-3">{{title}}</h1>
-  </div>
+  <navigation [userAuthenticated] = 'userAuthenticated' [mainTitle]="title"></navigation>
 </header>
 <router-outlet></router-outlet>
-<!-- <plant-list></plant-list> -->
+

@@ -1,0 +1,26 @@
+.plant-card{
+    background-color: rgb(224, 224, 224);
+    background: linear-gradient(to right,
+                #777A44 0%,
+                #777A44 35%,
+                #eeeeee 35%,
+                #eeeeee 100%);
+    padding: .5rem; 
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.plant-card-details{
+    color: #eeeeee;
+}
+
+.action-button{
+    margin: 0 .5rem;
+}
+
+.water-icon{
+    color: #43aaf9;
+}
+
+.fertilize-icon{
+    color: #338529;
+}

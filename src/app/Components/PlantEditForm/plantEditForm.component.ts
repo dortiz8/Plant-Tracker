@@ -65,7 +65,8 @@ export class PlantEditFormComponent {
 
         var plantLoad : PlantLoad ={
             plantId: this.plantId,
-            info: false
+            info: false,
+            userId: localStorage.getItem('userId')?.toString()
         }; 
 
         this.store.dispatch(new fromStore.LoadPlant(plantLoad));

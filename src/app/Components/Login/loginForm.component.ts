@@ -2,9 +2,14 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Component, EventEmitter, OnInit, Output} from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import * as fromStore from '../../shared/store';
 import { AuthResponseBody } from "src/app/shared/models/IAuthResponse";
-import { UserForAuthentication } from "src/app/shared/models/IUser";
+import { UserForAuthentication } from "src/app/shared/models/UserForAuthentication";
 import { AuthenticationService } from "src/app/shared/services/authentication/AuthenticationService";
+import { ObjectMapper } from "src/app/shared/services/utils/objectMapper";
+import { Observable } from "rxjs";
+import { Auth } from "src/app/shared/models/Auth";
 
 
 @Component({
@@ -18,11 +23,12 @@ export class LoginFormComponent implements OnInit {
     private returnUrl: string | undefined;
 
     loginForm: FormGroup;
-    errorMessage: string = '';
+    errorMessage$: Observable<string>;
     showError: boolean;
+    user$: Observable<Auth>; 
     //@Output() isAuthenticated = new EventEmitter<boolean>();
 
-    constructor(private authService: AuthenticationService, private router: Router, private route: ActivatedRoute) { }
+    constructor(private store: Store<fromStore.UserState>, private authService: AuthenticationService, private router: Router, private route: ActivatedRoute) { }
     
     ngOnInit(): void {
         this.loginForm = new FormGroup({
@@ -30,6 +36,7 @@ export class LoginFormComponent implements OnInit {
             password: new FormControl("password", [Validators.required])
         })
         this.returnUrl = '/home'; 
+        this.errorMessage$ = this.store.select(fromStore.getUserErrMessage); 
        //this.authService.expirationCheck(); 
     }
 
@@ -44,27 +51,18 @@ export class LoginFormComponent implements OnInit {
     loginUser = (loginFormValue: any) => {
         this.showError = false; 
         const login = {...loginFormValue}; 
+        const userForAuthentication = ObjectMapper.mapUserLoad(login, "api/authentication/authenticate"); 
+        console.log(userForAuthentication)
+        this.store.dispatch(new fromStore.LoadUser(userForAuthentication)); 
 
-        const userForAuthentication: UserForAuthentication = {
-            username: login.username, 
-            password: login.password
-        }
-
-        this.authService.loginUser("api/authentication/authenticate", userForAuthentication).subscribe({
-            next: (res: AuthResponseBody)=>{
-                localStorage.setItem("token", res.token);
-                localStorage.setItem("refreshToken", res.refreshToken);
-                localStorage.setItem("isAuth", res.isAuthSuccessful.toString());
-                localStorage.setItem("userId", res.userId.toString()); 
-                //this.isAuthenticated.emit(true); 
-
-                this.router.navigate([this.returnUrl]).then(()=> window.location.reload());
-            }, 
-            error: (err: HttpErrorResponse)=>{
-                this.errorMessage = err.message; 
-                this.showError = true; 
-            }
-        })
+        //var authorized = this.authService.authenticateUser("api/authentication/authenticate", userForAuthentication); 
+        // console.log(authorized); 
+        // if (authorized.isAuthSuccessful){
+        //     this.router.navigate([this.returnUrl]).then(() => window.location.reload());
+        // }else{
+        //     this.errorMessage = authorized.errorMessage; 
+        //     this.showError = true;
+        // }
     }
 
     

@@ -2,6 +2,7 @@
 // Help with communication via events
 
 import{Action} from '@ngrx/store'; 
+import { PatchListObject } from '../../models/PatchObject';
 import { Plant } from '../../models/Plant';
 import { PlantDelete } from '../../models/PlantDelete';
 
@@ -12,6 +13,7 @@ export const LOAD_PLANTS_SUCCESS = '[Products] Load Plants Success';
 
 export class LoadPlants implements Action {
     readonly type = LOAD_PLANTS; 
+    constructor(public payload: any) { }
 }
 export class LoadPlantsFail implements Action {
     readonly type = LOAD_PLANTS_FAIL; 
@@ -30,7 +32,7 @@ export const WATER_PLANT_SUCCESS = '[Products] Water Plant Success';
 export class WaterPlant implements Action {
     readonly type = WATER_PLANT;
     // Will hold error 
-    constructor(public payload: any = null) { }
+    constructor(public payload: PatchListObject) { }
 }
 export class WaterPlantFail implements Action {
     readonly type = WATER_PLANT_FAIL;
@@ -50,7 +52,7 @@ export const FERTILIZE_PLANT_SUCCESS = '[Products] Fertilize Plant Success';
 export class FertilizePlant implements Action {
     readonly type = FERTILIZE_PLANT;
     // Will hold error 
-    constructor(public payload: any = null) { }
+    constructor(public payload: PatchListObject) { }
 }
 export class FertilizePlantFail implements Action {
     readonly type = FERTILIZE_PLANT_FAIL;

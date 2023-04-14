@@ -9,6 +9,8 @@ import * as fromStore from '../../../shared/store';
 import { PlantNote } from 'src/app/shared/models/PlantNote';
 import { PlantNoteDelete } from 'src/app/shared/models/PlantNoteDelete';
 import { PlantNoteCreation } from 'src/app/shared/models/PlantNoteCreation';
+import { PatchListObject, PatchObject } from 'src/app/shared/models/PatchObject';
+import { ObjectMapper } from 'src/app/shared/services/utils/objectMapper';
 
 @Component({
     selector: 'plant-notes',
@@ -21,51 +23,67 @@ export class PlantNotesComponent {
    plantNotes$: Observable<PlantNote[]>;
    loading$: Observable<boolean>; 
    loaded$: Observable<boolean>; 
-   childComponentIsEditing$: Observable<boolean>; 
    
+    isAddingNewNote$: Observable<boolean>;
+    loadingFailed$: Observable<boolean>;
+    errMessage$: Observable<string>;
+    showError: boolean;
+    
+    
     constructor(private readonly route: ActivatedRoute, private store: Store<fromStore.ProductsState>) {
-}
-
+    
+    }
+    
     ngOnInit() {
+        this.errMessage$ = this.store.select(fromStore.getPlantNotesErrMessage);
         this.plantId = this.route.parent?.snapshot.paramMap.get('plantId');
+        this.isAddingNewNote$ = this.store.select(fromStore.getPlantNotesAddingChildNote); 
         //console.log('notes ', this.plantId)
         this.loading$ = this.store.select(fromStore.getPlantNotesLoading); 
         this.plantNotes$ = this.store.select(fromStore.getPlantNotes); 
-        this.childComponentIsEditing$ = this.store.select(fromStore.getPlantNotesIsOnEditMode); 
-        this.childComponentIsEditing$.subscribe(x => console.log(x, ' editing'))
-        this.store.dispatch(new fromStore.LoadPlantNotes(this.plantId)); 
+        this.store.dispatch(new fromStore.LoadPlantNotes(ObjectMapper.mapPlantNoteLoad(this.plantId, localStorage.getItem('userId')))); 
         this.loaded$ = this.store.select(fromStore.getPlantNotesLoaded); 
-
+        
         //this.plantNotes$.subscribe(note => console.log(note))
     };
     
+    isNewNote() {
+        var isNewNote = false;
+        this.isAddingNewNote$.subscribe((x) => {
+            isNewNote = x;
+        });
+        return isNewNote;
+    }
+
     deleteNote($plantId: any) {
-        //this.store.dispatch(new fromStore.DeletePlantNote())
-        var plantToDelete: PlantNoteDelete = {
-            Id: $plantId,
-            plantId: this.plantId,
-            userId: localStorage.getItem('userId')
-        }
-        //console.log('delete emitted from child', $plantId, plantToDelete)
-       this.store.dispatch(new fromStore.DeletePlantNote(plantToDelete))
+        const plantToDelete = ObjectMapper.mapPlantNoteToDelete($plantId, this.plantId, localStorage.getItem('userId')); 
+        this.store.dispatch(new fromStore.DeletePlantNote(plantToDelete))
     }
     
     saveNote($noteInfo: string[]) {
-        var plantToSave: PlantNoteCreation = {
-            userId: localStorage.getItem('userId')?.toString(),
-            plantId: $noteInfo[0],
-            description: $noteInfo[1]
+        if(this.isNewNote()){
+            this.saveNewNote($noteInfo)
+            return; 
         }
-        //console.log('save emitted from child', $noteInfo, plantToSave); 
+        this.editExistingNote($noteInfo)
+    }
+
+    saveNewNote($noteInfo: string[]){
+        var plantToSave = ObjectMapper.mapPlantNoteCreation($noteInfo[1], this.plantId, localStorage.getItem('userId')?.toString())
         this.store.dispatch(new fromStore.AddPlantNote(plantToSave))
+    }
+    
+    editExistingNote($noteInfo: string[]){
+        var noteToEdit = ObjectMapper.mapPatchObject("replace", "/description", $noteInfo[1]);
+        var patchListObject = ObjectMapper.mapPatchListObject([noteToEdit], $noteInfo[0], this.plantId, localStorage.getItem('userId')?.toString())
+        this.store.dispatch(new fromStore.EditPlantNote(patchListObject)); 
     }
 
     addNote(){
         this.store.dispatch(new fromStore.PreAddPlantNote()); 
-       
     }
-    componentIsEditing(event: any){
-        console.log(event, ' emitter')
-        
+
+    reload(){
+        window.location.reload()
     }
 }; 

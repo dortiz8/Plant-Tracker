@@ -1,6 +1,13 @@
 import { Component, Input } from '@angular/core';
 // Route information
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../shared/store';
+import { IS_AUTH } from 'src/app/shared/constants/auth';
+import { AuthenticationService } from 'src/app/shared/services/authentication/AuthenticationService';
+import { LocalStorageService } from 'src/app/shared/services/authentication/LocalStorageService';
+import { Observable } from 'rxjs';
+import { faLeaf, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 @Component({
     selector: 'navigation',
     templateUrl: './navigation.component.html',
@@ -8,31 +15,27 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
     providers: []
 })
 export class NavigationComponent {
-    /**
-     *
-     */
-    plantId: string | null = ''
-    isAuth: string | null = 'false'; 
-    @Input() authenticated: boolean;
-    constructor(private readonly route: ActivatedRoute, private readonly router: Router) {
+    
+    userLoaded$: Observable<boolean>; 
+    @Input() userAuthenticated: boolean; 
+    @Input() mainTitle: string; 
+    //Icons
+    leafIcon = faLeaf;
+    searchIcon = faMagnifyingGlass;  
+    constructor(private readonly route: ActivatedRoute, private readonly router: Router, 
+        private localStorageService: LocalStorageService, private store: Store<fromStore.UserState>) {
 
 
     }
     ngOnInit() {
-        this.plantId = this.route.snapshot.paramMap.get('plantId');
-        this.isAuth = localStorage.getItem('isAuth');
-        this.authenticated = (this.isAuth == "true");
+        this.userLoaded$ = this.store.select(fromStore.getUserLoaded); 
     };
   
     logOut(){
-        this.cleanTokens(); 
-        this.router.navigate(['/login']).then(()=>window.location.reload());
-        
+        this.store.dispatch(new fromStore.LogOffUser()); 
     }
-    // will go in a utils method
-    cleanTokens(){
-        localStorage.removeItem('token'); 
-        localStorage.removeItem('refreshToken'); 
-        localStorage.setItem('isAuth', "false"); 
+
+    search(){
+        console.log('searched for: ')
     }
 };

@@ -4,11 +4,20 @@ import {ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/st
 import * as fromPlants from './plants.reducer'; 
 import * as fromPlant from './plant.reducer'; 
 import * as fromPlantNotes from './plantNotes.reducer'; 
+import * as fromUser from './user.reducer'; 
+
+export interface UserState{
+    user: fromUser.AuthState; 
+}
 
 export interface ProductsState{
     plants: fromPlants.PlantsState; 
     plant: fromPlant.PlantState; 
     plantNotes: fromPlantNotes.PlantNotesState
+}
+
+export const userReducers: ActionReducerMap<UserState, any> = {
+    user: fromUser.reducer
 }
 
 // Register our reducers 
@@ -20,7 +29,13 @@ export const reducers: ActionReducerMap<ProductsState, any>= {
 
 // Set selectors
 // Selectors allows us to separate our application state with our component trees 
-export const getProductsState = createFeatureSelector<ProductsState>('products')
+export const getUserState = createFeatureSelector<UserState>('user'); 
+export const getProductsState = createFeatureSelector<ProductsState>('products'); 
+
+export const getUserSelectorState = createSelector(
+    getUserState,
+    (state: UserState) => state.user
+); 
 
 // Create a top level selector for plants state
 export const getPlantsState =  createSelector(
@@ -38,7 +53,14 @@ export const getPlantNotesState = createSelector(
     (state: ProductsState) => state.plantNotes
 ); 
 
-    console.log(getPlantsState); 
+
+export const getUserLoading = createSelector(getUserSelectorState, fromUser.getUserLoading); 
+export const getUserLoaded = createSelector(getUserSelectorState, fromUser.getUserLoaded); 
+export const getUser = createSelector(getUserSelectorState, fromUser.getUser); 
+export const getUserId = createSelector(getUserSelectorState, fromUser.getUserId); 
+export const getUserErrMessage = createSelector(getUserSelectorState, fromUser.getUserErrMessage); 
+
+
 // set the top level individual exports from the plants state
 export const getAllPlants = createSelector(getPlantsState, fromPlants.getPlants); 
 export const getPlantsLoaded = createSelector(getPlantsState, fromPlants.getPlantsLoaded); 
@@ -58,4 +80,4 @@ export const getPlantNotes = createSelector(getPlantNotesState, fromPlantNotes.g
 export const getPlantNotesLoaded = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesLoaded);
 export const getPlantNotesLoading = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesLoading);
 export const getPlantNotesErrMessage = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesErrMessage); 
-export const getPlantNotesIsOnEditMode = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesIsOnEditMode); 
+export const getPlantNotesAddingChildNote = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesAddingChildNote); 

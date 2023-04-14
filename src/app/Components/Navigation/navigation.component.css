@@ -1,0 +1,17 @@
+
+.mainNavBar{
+    
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .2);
+}
+.mainTitle{
+    color: #2a2a2b
+}
+
+.leafIcon{
+    color: #777A44;
+}

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { act } from '@ngrx/effects';
 import { Observable } from 'rxjs';
-import { PatchArray } from '../../models/PatchObject';
+import {  PatchListObject, PatchObject } from '../../models/PatchObject';
 import { Plant } from '../../models/Plant';
 import { PlantCreation } from '../../models/PlantCreation';
 import { PlantDelete } from '../../models/PlantDelete';
@@ -10,6 +10,7 @@ import { PlantEdit } from '../../models/PlantEdit';
 import { PlantLoad } from '../../models/PlantLoad';
 import { PlantNoteCreation } from '../../models/PlantNoteCreation';
 import { PlantNoteDelete } from '../../models/PlantNoteDelete';
+import { PlantNoteLoad } from '../../models/PlantNoteLoad';
 import { PlantDateService } from '../dates/PlantDateService';
 import { IPlantService } from './IPlantService';
 
@@ -44,8 +45,8 @@ export class PlantService implements IPlantService {
     }
     return this.http.post(`api/users/${plant.userId}/plants`, body, { headers: this.headers_object });
   }
-  getPlantById(userId: string | null, plantLoad: PlantLoad): Observable<any>{
-    const { plantId , info} = plantLoad; 
+  getPlantById(plantLoad: PlantLoad): Observable<any>{
+    const { plantId , info, userId} = plantLoad; 
     return this.http.get(`api/users/${userId}/plants/${plantId}?info=${info}`, { headers: this.headers_object });
   }; 
 
@@ -67,23 +68,13 @@ export class PlantService implements IPlantService {
     return this.http.get(`api/users/${userId}/plants`, {headers: this.headers_object}); 
   }
 
-  patchWaterOrFertilizePlant(userId: any, plantId: any, actionName: string): Observable<any>{
-    var formattedDate = this.dateService.getNewFormattedDate();
-    var path = actionName == 'water' ? '/dateWatered' : '/dateFertilized'; 
-
-    var body = [{
-      op: "replace", 
-      path: path,
-      value: formattedDate
-
-    }]; 
- 
-    return this.http.patch(`api/users/${userId}/plants/${plantId}`, body , { headers: this.headers_object} )
+  patchWaterOrFertilizePlant(patchListObject: PatchListObject): Observable<any>{
+    var body = patchListObject.patchArray; 
+    return this.http.patch(`api/users/${patchListObject.userId}/plants/${patchListObject.plantId}`, body , { headers: this.headers_object} )
   }
 
-  getPlantNotesById(userId: string | null, plantId: string | null): Observable<any> {
-    console.log(`api/users/${userId}/plants/${plantId}`)
-    return this.http.get(`api/users/${userId}/plants/${plantId}/notes`, { headers: this.headers_object }); 
+  getPlantNotesById(plantNoteLoad: PlantNoteLoad): Observable<any> {
+    return this.http.get(`api/users/${plantNoteLoad.userId}/plants/${plantNoteLoad.plantId}/notes`, { headers: this.headers_object }); 
   }
 
   deletePlantNoteById(note: PlantNoteDelete): Observable<any> {
@@ -92,8 +83,9 @@ export class PlantService implements IPlantService {
   addPlantNotebyId(note: PlantNoteCreation): Observable<any> {
     return this.http.post(`api/users/${note.userId}/plants/${note.plantId}/notes`, note, { headers: this.headers_object })
   }
-  patchPlantNotebyId(patchObjectArr: PatchArray): Observable<any> {
-    throw new Error('Method not implemented.');
+  patchPlantNotebyId(patchListObject: PatchListObject): Observable<any> {
+    const body = patchListObject.patchArray; 
+    return this.http.patch(`api/users/${patchListObject.userId}/plants/${patchListObject.plantId}/notes/${patchListObject.noteId}`, body, { headers: this.headers_object })
   }
   
 }

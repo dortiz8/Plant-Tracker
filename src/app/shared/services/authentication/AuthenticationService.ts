@@ -3,8 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import {JwtHelperService} from '@auth0/angular-jwt'; 
 import { AuthResponseBody } from 'src/app/shared/models/IAuthResponse';
-import { UserForAuthentication } from 'src/app/shared/models/IUser';
+import { UserForAuthentication } from 'src/app/shared/models/UserForAuthentication';
 import { Router } from '@angular/router';
+import { Authorized } from '../../models/Authorized';
+import { UserLoad } from '../../models/UserLoad';
+import { LocalStorageService } from './LocalStorageService';
+import { ERROR_MESSAGE, IS_AUTH, REFRESH_TOKEN, TOKEN, USER_ID } from '../../constants/auth';
+import { ObjectMapper } from '../utils/objectMapper';
 
 @Injectable({
     providedIn: 'root',
@@ -12,58 +17,58 @@ import { Router } from '@angular/router';
 
 export class AuthenticationService {
     isLoggedIn = false; 
-    constructor(private readonly http: HttpClient, private jwtHelper: JwtHelperService, private router: Router) {
+    constructor(private readonly http: HttpClient, private jwtHelper: JwtHelperService, private router: Router, private localStorageService: LocalStorageService) {
 
     }
     public isAuthenticated(): boolean{
-       // var logedIn = localStorage.getItem("isAuth"); 
-       // if(logedIn) this.isLoggedIn = true; 
        var isRefreshSuccessful = false; 
-        var token = localStorage.getItem("token"); 
-        if (token && !this.jwtHelper.isTokenExpired(token)){
-            //console.log(isRefreshSuccessful);
-            return true; 
+        var token = this.localStorageService.retrieveKey(TOKEN); 
+        // Check for saved token
+        if(token != null){
+            if (!this.jwtHelper.isTokenExpired(token)){
+                return true; 
+            }
+
         }
 
-        const isRefreshSuccess = this.tryRefreshingTokens(token).subscribe({
-            next: (res: boolean) => { isRefreshSuccessful = res; console.log(res, ' from service ')},
+        this.tryRefreshingTokens(token).subscribe({
+            next: (res: boolean) => { isRefreshSuccessful = res; },
             error: (err: HttpErrorResponse) => { isRefreshSuccessful = false; }
         }); 
 
         if (!isRefreshSuccessful) this.router.navigate(['/login']);
-        //console.log(isRefreshSuccessful, ' last line'); 
+        console.log(isRefreshSuccessful, ' from is authenticated refresh token'); 
         return isRefreshSuccessful; 
+        //return true; 
     }
 
 
-    public loginUser = (route: string, body: UserForAuthentication): Observable<any> => {
-        return this.http.post<AuthResponseBody>(route, body); 
+    public postAuthenticationCredentials = (userLoad: UserLoad): Observable<any> => {
+        const {user, route} = userLoad; 
+        return this.http.post<AuthResponseBody>(route, user); 
     }
 
     public tryRefreshingTokens(token: string | null): Observable<boolean>{
-        const refreshToken = localStorage.getItem('refreshToken'); 
+        const refreshToken = this.localStorageService.retrieveKey(REFRESH_TOKEN); 
 
         if(!refreshToken || !token) return of(false); 
 
         var credentials = JSON.stringify({token: token, refreshToken: refreshToken}); 
-        console.log(credentials); 
+       
         let isRefeshSuccess: boolean = false;        
 
-        const refreshRes = this.refreshToken('api/token/refresh', { token: token, refreshToken: refreshToken }).subscribe({
+        this.refreshToken('api/token/refresh', { token: token, refreshToken: refreshToken }).subscribe({
             next: (res: AuthResponseBody) => {
-                localStorage.setItem("token", res.token);
-                localStorage.setItem("refreshToken", res.refreshToken);
-                localStorage.setItem("isAuth", res.isAuthSuccessful.toString());
-                localStorage.setItem("userId", res.userId.toString())
+                this.localStorageService.storeKeys(ObjectMapper.mapUserToLocalStorageObject(res)); 
                 isRefeshSuccess = true; 
             },
             error: (err: HttpErrorResponse) => {
-
                 isRefeshSuccess = false;
-                console.log(err.message); 
+                console.log(err.message, 'from refresh token'); 
             }
         }); 
         return of(isRefeshSuccess); 
+        //return of(true); 
     }
 
     private refreshToken = (route: string, credentials: any): Observable<any> => {
@@ -72,18 +77,21 @@ export class AuthenticationService {
 
     public expirationCheck(): void{
         var isAuth = this.isAuthenticated(); 
-        if(!isAuth) this.cleanTokens(); 
-
+        if(!isAuth){
+            this.cleanTokens(); 
+        }
     }
 
-    public cleanTokens() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        localStorage.setItem('isAuth', "false");
+    private cleanTokens() {
+        this.localStorageService.deleteKeys([TOKEN, REFRESH_TOKEN, USER_ID, ERROR_MESSAGE])
+    }
+    
+    private resetAuthentication(){
+        this.localStorageService.storeKeys([[IS_AUTH, false]])
     }
 
-    public getUserId(): number{
-        return 0; 
-       
+    public logOut(){
+        this.cleanTokens(); 
+        this.resetAuthentication(); 
     }
 }

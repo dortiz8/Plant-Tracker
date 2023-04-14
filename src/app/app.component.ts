@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ngbCarouselTransitionOut } from '@ng-bootstrap/ng-bootstrap/carousel/carousel-transition';
+import { Store } from '@ngrx/store';
+import * as fromStore from './shared/store';
+import { IS_AUTH } from './shared/constants/auth';
+import { LocalStorageService } from './shared/services/authentication/LocalStorageService';
 
 
 @Component({
@@ -10,13 +14,22 @@ import { ngbCarouselTransitionOut } from '@ng-bootstrap/ng-bootstrap/carousel/ca
 })
 export class AppComponent {
   public title = 'Plant Tracker'; 
-  isAuth: string | null = 'false';
-  authenticated: boolean = false;
-  
+  userAuthenticated : boolean; 
+  constructor(private localStorageService: LocalStorageService, private store: Store<fromStore.ProductsState>) {
+    
+  }; 
 
- authenticate(isAuth: any){
-   console.log(isAuth, ' emiitter')
-   this.authenticated = isAuth; 
- }; 
+  ngOnInit(){
+    this.userAuthenticated = this.isUserAuthenticated(); 
+  }
+
+  isUserAuthenticated():boolean{
+    // var userLoaded = null; 
+    // this.store.select(fromStore.getUserLoaded).subscribe(x => userLoaded = x); 
+    // if(userLoaded != false){
+    //   return true; 
+    // }
+    return this.localStorageService.retrieveKey(IS_AUTH) == "true" ? true : false; 
+  }
 }
 

@@ -26,7 +26,8 @@ export const initialState: PlantState ={
     addSame: false
 }; 
 
-export function reducer(state: PlantState = initialState, action: fromPlant.PlantAction): PlantState {
+export function reducer(state: PlantState = initialState, 
+    action: fromPlant.PlantAction): PlantState {
     switch(action.type){
         case fromPlant.LOAD_PLANT: {
             return {

@@ -16,11 +16,9 @@ export class PlantsEffects {
     constructor(private readonly plantService: PlantService,
         private readonly dateService: PlantDateService, private actions$: Actions, private readonly store: Store) {
     }
-    userId = localStorage.getItem('userId'); 
-    userIdNum = this.userId != null ? parseInt(this.userId) : 0; 
    
     loadPlants$ = createEffect(() => this.actions$.pipe(ofType(plantActions.LOAD_PLANTS),
-        mergeMap(()=> this.plantService.getPlantList(this.userId)
+        mergeMap(({ payload })=> this.plantService.getPlantList(payload)
             .pipe(
                 map(plants => {
                     // We may need to move this logic moved at db level, but it is mainly used to change the state of 
@@ -31,7 +29,7 @@ export class PlantsEffects {
             )))); 
 
     waterPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.WATER_PLANT),
-        mergeMap(({payload})=> this.plantService.patchWaterOrFertilizePlant(this.userIdNum, payload, 'water')
+        mergeMap(({payload})=> this.plantService.patchWaterOrFertilizePlant(payload)
             .pipe(
                 map(plant => {
                     // We may need to move this logic moved at db level, but it is mainly used to change the state of 
@@ -42,7 +40,7 @@ export class PlantsEffects {
                 catchError((err) => of(new plantActions.WaterPlantFail(err)))
             )))); 
     fertilizePlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.FERTILIZE_PLANT),
-        mergeMap(({payload})=> this.plantService.patchWaterOrFertilizePlant(this.userIdNum, payload, 'fertilize')
+        mergeMap(({payload})=> this.plantService.patchWaterOrFertilizePlant(payload)
             .pipe(
                 map(plant => {
                     const updatedPlant = this.dateService.changeSinglePlantStateBasedOnDateAndReturn(plant);
@@ -60,4 +58,3 @@ export class PlantsEffects {
                 catchError((err) => of(new plantActions.DeletePlantFail(err)))
             ))));
 }
-  //withLatestFrom(this.store.select(fromStore.getCurrentPlant)),

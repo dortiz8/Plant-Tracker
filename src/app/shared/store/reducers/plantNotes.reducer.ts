@@ -1,3 +1,4 @@
+import { INITIAL_REDUCERS } from "@ngrx/store";
 import {PlantNote} from "../../models/PlantNote"; 
 import * as fromPlant from "../actions/plantNotes.action"; 
 
@@ -6,7 +7,7 @@ export interface PlantNotesState{
     loaded: boolean,
     loading: boolean,
     errMessage: string,
-    isEditing: boolean // checks if child plant in array is on edit mode
+    addingChildToData: boolean // checks if adding action is being performed
 }; 
 
 export const initialState: PlantNotesState ={
@@ -14,7 +15,7 @@ export const initialState: PlantNotesState ={
     loaded: false,
     loading: false,
     errMessage: '', 
-    isEditing: false 
+    addingChildToData: false 
 }; 
 
 export function reducer(state: PlantNotesState = initialState, action: fromPlant.PlantNotesAction): PlantNotesState {
@@ -23,7 +24,7 @@ export function reducer(state: PlantNotesState = initialState, action: fromPlant
             return {
                 ...state,
                 loading: true, 
-                isEditing: false
+                addingChildToData: false
             }
             break;
         case fromPlant.LOAD_PLANT_NOTES_FAIL: {
@@ -46,6 +47,18 @@ export function reducer(state: PlantNotesState = initialState, action: fromPlant
                 data,
             }
         }
+        case fromPlant.CANCEL_PRE_ADD_PLANT_NOTE: {
+            
+            const data = state.data.filter(x => x.id != undefined); 
+            
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                addingChildToData: false,
+                data
+            }
+        }
         case fromPlant.PRE_ADD_PLANT_NOTE: {
             const data = [...state.data, new PlantNote()] ; 
             
@@ -53,7 +66,7 @@ export function reducer(state: PlantNotesState = initialState, action: fromPlant
                 ...state,
                 loading: false,
                 loaded: true,
-                isEditing: true,
+                addingChildToData: true,
                 data
             }
         }
@@ -64,7 +77,7 @@ export function reducer(state: PlantNotesState = initialState, action: fromPlant
                 ...state,
                 loading: false,
                 loaded: true,
-                isEditing: false,
+                addingChildToData: false,
             }
         }
         case fromPlant.ADD_PLANT_NOTE_FAIL: {
@@ -74,18 +87,91 @@ export function reducer(state: PlantNotesState = initialState, action: fromPlant
                 ...state,
                 loading: false,
                 loaded: false,
-                isEditing: false,
+                addingChildToData: false,
                 errMessage: `${status}: ${statusText}`
             }
         }
         case fromPlant.ADD_PLANT_NOTE_SUCCESS: {
-            const data = action.payload; 
-            
+            const returnedData = action.payload; 
+            let filteredData = state.data.filter(x => x.id != undefined); 
+            const data = [...filteredData, returnedData]; 
+            console.log(data)
             return {
                 ...state,
                 loading: false,
                 loaded: true,
-                isEditing: false,
+                addingChildToData: false,
+                data
+            }
+        }
+        case fromPlant.EDIT_PLANT_NOTE: {
+            const data = action.payload
+
+            return {
+                ...state,
+                loading: true,
+                loaded: false,
+                addingChildToData: false,
+            }
+        }
+        case fromPlant.EDIT_PLANT_NOTE_FAIL: {
+            const { status, statusText } = action.payload;
+
+            return {
+                ...state,
+                loading: false,
+                loaded: false,
+                addingChildToData: false,
+                errMessage: `${status}: ${statusText}`
+            }
+        }
+        case fromPlant.EDIT_PLANT_NOTE_SUCCESS: {
+            const returnedData = action.payload; 
+            const indexToReplace = state.data.findIndex(x=> x.id == returnedData.id); 
+            const arrToSort = [...state.data]; 
+            arrToSort[indexToReplace] = returnedData; 
+            const data = arrToSort; 
+
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                addingChildToData: false,
+                data
+            }
+        }
+        case fromPlant.DELETE_PLANT_NOTE: {
+            const data = action.payload
+
+            return {
+                ...state,
+                loading: true,
+                loaded: false,
+                addingChildToData: false,
+            }
+        }
+        case fromPlant.DELETE_PLANT_NOTE_FAIL: {
+            const { status, statusText } = action.payload;
+
+            return {
+                ...state,
+                loading: false,
+                loaded: false,
+                addingChildToData: false,
+                errMessage: `${status}: ${statusText}`
+            }
+        }
+        case fromPlant.DELETE_PLANT_NOTE_SUCCESS: {
+            const payload = action.payload;
+
+            const data = state.data.filter(note => note.id != action.payload.Id)
+
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                addingChildToData: false,
+                data
             }
         }
 
@@ -98,4 +184,4 @@ export const getPlantNotesLoading = (state: PlantNotesState) => state.loading;
 export const getPlantNotesLoaded = (state: PlantNotesState) => state.loaded;
 export const getPlantNotes = (state: PlantNotesState) => state.data;
 export const getPlantNotesErrMessage = (state: PlantNotesState) => state.errMessage;
-export const getPlantNotesIsOnEditMode = (state: PlantNotesState) => state.isEditing;
+export const getPlantNotesAddingChildNote = (state: PlantNotesState) => state.addingChildToData;

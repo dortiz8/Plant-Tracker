@@ -20,15 +20,10 @@ export class PlantEffects {
         private readonly router: Router,) {
     }
 
-    userId = localStorage.getItem('userId');
-    userIdNum = this.userId != null ? parseInt(this.userId) : 0;
-
     loadPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.LOAD_PLANT), delay(2000),
-        mergeMap(({payload}) => this.plantService.getPlantById(this.userId, payload)
+        mergeMap(({payload}) => this.plantService.getPlantById(payload)
             .pipe(
                 map(plant => {
-                    //console.log(plant, ' from effects')
-                    console.log(typeof plant)
                     if (plant instanceof PlantInfo) { return new plantActions.LoadPlantInfoSuccess(plant) }
                     return new plantActions.LoadPlantSuccess(plant)
                 }),

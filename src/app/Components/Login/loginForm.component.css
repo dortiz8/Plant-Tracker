@@ -1,0 +1,14 @@
+.login-form{
+    margin: 2rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-group{
+    width: 500px;
+}
+
+.sign-in-btn{
+    background-color: #777A44;
+    color: white;
+}
