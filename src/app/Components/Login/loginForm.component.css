@@ -1,14 +1,14 @@
 .login-form{
-    margin: 2rem 1rem;
+    margin: 3rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .form-group{
-    width: 500px;
+    width: 400px;
 }
 
 .sign-in-btn{
-    background-color: #777A44;
+    background-color: rgb(52, 161, 130);
     color: white;
 }

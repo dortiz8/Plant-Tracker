@@ -18,5 +18,6 @@ export interface IPlantService{
     getPlantNotesById(plantNoteLoad: PlantNoteLoad): Observable<any>; 
     deletePlantNoteById(plant: PlantNoteDelete): Observable<any>; 
     addPlantNotebyId(body: PlantNoteCreation): Observable<any>;
-    patchPlantNotebyId(patchObjectArr: PatchListObject): Observable<any>
+    patchPlantNotebyId(patchObjectArr: PatchListObject): Observable<any>; 
+    getPlantsStatsById: (userId: string | null) => Observable<any>; 
 }

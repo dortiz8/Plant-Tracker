@@ -2,6 +2,7 @@
 
 import { Plant } from "../../models/Plant";
 import * as fromPlants from "../actions/plants.action"; 
+import * as fromPlantsStats from "../actions/plantsStats.action"; 
 //import * as fromPlant from "../actions/plant.action"; 
 
 export interface PlantsState {
@@ -36,17 +37,13 @@ export const initialState: PlantsState ={
 
 export function reducer(state: PlantsState = initialState, action: fromPlants.PlantsAction): PlantsState {
     switch(action.type){
-        case fromPlants.LOAD_PLANTS:
-        case fromPlants.WATER_PLANT:
-        case fromPlants.FERTILIZE_PLANT: {
+        case fromPlants.LOAD_PLANTS:{
             return {
                 ...state,
                 loading: true
             }
         }
-        case fromPlants.LOAD_PLANTS_FAIL:
-        case fromPlants.WATER_PLANT_FAIL: 
-        case fromPlants.FERTILIZE_PLANT_FAIL: {
+        case fromPlants.LOAD_PLANTS_FAIL:{
             const {status, statusText} = action.payload; 
             console.log(`${status}: ${statusText} from reducer`); 
             return {
@@ -60,24 +57,6 @@ export function reducer(state: PlantsState = initialState, action: fromPlants.Pl
            const data = action.payload; 
             return {
                 ...state,
-                loading: false, 
-                loaded: true, 
-                data,
-            }
-        }
-
-        case fromPlants.WATER_PLANT_SUCCESS:
-        case fromPlants.FERTILIZE_PLANT_SUCCESS: {
-            const updatedPlant = action.payload; 
-            const arrToSort = [...state.data]; 
-            var indexToReplace = state.data.findIndex(p => p.id == updatedPlant.id);
-            arrToSort[indexToReplace] = updatedPlant; 
-            var data = arrToSort; 
-            console.log(arrToSort, indexToReplace,  ' from reducer'); 
-           // var data = arrToSort.splice(0, indexToReplace).concat(updatedPlant).concat(arrToSort.splice(indexToReplace, arrToSort.length - 1)); 
-            
-            return {
-                ...state, 
                 loading: false, 
                 loaded: true, 
                 data,
@@ -112,7 +91,6 @@ export function reducer(state: PlantsState = initialState, action: fromPlants.Pl
                 data
             }
         }
-
     }
     return state; 
 }

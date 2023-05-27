@@ -17,7 +17,7 @@ export class PlantsEffects {
         private readonly dateService: PlantDateService, private actions$: Actions, private readonly store: Store) {
     }
    
-    loadPlants$ = createEffect(() => this.actions$.pipe(ofType(plantActions.LOAD_PLANTS),
+    loadPlants$ = createEffect(() => this.actions$.pipe(ofType(plantActions.LOAD_PLANTS), delay(1000),
         mergeMap(({ payload })=> this.plantService.getPlantList(payload)
             .pipe(
                 map(plants => {
@@ -28,27 +28,27 @@ export class PlantsEffects {
                 catchError((err) => of(new plantActions.LoadPlantsFail(err)))
             )))); 
 
-    waterPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.WATER_PLANT),
-        mergeMap(({payload})=> this.plantService.patchWaterOrFertilizePlant(payload)
-            .pipe(
-                map(plant => {
-                    // We may need to move this logic moved at db level, but it is mainly used to change the state of 
-                    const updatedPlant = this.dateService.changeSinglePlantStateBasedOnDateAndReturn(plant); 
-                    console.log(updatedPlant); 
-                    return new plantActions.WaterPlantSuccess(updatedPlant)
-                }),
-                catchError((err) => of(new plantActions.WaterPlantFail(err)))
-            )))); 
-    fertilizePlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.FERTILIZE_PLANT),
-        mergeMap(({payload})=> this.plantService.patchWaterOrFertilizePlant(payload)
-            .pipe(
-                map(plant => {
-                    const updatedPlant = this.dateService.changeSinglePlantStateBasedOnDateAndReturn(plant);
-                    return new plantActions.FertilizePlantSuccess(updatedPlant)
-                }),
-                catchError((err) => of(new plantActions.FertilizePlantFail(err)))
-            )))); 
-    deletePlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.DELETE_PLANT), delay(2000),
+    // waterPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.WATER_PLANT),
+    //     mergeMap(({payload})=> this.plantService.patchWaterOrFertilizePlant(payload)
+    //         .pipe(
+    //             map(plant => {
+    //                 // We may need to move this logic moved at db level, but it is mainly used to change the state of 
+    //                 const updatedPlant = this.dateService.changeSinglePlantStateBasedOnDateAndReturn(plant); 
+    //                 console.log(updatedPlant); 
+    //                 return new plantActions.WaterPlantSuccess(updatedPlant)
+    //             }),
+    //             catchError((err) => of(new plantActions.WaterPlantFail(err)))
+    //         )))); 
+    // fertilizePlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.FERTILIZE_PLANT),
+    //     mergeMap(({payload})=> this.plantService.patchWaterOrFertilizePlant(payload)
+    //         .pipe(
+    //             map(plant => {
+    //                 const updatedPlant = this.dateService.changeSinglePlantStateBasedOnDateAndReturn(plant);
+    //                 return new plantActions.FertilizePlantSuccess(updatedPlant)
+    //             }),
+    //             catchError((err) => of(new plantActions.FertilizePlantFail(err)))
+    //         )))); 
+    deletePlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.DELETE_PLANT), delay(1000),
         mergeMap(({ payload }) => this.plantService.deletePlantById(payload)
             .pipe(
                 map(data => {

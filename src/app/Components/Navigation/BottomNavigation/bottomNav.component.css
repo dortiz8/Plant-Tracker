@@ -1,0 +1,19 @@
+.nav-button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-container{
+    max-width: 425px;
+}
+.main-nav{
+    z-index: 2;
+    /* background-color: rgba(0, 0, 0, 0.356); */
+}
+.nav-button{
+    color: rgb(70, 70, 70);
+    font-size: small;
+}
+

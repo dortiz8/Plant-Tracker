@@ -4,6 +4,7 @@ import {ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/st
 import * as fromPlants from './plants.reducer'; 
 import * as fromPlant from './plant.reducer'; 
 import * as fromPlantNotes from './plantNotes.reducer'; 
+import * as fromPlantsStats from './plantsStats.reducer'; 
 import * as fromUser from './user.reducer'; 
 
 export interface UserState{
@@ -13,7 +14,8 @@ export interface UserState{
 export interface ProductsState{
     plants: fromPlants.PlantsState; 
     plant: fromPlant.PlantState; 
-    plantNotes: fromPlantNotes.PlantNotesState
+    plantNotes: fromPlantNotes.PlantNotesState; 
+    plantsStats: fromPlantsStats.PlantsStatsState; 
 }
 
 export const userReducers: ActionReducerMap<UserState, any> = {
@@ -25,6 +27,7 @@ export const reducers: ActionReducerMap<ProductsState, any>= {
     plants: fromPlants.reducer,
     plant: fromPlant.reducer, 
     plantNotes: fromPlantNotes.reducer,
+    plantsStats: fromPlantsStats.reducer
 }; 
 
 // Set selectors
@@ -52,6 +55,10 @@ export const getPlantNotesState = createSelector(
     getProductsState,
     (state: ProductsState) => state.plantNotes
 ); 
+export const getPlantsStatsState = createSelector(
+    getProductsState,
+    (state: ProductsState) => state.plantsStats
+); 
 
 
 export const getUserLoading = createSelector(getUserSelectorState, fromUser.getUserLoading); 
@@ -75,9 +82,15 @@ export const getPlantErrMessage = createSelector(getPlantState, fromPlant.getPla
 export const getEditPlantSuccess = createSelector(getPlantState, fromPlant.getEditPlantSuccess); 
 export const getAddPlantSuccess = createSelector(getPlantState, fromPlant.getAddPlantSuccess); 
 export const getAddSamePlant = createSelector(getPlantState, fromPlant.getAddSamePlant); 
+export const getEditExistingPlant = createSelector(getPlantState, fromPlant.getEditExistingPlant); 
 
 export const getPlantNotes = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotes);
 export const getPlantNotesLoaded = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesLoaded);
 export const getPlantNotesLoading = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesLoading);
 export const getPlantNotesErrMessage = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesErrMessage); 
 export const getPlantNotesAddingChildNote = createSelector(getPlantNotesState, fromPlantNotes.getPlantNotesAddingChildNote); 
+
+export const getPlantsStats = createSelector(getPlantsStatsState, fromPlantsStats.getPlantsStats);
+export const getPlantsStatsLoaded = createSelector(getPlantsStatsState, fromPlantsStats.getPlantsStatsLoaded);
+export const getPlantsStatsLoading = createSelector(getPlantsStatsState, fromPlantsStats.getPlantsStatsLoading);
+export const getPlantsStatsErrMessage = createSelector(getPlantsStatsState, fromPlantsStats.getPlantsStatsErrMessage); 

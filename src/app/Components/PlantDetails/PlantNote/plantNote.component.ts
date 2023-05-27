@@ -9,11 +9,12 @@ import * as fromStore from '../../../shared/store';
 import { PlantNote } from 'src/app/shared/models/PlantNote';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlantNoteCreation } from 'src/app/shared/models/PlantNoteCreation';
+import { faEllipsis, faSquarePlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'plant-note',
     templateUrl: './plantNote.component.html',
-    styleUrls: [],
+    styleUrls: ['./plantNote.compoenent.css'],
     providers: []
 })
 export class PlantNoteComponent {
@@ -26,6 +27,11 @@ export class PlantNoteComponent {
    editFormGroup: FormGroup; 
    isEditing: boolean; 
    isAddingNewNote: Observable<boolean>; 
+
+    // Icons
+    editIcon = faEllipsis; 
+    deleteIcon = faXmark; 
+    
     constructor(private readonly route: ActivatedRoute, private store: Store<fromStore.ProductsState>) {
        
     }

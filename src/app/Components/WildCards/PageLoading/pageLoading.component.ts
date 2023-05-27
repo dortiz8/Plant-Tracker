@@ -3,7 +3,7 @@ import {Component} from '@angular/core';
 @Component({
     selector: 'page-loading', 
     templateUrl: './pageLoading.component.html', 
-    styleUrls: [],
+    styleUrls: ['./pageLoading.component.css'],
     providers: []
 })
 

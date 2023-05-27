@@ -11,7 +11,8 @@ export interface PlantState {
     errMessage: string, 
     editSuccess: boolean, 
     addSuccess: boolean, 
-    addSame: boolean
+    addSame: boolean, 
+    editExisting: boolean
 }
 
 //var mockData: Plant [] = [plant1]
@@ -23,13 +24,15 @@ export const initialState: PlantState ={
     errMessage: '',
     editSuccess: false, 
     addSuccess: false, 
-    addSame: false
+    addSame: false, 
+    editExisting: false,
 }; 
 
 export function reducer(state: PlantState = initialState, 
     action: fromPlant.PlantAction): PlantState {
     switch(action.type){
-        case fromPlant.LOAD_PLANT: {
+        case fromPlant.LOAD_PLANT:
+        case fromPlant.WATER_PLANT: {
             return {
                 ...state,
                 loading: true, 
@@ -37,7 +40,8 @@ export function reducer(state: PlantState = initialState,
                 
             }
         }
-        case fromPlant.LOAD_PLANT_FAIL: {
+        case fromPlant.LOAD_PLANT_FAIL:
+        case fromPlant.WATER_PLANT_FAIL: {
             const {status, statusText} = action.payload; 
             return {
                 ...state,
@@ -103,7 +107,9 @@ export function reducer(state: PlantState = initialState,
                 loading: false, 
                 loaded: false, 
                 editSuccess: false,
-                addSuccess: false
+                addSuccess: false, 
+                addSame: false, 
+                editExisting: false
             }
         }
         // Add 
@@ -138,7 +144,6 @@ export function reducer(state: PlantState = initialState,
             }
         }
         case fromPlant.ADD_SAME_PLANT: {
-            
             const data = action.payload;
             console.log(data, ' from effects')
             return {
@@ -147,6 +152,35 @@ export function reducer(state: PlantState = initialState,
                 loaded: true,
                 addSame: true, 
                 data
+            }
+        }
+        case fromPlant.EDIT_EXISTING_PLANT: {
+            const data = action.payload;
+            console.log(data, ' from effects')
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                editExisting: true,
+                data
+            }
+        }
+
+        case fromPlant.WATER_PLANT_SUCCESS:
+        case fromPlant.FERTILIZE_PLANT_SUCCESS: {
+            const data = action.payload;
+            // const arrToSort = [...state.data];
+            // var indexToReplace = state.data.findIndex(p => p.id == updatedPlant.id);
+            // arrToSort[indexToReplace] = updatedPlant;
+            // var data = arrToSort;
+            // console.log(arrToSort, indexToReplace, ' from reducer');
+            // var data = arrToSort.splice(0, indexToReplace).concat(updatedPlant).concat(arrToSort.splice(indexToReplace, arrToSort.length - 1)); 
+
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                data,
             }
         }
        
@@ -161,3 +195,4 @@ export const getPlantErrMessage = (state: PlantState) => state.errMessage;
 export const getEditPlantSuccess = (state: PlantState) => state.editSuccess; 
 export const getAddPlantSuccess = (state: PlantState) => state.addSuccess; 
 export const getAddSamePlant = (state: PlantState) => state.addSame; 
+export const getEditExistingPlant = (state: PlantState) => state.editExisting; 

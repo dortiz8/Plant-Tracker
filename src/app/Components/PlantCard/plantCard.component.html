@@ -1,70 +1,31 @@
 
 <div *ngIf="(loading$ | async)"><page-loading></page-loading></div>
-<div class="plant-card row align-items-center justify-content-between">
-    <div class="plant-card-details col align-items-center">
-        <div class="d-flex">
-            <a class="link-info" [routerLink]="['/plantDetails', plant.id]"><fa-icon
-                    class="specialIcon infoIcon" [icon]="infoIcon"></fa-icon></a>
-            <h5 style="margin-left: .5rem;">{{ plant.name }}</h5>
-            <!-- <a class="link-info" [routerLink]="['/plantDetails', plant.id]">Details</a> -->
-        </div>
-    </div>
-    <div class="col">
-        <div class="row" style="margin-bottom: .5rem;">
-            <div class="col justify-content-center">
-                <div class="d-flex justify-content-center">
-                    <span>
-                        <!-- <fa-icon class="water-icon specialIcon waterIcon" [icon]="waterIcon"></fa-icon> -->
-                        {{plant.dateWatered | date:'shortDate'}}
-                    </span>
-                    <span *ngIf="plant.waterState == 3" style="margin-left: .5rem;" >
-                        <fa-icon class="specialIcon triangleExclamationIcon"
-                        [icon]="triangleExclamationIcon" style="color: #ff0000"></fa-icon>
-                    </span>
-                </div>
-            </div>
-            <div class="col">
-                <div class="action-button">
-                    <a class="water-icon btn btn-outline-secondary btn-sm" (click)="waterFertilizePlantPatch('water')"><fa-icon class="specialIcon waterIcon"
-                    [icon]="waterIcon"></fa-icon></a>
-                </div>
+<div class="container-fluid">
+    <div class="plant-card d-flex justify-content-between align-items-center" [ngClass]="{'warningCard': (plant.waterState == 3 || plant.fertilizeState == 3)}">
+        <div >
+            <div class="card-title" >
+                <h6>
+                    <a class="card-title-link" 
+                    [ngClass]="{'warningLink': (plant.waterState == 3 || plant.fertilizeState == 3)}"
+                    [routerLink]="['/plantDetails', plant.id]">
+                    <fa-icon class="specialIcon seedlingIcon" [icon]="(plant.waterState == 3 || plant.fertilizeState == 3) ? fertilizeIcon: seedlingIcon"></fa-icon>
+                    {{ plant.name }}</a>
+                </h6>
             </div>
         </div>
-        <div class="row">
-            <div class="col justify-content-center">
-                <div class="d-flex justify-content-center">
-                    <span>
-                        <!-- <fa-icon class="fertilize-icon specialIcon fertilizeIcon" [icon]="fertilizeIcon"></fa-icon>  -->
-                        {{plant.dateFertilized | date:'shortDate'}}
-                    </span>
-                    <span *ngIf="plant.fertilizeState == 3" style="margin-left: .5rem;">
-                        <fa-icon class="specialIcon triangleExclamationIcon"
-                            [icon]="triangleExclamationIcon" style="color: #ff0000"></fa-icon>
-                    </span>
-                </div>
-            </div >
-            <div class="col">
-                <div class="action-button">
-                    <a class="fertilize-icon btn btn-outline-secondary btn-sm" (click)="waterFertilizePlantPatch('fertilize')"><fa-icon
-                            class="specialIcon fertilizeIcon" [icon]="fertilizeIcon"></fa-icon></a>
-                </div>
+    
+        <div >
+            <div class="action-button">
+                <a class="editBtn btn" (click)="navigateToPlantEditPage()"><fa-icon class="specialIcon editIcon"
+                        [icon]="editIcon"></fa-icon></a>
             </div>
+            <!-- <div class="action-button">
+                <a class="btn btn-danger btn-sm" (click)="startDeleteProcess()"><fa-icon class="specialIcon deleteIcon"
+                        [icon]="deleteIcon"></fa-icon></a>
+            </div> -->
         </div>
     </div>
-    <div class="col d-flex justify-content-end">
-        <div class="action-button">
-            <a class="btn btn-success btn-sm" (click)="navigateToAddPlantPage()"><fa-icon class="specialIcon addIcon"
-                    [icon]="addIcon"></fa-icon></a>
-        </div>
-        <div class="action-button">
-            <a class="btn btn-dark btn-sm" (click)="navigateToPlantEditPage()"><fa-icon class="specialIcon editIcon"
-                    [icon]="editIcon"></fa-icon></a>
-        </div>
-        <div class="action-button">
-            <a class="btn btn-danger btn-sm" (click)="startDeleteProcess()"><fa-icon class="specialIcon deleteIcon"
-                    [icon]="deleteIcon"></fa-icon></a>
-        </div>
-    </div>
+
 </div>
 
 <div *ngIf="deletePanelIsOn">

@@ -18,6 +18,7 @@ const routes: Routes = [
   {path: 'editPlant/:plantId', title: 'Edit Plant Component', component: PlantEditFormComponent},
   { 
     path: 'plantDetails/:plantId', 
+    title: 'Plant Details',
     component: PlantDetailsComponent, 
     children: [
       {path: '', title: 'Plant Details Component', redirectTo: 'generalInfo', pathMatch: 'full'},
@@ -32,7 +33,7 @@ const routes: Routes = [
   },
   { 
     path: 'home', title: 'Home Component', component: PlantListComponent, 
-      canActivate: [AuthGuard]
+      //canActivate: [AuthGuard]
     },
   { 
     path: 'addPlant', title: 'Plant Form Component', component: PlantFormComponent, 
@@ -47,7 +48,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    
+    anchorScrolling: 'enabled', 
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

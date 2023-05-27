@@ -1,12 +1,21 @@
 
-<div class="container">
-    <div class="row">
-        <div class="col-6" style="text-align: center;">
-            <a class="nav-link" routerLink="generalInfo" routerLinkActivate="active" ariaCurrentWhenActive="page">Genarl Info</a>
-        </div>
-        <div class="col-6" style="text-align: center;">
-            <a class="nav-link" routerLink="notes" routerLinkActivate="active" ariaCurrentWhenActive="page">Notes</a>
-        </div>
+<!-- <nav class="mainNavBar navbar navbar-expand  fixed-top ">
+    <div id="navbarNav" style="width: 100%; padding: 0%;">
+        <ul  class="navbarUl navbar-nav">
+            <li class="nav-item nav-item-light active">
+                <a class="navlink nav-link link-warning" routerLink="generalInfo" routerLinkActivate="active" ariaCurrentWhenActive="page">Genarl Info</a>
+            </li>
+            <li class="nav-item">
+                <a class="navlink nav-link link-warning" routerLink="notes" routerLinkActivate="active" ariaCurrentWhenActive="page">Notes</a>
+            </li>
+        </ul>
     </div>
+</nav> 
+<div class="container">
+    <router-outlet></router-outlet>
+
+</div> -->
+<div class="container">
+    <plant-general-information [plantId]="plantId"></plant-general-information>
+    <plant-notes [plantId]="plantId"></plant-notes>
 </div>
-<router-outlet></router-outlet>

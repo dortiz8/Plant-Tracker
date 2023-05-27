@@ -1,0 +1,36 @@
+
+.plant-list-conatiner{
+    padding: 1rem;
+    background-image: linear-gradient(to bottom, rgb(52, 161, 130) 10%, #ddf1da 0%);
+}
+.main-row{
+    justify-content: center;
+    margin: 0 .3rem;
+    /* background-color: rgba(177, 176, 176, 0.809); */
+}
+
+.default-col{
+    
+    background-color: rgb(255, 251, 251);
+        box-shadow: 0 3px 10px rgba(55, 55, 55, 0.2);
+        border-radius: 5px 5px 5px 5px;
+        padding: 1rem;
+        margin: .5rem;
+}
+
+.default-col ul{
+    margin-right: .5rem;
+    margin-left: .5rem;
+}
+
+.plant-stats{
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    border-radius: 5px;
+    
+}
+
+span{
+    color: rgb(70, 70, 70);
+    font-size: small;
+    font-weight: bold;
+}

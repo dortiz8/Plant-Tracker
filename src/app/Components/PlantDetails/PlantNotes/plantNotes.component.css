@@ -1,0 +1,21 @@
+.main-container{
+    background-color: rgb(255, 251, 251);
+        box-shadow: 0 3px 10px rgba(55, 55, 55, 0.2);
+        border-radius: 5px 5px 5px 5px;
+        padding: 1rem;
+        
+       
+}
+ .plant-list {
+     margin-top: 1rem;
+ }
+
+ .btn{
+    background-color: rgb(52, 161, 130);
+        color: white;
+ }
+ .no-notes{
+    display: flex;
+    justify-content: center;
+    font-size: small;
+ }

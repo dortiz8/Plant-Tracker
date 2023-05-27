@@ -32,6 +32,7 @@ export class PlantFormComponent {
     errMessage: string; 
     addPlantSuccess$: Observable<boolean>;
     addSamePlant$: Observable<boolean>; 
+    editExistingPlant$: Observable<boolean>; 
     plant$: Observable<Plant>; 
 
     constructor(private store: Store<fromStore.ProductsState>,
@@ -44,6 +45,7 @@ export class PlantFormComponent {
     
     ngOnInit(){
       this.addSamePlant$ = this.store.select(fromStore.getAddSamePlant); 
+      this.editExistingPlant$ = this.store.select(fromStore.getEditExistingPlant); 
       this.userId =  localStorage.getItem('userId')?.toString(); 
       this.loading$ = this.store.select(fromStore.getPlantLoading);
       this.loaded$ = this.store.select(fromStore.getPlantLoaded);
@@ -59,29 +61,32 @@ export class PlantFormComponent {
     }
 
     mapPlant(){
-      var samePlantAction = this.addSamePlant$.subscribe({ 
-        next:(res: boolean)=>{
-          if(res){
-            this.plant$.subscribe(plant => {
-              this.plant = plant;
-              this.persistPlantData(true);
-            })
-          }else{
-            var localStorageSavedPlant = localStorage.getItem('plantState');
+      var isAddSamePlant = false; 
+      var isEditExistingPlant = false; 
+       this.addSamePlant$.subscribe(x =>{
+          isAddSamePlant = x
+       }); 
+       this.editExistingPlant$.subscribe(x => {
+         isEditExistingPlant = x
+       }); 
+      console.log(isAddSamePlant, isEditExistingPlant, ' issame or edit')
+      if(isAddSamePlant || isEditExistingPlant){
+       
+        this.plant$.subscribe(plant => {
+          this.plant = plant;
+          this.persistPlantData(true);
+        })
+      }else{
+        var localStorageSavedPlant = localStorage.getItem('plantState');
 
-            if (localStorageSavedPlant != null) {
-              this.plant = JSON.parse(localStorageSavedPlant)
-            }else{
-              this.plant = new Plant(); 
-            }
-          }
-          this.mapPlantEditFormGroup();
-          this.getGenusMenu();
-        },
-        error:(err: HttpErrorResponse)=>{
-          this.showError = true; 
+        if (localStorageSavedPlant != null) {
+          this.plant = JSON.parse(localStorageSavedPlant)
+        } else {
+          this.plant = new Plant();
         }
-      }); 
+      }
+      this.mapPlantEditFormGroup();
+      this.getGenusMenu();
     }
 
     mapPlantEditFormGroup() {

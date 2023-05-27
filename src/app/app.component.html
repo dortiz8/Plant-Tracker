@@ -1,6 +1,13 @@
 
-<header>
-  <navigation [userAuthenticated] = 'userAuthenticated' [mainTitle]="title"></navigation>
-</header>
-<router-outlet></router-outlet>
 
+<div class="container" style="padding: 0;">
+    <div class="header">
+        <top-nav [userAuthenticated]='userAuthenticated' [mainTitle]="title"></top-nav>
+    </div>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="footer">
+        <bottom-nav  [userAuthenticated]='userAuthenticated'></bottom-nav>
+    </div>
+</div>

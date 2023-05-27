@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 // Route information
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -11,15 +11,17 @@ import { PlantNoteDelete } from 'src/app/shared/models/PlantNoteDelete';
 import { PlantNoteCreation } from 'src/app/shared/models/PlantNoteCreation';
 import { PatchListObject, PatchObject } from 'src/app/shared/models/PatchObject';
 import { ObjectMapper } from 'src/app/shared/services/utils/objectMapper';
+import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'plant-notes',
     templateUrl: './plantNotes.component.html',
-    styleUrls: [],
+    styleUrls: ['./plantNotes.component.css'],
     providers: []
 })
 export class PlantNotesComponent {
-   plantId: string | null | undefined;
+    @Input() plantId: string | null | undefined; 
+//    plantId: string | null | undefined;
    plantNotes$: Observable<PlantNote[]>;
    loading$: Observable<boolean>; 
    loaded$: Observable<boolean>; 
@@ -28,7 +30,7 @@ export class PlantNotesComponent {
     loadingFailed$: Observable<boolean>;
     errMessage$: Observable<string>;
     showError: boolean;
-    
+    addIcon = faSquarePlus; 
     
     constructor(private readonly route: ActivatedRoute, private store: Store<fromStore.ProductsState>) {
     
@@ -36,7 +38,7 @@ export class PlantNotesComponent {
     
     ngOnInit() {
         this.errMessage$ = this.store.select(fromStore.getPlantNotesErrMessage);
-        this.plantId = this.route.parent?.snapshot.paramMap.get('plantId');
+        //this.plantId = this.route.parent?.snapshot.paramMap.get('plantId');
         this.isAddingNewNote$ = this.store.select(fromStore.getPlantNotesAddingChildNote); 
         //console.log('notes ', this.plantId)
         this.loading$ = this.store.select(fromStore.getPlantNotesLoading); 

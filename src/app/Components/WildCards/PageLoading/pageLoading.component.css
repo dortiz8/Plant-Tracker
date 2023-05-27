@@ -1,0 +1,6 @@
+.spinner-border{
+    position: fixed;
+    top: 30%;
+    left: 45%;
+    z-index: 1;
+}

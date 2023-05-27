@@ -12,7 +12,6 @@ import { LoginFormComponent } from './Components/Login/loginForm.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AppJwtModule } from './app-jwt.module';
 import { PlantDetailsComponent } from './Components/PlantDetails/plantDetails.component';
-import { NavigationComponent } from './Components/Navigation/navigation.component';
 import { PageNotFoundComponent } from './Components/WildCards/PageNotFound/pageNotFound.component';
 import { PlantNotesComponent } from './Components/PlantDetails/PlantNotes/plantNotes.component';
 import { PlantGeneralInformationComponent } from './Components/PlantDetails/PlantGeneralInformation/plantGeneralInformation.component';
@@ -37,6 +36,9 @@ import { PageDeletePromptComponent } from './Components/WildCards/PageDeleteProm
 import { PlantNote } from './shared/models/PlantNote';
 import { PlantNoteComponent } from './Components/PlantDetails/PlantNote/plantNote.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PlantsStatsComponent } from './Components/PlantsStats/plantsStats.component';
+import { TopNavigationComponent } from './Components/Navigation/TopNavigation/topNav.component';
+import { BottomNavigationComponent } from './Components/Navigation/BottomNavigation/bottomNav.component';
 
 @NgModule({
   declarations: [
@@ -47,11 +49,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     PlantFormComponent,
     LoginFormComponent, 
     PlantDetailsComponent,
-    NavigationComponent, 
+    TopNavigationComponent,
+    BottomNavigationComponent, 
     PageNotFoundComponent, 
     PlantNotesComponent, 
     PlantNoteComponent,
     PlantGeneralInformationComponent, 
+    PlantsStatsComponent, 
     PageLoadingComponent, 
     PageFailedComponent, 
     PageSuccessComponent, 

@@ -12,7 +12,7 @@ import { from, Observable } from 'rxjs';
 import { PlantDelete } from 'src/app/shared/models/PlantDelete';
 import { ObjectMapper } from 'src/app/shared/services/utils/objectMapper';
 import { PlantDateService } from 'src/app/shared/services/dates/PlantDateService';
-import {faAdd, faTrash, faPen, faDroplet, faPlantWilt, faTriangleExclamation, faCircleInfo} from '@fortawesome/free-solid-svg-icons'
+import {faAdd, faTrash, faPen, faDroplet, faPlantWilt, faSeedling, faCircleInfo, faEllipsis} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'plant-card',
@@ -33,13 +33,15 @@ export class PlantCardComponent {
     //Icons
     addIcon = faAdd; 
     deleteIcon = faTrash; 
-    editIcon = faPen; 
+    editIcon = faEllipsis; 
     waterIcon = faDroplet; 
     fertilizeIcon = faPlantWilt; 
-    triangleExclamationIcon = faTriangleExclamation; 
+    seedlingIcon = faSeedling; 
     infoIcon = faCircleInfo; 
 
-    constructor(private store: Store<fromStore.ProductsState>, private readonly plantService: PlantService, private readonly router: Router, 
+    constructor(private store: Store<fromStore.ProductsState>, 
+        private readonly plantService: PlantService, 
+        private readonly router: Router, 
         private readonly dateService: PlantDateService) {
         
         
@@ -60,7 +62,8 @@ export class PlantCardComponent {
         actionName == 'water' ? this.store.dispatch(new fromStore.WaterPlant(patchListObject)) : this.store.dispatch(new fromStore.FertilizePlant(patchListObject));  
     }
     navigateToPlantEditPage(){
-        this.router.navigate(['/editPlant', this.plant.id]);
+        this.store.dispatch(new fromStore.EditExistingPlant(this.plant))
+        //this.router.navigate(['/editPlant', this.plant.id]);
     }
     navigateToAddPlantPage(){
         this.store.dispatch(new fromStore.AddSamePlant(this.plant))

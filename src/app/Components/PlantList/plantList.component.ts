@@ -7,11 +7,11 @@ import { Store, createAction } from '@ngrx/store';
 import * as fromStore from '../../shared/store'; 
 import { LocalStorageService } from 'src/app/shared/services/authentication/LocalStorageService';
 import { USER_ID } from 'src/app/shared/constants/auth';
+import { PlantsStats } from 'src/app/shared/models/PlantsStats';
 @Component({
   selector: 'plant-list',
   templateUrl: './plantList.component.html',
   styleUrls: ['./plantList.component.css'],
-  providers: []
 })
 export class PlantListComponent {
   // The $ sign means that this will be an observable variable

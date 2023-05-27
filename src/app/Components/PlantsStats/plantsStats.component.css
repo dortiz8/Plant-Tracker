@@ -1,0 +1,40 @@
+.table{
+   
+    background-color: rgb(255, 251, 251);
+    box-shadow: 0 3px 10px rgba(55, 55, 55, 0.2);
+    border-radius: 5px 5px 5px 5px;
+    padding: 1rem;
+    margin: 0rem;
+    
+}
+.plant-stats tr{
+    /* width: 100%; */
+}
+
+.table-row td{
+    width: 100%;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    
+}
+
+.genus-list{
+    padding: 0;
+    
+}
+
+th, td{
+    color: rgb(70, 70, 70);
+    font-size: small;
+}
+.main-table{
+
+}
+.badge{
+    background-color: rgb(52, 161, 130);
+}
+.specialIcon{
+    color: rgb(52, 161, 130);
+    margin-right: .5rem;
+}
