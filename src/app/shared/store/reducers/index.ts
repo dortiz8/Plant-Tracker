@@ -73,6 +73,8 @@ export const getAllPlants = createSelector(getPlantsState, fromPlants.getPlants)
 export const getPlantsLoaded = createSelector(getPlantsState, fromPlants.getPlantsLoaded); 
 export const getPlantsLoading = createSelector(getPlantsState, fromPlants.getPlantsLoading); 
 export const getPlantsErrMessage = createSelector(getPlantsState, fromPlants.getPlantsErrMessage); 
+export const getPlantsDeletingStarted = createSelector(getPlantsState, fromPlants.getPlantsDeletingStarted);
+export const getPlantsPlantToDelete = createSelector(getPlantsState, fromPlants.getPlantsPlantToDelete);
 
 
 export const getPlant = createSelector(getPlantState, fromPlant.getPlant); 

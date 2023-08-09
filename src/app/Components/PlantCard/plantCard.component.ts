@@ -63,16 +63,14 @@ export class PlantCardComponent {
     }
     navigateToPlantEditPage(){
         this.store.dispatch(new fromStore.EditExistingPlant(this.plant))
-        //this.router.navigate(['/editPlant', this.plant.id]);
     }
     navigateToAddPlantPage(){
         this.store.dispatch(new fromStore.AddSamePlant(this.plant))
     }
 
     deletePlant(){
-        this.plantToDelete = {userId: this.userId, plantId: this.plant.id}; 
-
-        this.store.dispatch(new fromStore.DeletePlant(this.plantToDelete))
+        // this.plantToDelete = {userId: this.userId, plantId: this.plant.id}; 
+        // this.store.dispatch(new fromStore.DeletePlant(this.plantToDelete))
     }
     startDeleteProcess(){
         this.deletePanelIsOn = true; 

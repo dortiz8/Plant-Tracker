@@ -1,7 +1,8 @@
 
 .plant-list-conatiner{
-    padding: 1rem;
+    /* padding: 1rem; */
     background-image: linear-gradient(to bottom, rgb(52, 161, 130) 10%, #ddf1da 0%);
+    width: 100%;
 }
 .main-row{
     justify-content: center;
@@ -33,4 +34,13 @@ span{
     color: rgb(70, 70, 70);
     font-size: small;
     font-weight: bold;
+}
+
+.searchArea{
+    margin: 1rem 0;
+}
+
+.searchArea .form-control{
+    color: rgb(70, 70, 70);
+    font-size: small;
 }

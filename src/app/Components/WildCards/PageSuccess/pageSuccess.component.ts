@@ -13,5 +13,8 @@ export class PageSuccessComponent{
     ngOnInit(){
         
     }
+    ngOnDestroy(){
+        this.componentMessage = ''; 
+    }
    
 }

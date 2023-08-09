@@ -13,6 +13,8 @@ import { PlantNoteDelete } from '../../models/PlantNoteDelete';
 import { PlantNoteLoad } from '../../models/PlantNoteLoad';
 import { PlantDateService } from '../dates/PlantDateService';
 import { IPlantService } from './IPlantService';
+import { PlantImageEdit } from '../../models/PlantImageEdit';
+import { BASE_PLANT_ROUTE } from '../../constants/routes';
 
 @Injectable({
   providedIn: 'root',
@@ -30,65 +32,78 @@ export class PlantService implements IPlantService {
     headers_object = new HttpHeaders().set("Authorization", "Bearer " + localStorage.getItem('token'));
     
     deletePlantById(plant: PlantDelete): Observable<any> {
-      return this.http.delete(`api/users/${plant.userId}/plants/${plant.plantId}`, { headers: this.headers_object })
+      return this.http.delete(`${BASE_PLANT_ROUTE}${plant.userId}/plants/${plant.plantId}`, { headers: this.headers_object })
     }
     
     
-    addPlantbyId(plant: Plant): Observable<any> {
+    addPlantbyId(plant: PlantCreation): Observable<any> {
+
+      var image: PlantImageEdit = {
+        userId: plant.image.userId,
+        plantId: plant.image.plantId,
+        name: plant.image.name,
+        type: plant.image.type,
+        size: plant.image.size,
+        base64: plant.image.base64
+      }
       var body: PlantEdit = {
         name: plant.name,
         genusId: plant.genusId,
         dateWatered: plant.dateWatered,
         dateFertilized: plant.dateFertilized,
         fertilizeInterval: plant.fertilizeInterval,
-        waterInterval: plant.waterInterval
+        waterInterval: plant.waterInterval,
+        image: image,
       }
-      return this.http.post(`api/users/${plant.userId}/plants`, body, { headers: this.headers_object });
+      console.log(body)
+      return this.http.post(`${BASE_PLANT_ROUTE}${plant.userId}/plants`, body, { headers: this.headers_object });
     }
     getPlantById(plantLoad: PlantLoad): Observable<any>{
       const { plantId , info, userId} = plantLoad; 
-      return this.http.get(`api/users/${userId}/plants/${plantId}?info=${info}`, { headers: this.headers_object });
+      return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants/${plantId}?info=${info}`, { headers: this.headers_object });
     }; 
     
-    putPlantById(plant: Plant): Observable<any>{
+    putPlantById(plant: PlantCreation): Observable<any>{
       var body: PlantEdit = {
         name: plant.name,
         genusId: plant.genusId,
         dateWatered: plant.dateWatered,
         dateFertilized: plant.dateFertilized,
         fertilizeInterval: plant.fertilizeInterval,
-        waterInterval: plant.waterInterval
+        waterInterval: plant.waterInterval,
+        image: plant.image,
+        
       }
       
-      return this.http.put(`api/users/${plant.userId}/plants/${plant.id}`, body, { headers: this.headers_object });
+      return this.http.put(`${BASE_PLANT_ROUTE}${plant.userId}/plants/${plant.id}`, body, { headers: this.headers_object });
     }
     
     
     getPlantList(userId: string | null): Observable<any> { 
-      return this.http.get(`api/users/${userId}/plants`, {headers: this.headers_object}); 
+      return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants`, {headers: this.headers_object}); 
     }
     
     patchWaterOrFertilizePlant(patchListObject: PatchListObject): Observable<any>{
       var body = patchListObject.patchArray; 
-      return this.http.patch(`api/users/${patchListObject.userId}/plants/${patchListObject.plantId}`, body , { headers: this.headers_object} )
+      return this.http.patch(`${BASE_PLANT_ROUTE}${patchListObject.userId}/plants/${patchListObject.plantId}`, body , { headers: this.headers_object} )
     }
     
     getPlantNotesById(plantNoteLoad: PlantNoteLoad): Observable<any> {
-      return this.http.get(`api/users/${plantNoteLoad.userId}/plants/${plantNoteLoad.plantId}/notes`, { headers: this.headers_object }); 
+      return this.http.get(`${BASE_PLANT_ROUTE}${plantNoteLoad.userId}/plants/${plantNoteLoad.plantId}/notes`, { headers: this.headers_object }); 
     }
     
     deletePlantNoteById(note: PlantNoteDelete): Observable<any> {
-      return this.http.delete(`api/users/${note.userId}/plants/${note.plantId}/notes/${note.Id}`)
+      return this.http.delete(`${BASE_PLANT_ROUTE}${note.userId}/plants/${note.plantId}/notes/${note.Id}`)
     }
     addPlantNotebyId(note: PlantNoteCreation): Observable<any> {
-      return this.http.post(`api/users/${note.userId}/plants/${note.plantId}/notes`, note, { headers: this.headers_object })
+      return this.http.post(`${BASE_PLANT_ROUTE}${note.userId}/plants/${note.plantId}/notes`, note, { headers: this.headers_object })
     }
     patchPlantNotebyId(patchListObject: PatchListObject): Observable<any> {
       const body = patchListObject.patchArray; 
-      return this.http.patch(`api/users/${patchListObject.userId}/plants/${patchListObject.plantId}/notes/${patchListObject.noteId}`, body, { headers: this.headers_object })
+      return this.http.patch(`${BASE_PLANT_ROUTE}${patchListObject.userId}/plants/${patchListObject.plantId}/notes/${patchListObject.noteId}`, body, { headers: this.headers_object })
     }
     getPlantsStatsById(userId: string | null):Observable<any> {
-      return this.http.get(`api/users/${userId}/plants/stats`, { headers: this.headers_object }); 
+      return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants/stats`, { headers: this.headers_object }); 
     };
     
   }

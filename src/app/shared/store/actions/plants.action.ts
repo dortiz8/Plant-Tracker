@@ -11,6 +11,8 @@ export const LOAD_PLANTS = '[Products] Load Plants';
 export const LOAD_PLANTS_FAIL = '[Products] Load Plants Fail'; 
 export const LOAD_PLANTS_SUCCESS = '[Products] Load Plants Success'; 
 
+export const BEGIN_DELETE_PLANT_PROCESS = '[Products] Begin Delete Plant Process'
+export const CANCEL_DELETE_PLANT_PROCESS = '[Products] Cancel Delete Plant Process'
 export const DELETE_PLANT = '[Products] Delete Plant'
 export const DELETE_PLANT_FAIL = '[Products] Delete Plant Fail'
 export const DELETE_PLANT_SUCCESS = '[Products] Delete Plant Success'
@@ -26,6 +28,15 @@ export class LoadPlantsFail implements Action {
 export class LoadPlantsSuccess implements Action {
     readonly type = LOAD_PLANTS_SUCCESS; 
     constructor(public payload: Plant[]) {}
+}
+
+export class BeginDeletePlantProcess implements Action {
+    readonly type = BEGIN_DELETE_PLANT_PROCESS;
+    constructor(public payload: PlantDelete) { }
+}
+
+export class CancelDeletePlantProcess implements Action {
+    readonly type = CANCEL_DELETE_PLANT_PROCESS;
 }
 
 export class DeletePlant implements Action {
@@ -44,4 +55,4 @@ export class DeletePlantSuccess implements Action {
 // Action types
 
 export type PlantsAction = LoadPlants | LoadPlantsFail | LoadPlantsSuccess | 
-    DeletePlant | DeletePlantFail | DeletePlantSuccess;
+    BeginDeletePlantProcess | CancelDeletePlantProcess | DeletePlant | DeletePlantFail | DeletePlantSuccess;

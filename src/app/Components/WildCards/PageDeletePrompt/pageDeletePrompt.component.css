@@ -1,0 +1,31 @@
+.default-card{
+        max-width: 600px;
+    
+    /* background: linear-gradient(to right,
+                rgb(252, 192, 143) 0%,
+                rgb(252, 192, 143)65%,
+                #eeeeee 65%,
+                #eeeeee 100%); */
+    
+    margin-top: 6rem;
+    margin-bottom: .5rem;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    border-radius: 5px;
+
+    position: absolute;
+    z-index: 3;
+    top: 25%; 
+}
+.card-header h3{
+      font-size: medium;
+      text-align: center;
+}
+.card-body{
+    display: flex;
+    justify-content: center;
+}
+.btn{
+    width: 3rem;
+    padding: .2rem;
+    margin: 0 1rem;
+}

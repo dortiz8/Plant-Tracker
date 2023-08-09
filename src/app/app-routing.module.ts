@@ -10,6 +10,7 @@ import { PageNotFoundComponent } from './Components/WildCards/PageNotFound/pageN
 import { PlantGeneralInformationComponent } from './Components/PlantDetails/PlantGeneralInformation/plantGeneralInformation.component';
 import { PlantNotesComponent } from './Components/PlantDetails/PlantNotes/plantNotes.component';
 import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm.component';
+import { LoginFormGoogleComponent } from './Components/Login/loginFormGoogle.component';
 
 const routes: Routes = [
   // have your most specific routes at the top

@@ -12,6 +12,10 @@ import { GenusService } from "src/app/shared/services/menus/MenusService";
 import { Genus } from "src/app/shared/models/Genus";
 import { FormValidators } from "src/app/shared/services/utils/formValidators"; 
 import { PlantLoad } from "src/app/shared/models/PlantLoad";
+import { PlantCreation } from "src/app/shared/models/PlantCreation";
+import { Subscription } from "rxjs";
+import { LocalStorageService } from "src/app/shared/services/authentication/LocalStorageService";
+import { HOME_ROUTE } from "src/app/shared/constants/routes";
 
 @Component({
     selector: 'plant-editForm',
@@ -28,6 +32,7 @@ export class PlantEditFormComponent {
     loadingFailed$: Observable<boolean>;
     errMessage$: Observable<string>;
     editPlantSuccess$: Observable<boolean>;
+    loadUserId$: Observable<string>; 
 
     showError: boolean;
     userIdFromStorage: string | null;
@@ -39,6 +44,9 @@ export class PlantEditFormComponent {
     localStorageId: string | null; 
     plantId: string | null; 
     genusOptions: string []=  ['option1', 'option2', 'option3']
+
+    plantSubscription: Subscription;
+    userIdSubscription: Subscription; 
     /**
      *
      */
@@ -46,10 +54,11 @@ export class PlantEditFormComponent {
         private readonly route: ActivatedRoute, 
         private readonly genusService: GenusService, 
         private readonly router: Router, 
-        private readonly formValidator: FormValidators) {
+        private localStorageService: LocalStorageService,) {
         
     }
     ngOnInit() {
+        this.loadUserId$ = this.store.select(fromStore.getUserId); 
         this.plantId = this.route.snapshot.paramMap.get('plantId');
         this.loading$ = this.store.select(fromStore.getPlantLoading);
         this.loaded$ = this.store.select(fromStore.getPlantLoaded); 
@@ -57,35 +66,58 @@ export class PlantEditFormComponent {
         this.loadingFailed$ = this.store.select(fromStore.getPlantLoaded);
         this.errMessage$ = this.store.select(fromStore.getPlantErrMessage);
         this.editPlantSuccess$ = this.store.select(fromStore.getEditPlantSuccess); 
+
         
        //We are going to load all plants by dispatching an action 
-     
+       this.loadUserId(); 
         this.loadPlant(); 
+        this.mapPlant(); 
         this.getGenusMenu(); 
 
-        var plantLoad : PlantLoad ={
-            plantId: this.plantId,
-            info: false,
-            userId: localStorage.getItem('userId')?.toString()
-        }; 
-
-        this.store.dispatch(new fromStore.LoadPlant(plantLoad));
+        
     };
+
+    ngOnDestroy(){
+        this.plantSubscription.unsubscribe(); 
+        this.userIdSubscription.unsubscribe(); 
+    }
+
+
+    loadUserId() {
+        this.userIdSubscription = this.loadUserId$.subscribe(userId => {
+            if (userId != null) {
+                this.userId = userId
+            } else {
+                var retrievedUserId = this.localStorageService.retrieveKey('userId');
+                if (retrievedUserId != null) {
+                    this.userId = retrievedUserId
+                }
+            }
+        });
+    }
 
     cancelEdit(){
         this.store.dispatch(new fromStore.ResetPlant()); 
-        this.router.navigate(['/home']); 
+        this.router.navigate([HOME_ROUTE]); 
     }
 
     loadPlant(){
-        this.plant$.subscribe({
+        var plantLoad: PlantLoad = {
+            plantId: this.plantId,
+            info: false,
+            userId: this.userId
+        }
+
+        this.store.dispatch(new fromStore.LoadPlant(plantLoad));
+    }
+
+    mapPlant(){
+        this.plantSubscription = this.plant$.subscribe({
             next: (res: any) => {
                 this.plant = res;
-                console.log(res, ' from plant form');
                 this.mapPlantEditFormGroup();
             },
             error: (err: HttpErrorResponse) => {
-                console.log(err)
                 this.showError = true;
             }
         })
@@ -121,7 +153,7 @@ export class PlantEditFormComponent {
         
     }
     submitEdit(editFormValue: any){
-        var plant: Plant = {...editFormValue, userId: this.plant.userId, id: this.plantId}
+        var plant: PlantCreation = {...editFormValue, userId: this.plant.userId, id: this.plantId}
         this.store.dispatch(new fromStore.EditPlant(plant)); 
     }
     validateControl = (controlName: string) => {
@@ -129,7 +161,7 @@ export class PlantEditFormComponent {
     }
 
     hasError = (controlName: string, errorName: string) => {
-        console.log(this.editForm.get(controlName))
+        // console.log(this.editForm.get(controlName))
         return this.editForm.get(controlName)?.hasError(errorName);
     }
  

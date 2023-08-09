@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { defer, Observable, of } from 'rxjs';
 import { map, mergeMap, catchError, withLatestFrom, delay, tap } from 'rxjs/operators';
 import { TOKEN, USER_ID } from '../../constants/auth';
+import { HOME_ROUTE } from '../../constants/routes';
 import { AuthResponseBody } from '../../models/IAuthResponse';
 import { AuthenticationService } from '../../services/authentication/AuthenticationService';
 import { LocalStorageService } from '../../services/authentication/LocalStorageService';
@@ -26,9 +27,8 @@ export class UserEffects{
         mergeMap(({ payload }) => this.authService.postAuthenticationCredentials(payload)
             .pipe(
                 map(user => {
-                    console.log(user)
                     this.localStorageService.storeKeys(ObjectMapper.mapUserToLocalStorageObject(user)); 
-                    this.router.navigate(['/home']);
+                    this.router.navigate([HOME_ROUTE]);
                     return new userActions.LoadUserSuccess(user)
                 }),
                 catchError((err) => of(new userActions.LoadUserFail(err)))

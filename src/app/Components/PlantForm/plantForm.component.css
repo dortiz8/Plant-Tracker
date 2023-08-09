@@ -3,6 +3,9 @@
     font-size: small;
     
  }
+ .form-group{
+    margin: .2rem 0;
+ }
  .container{
     margin-top: 1rem;
     
@@ -33,4 +36,27 @@
     
     background-color:rgb(52, 161, 130);
     color: white;
+}
+.imageBtn{
+    width: 2.5rem;
+        padding: .5rem;
+        font-size: small;
+        
+}
+.selected-image{
+    font-size: small;
+    font-weight: bold;
+    color: rgb(52, 161, 130);
+}
+.image-button-area{
+    display: flex;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.image-form-group{
+    margin: 1rem 0;
+   
 }

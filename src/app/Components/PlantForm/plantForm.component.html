@@ -7,9 +7,23 @@
 <div *ngIf="(addPlantSuccess$ | async)">
   <page-success componentMessage="Plant Added Successfully"></page-success>
 </div>
+<div *ngIf="(editPlantSuccess$ | async)">
+  <page-success componentMessage="Edit Successful"></page-success>
+</div>
 <div class="container">
   <div *ngIf="plant" class="form-container">
+        <div *ngIf="isAddSamePlant">
+          <div class="alert alert-warning" role="alert">
+            {{addingMessage}}
+          </div>
+        </div>
+        <div *ngIf="isEditExistingPlant || (!isAddSamePlant && !isEditExistingPlant)">
+          <div class="alert alert-info" role="alert">
+            {{addingMessage}}
+          </div>
+        </div>
         <form [formGroup]="editForm" autocomplete="off" novalidate (submit)="submitEdit(editForm.value)">
+         
           <div class="form-group row ">
             <label for="inputName" class="col-sm-2 col-lg-2 col-form-label">Name</label>
             <div class="col-sm-10 col-lg-10">
@@ -93,16 +107,30 @@
                 date format</em>
             </div>
           </div>
-          <div *ngIf="(addPlantSuccess$ | async)" class="form-group row py-sm-3 mb-0">
+          <div class="image-form-group form-group row">
+            <label for="inputImage" class="image-button-area">Image Upload <a class="imageBtn btn btn-sm btn-primary"><fa-icon
+                  class="specialIcon editIcon" [icon]="cameraIcon"></fa-icon></a>
+            </label>
+            <div>
+              <input type="file" class="form-control" id="inputImage" formControlName='image' style="display: none;"
+                (change)="handleFileChange($event)">
+            </div>
+            <div class="selected-image">
+              {{selectedImage?.name}}
+            </div>
+          </div>
+          <div *ngIf="(addPlantSuccess$ | async) || (editPlantSuccess$ | async) else submitDiv" class="form-group row py-sm-3 mb-0">
             <button class="btn btn-success btn-md btn-block" (click)="cancelEdit()">Done</button>
           </div>
-          <div *ngIf="!(addPlantSuccess$ | async)" class="form-actions form-group py-sm-3 mb-0">
-            <button type="submit" class="save-btn btn btn-md btn-block" style="margin: .5rem 0;"
-              [disabled]='editForm.status == "INVALID" || (editForm.pristine == true && !(addSamePlant$ | async))'>Save</button>
-  
-              <button type="button" class="btn btn-secondary btn-md btn-block" (click)="clearForm()" style="margin: .5rem 0;">Clear</button>
-              <button type="button" class="btn btn-danger btn-md btn-block" (click)="cancelEdit()" style="margin: .5rem 0;">Cancel</button>
-          </div>
+          <ng-template #submitDiv>
+            <div class="form-actions form-group py-sm-3 mb-0">
+              <button type="submit" class="save-btn btn btn-md btn-block" style="margin: .5rem 0;"
+                [disabled]='editForm.status == "INVALID" || (editForm.pristine == true && !(addSamePlant$ | async))'>Save</button>
+    
+                <button type="button" class="btn btn-secondary btn-md btn-block" (click)="clearForm()" style="margin: .5rem 0;">Clear</button>
+                <button type="button" class="btn btn-danger btn-md btn-block" (click)="cancelEdit()" style="margin: .5rem 0;">Cancel</button>
+            </div>
+          </ng-template>
         </form>
   </div>
 </div>

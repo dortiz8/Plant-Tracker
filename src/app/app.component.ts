@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import * as fromStore from './shared/store';
 import { IS_AUTH } from './shared/constants/auth';
 import { LocalStorageService } from './shared/services/authentication/LocalStorageService';
+import { Observable } from 'rxjs';
+
 
 
 @Component({
@@ -14,22 +16,27 @@ import { LocalStorageService } from './shared/services/authentication/LocalStora
 })
 export class AppComponent {
   public title = 'Plant Tracker'; 
-  userAuthenticated : boolean; 
+  userAuthenticated : boolean;
+  getUserLoaded: Observable<boolean>  
   constructor(private localStorageService: LocalStorageService, private store: Store<fromStore.ProductsState>) {
     
   }; 
 
   ngOnInit(){
-    this.userAuthenticated = this.isUserAuthenticated(); 
+    this.getUserLoaded = this.store.select(fromStore.getUserLoaded); 
+    this.isUserAuthenticated(); 
   }
 
-  isUserAuthenticated():boolean{
-    // var userLoaded = null; 
-    // this.store.select(fromStore.getUserLoaded).subscribe(x => userLoaded = x); 
-    // if(userLoaded != false){
-    //   return true; 
-    // }
-    return this.localStorageService.retrieveKey(IS_AUTH) == "true" ? true : false; 
+  isUserAuthenticated():void{
+    this.getUserLoaded.subscribe(x =>{
+      this.userAuthenticated = x; 
+      if(!this.userAuthenticated){
+        var isUserAuth = this.localStorageService.retrieveKey(IS_AUTH); 
+        if(isUserAuth != null){
+          this.userAuthenticated = isUserAuth == "true" ? true : false; 
+        }
+      }
+    } ); 
   }
 }
 

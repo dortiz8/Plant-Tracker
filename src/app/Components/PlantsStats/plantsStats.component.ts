@@ -7,6 +7,7 @@ import { PlantsStats } from "src/app/shared/models/PlantsStats";
 import { LocalStorageService } from "src/app/shared/services/authentication/LocalStorageService";
 import * as fromStore from '../../shared/store';
 import { faDroplet, faPlantWilt, faSmile } from "@fortawesome/free-solid-svg-icons";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'plants-stats',
@@ -22,10 +23,11 @@ export class PlantsStatsComponent {
     loaded$: Observable<boolean>; 
     loadingFailed$: Observable<boolean>;
     errMessage$: Observable<string>;
-
+    plantSubscription: Subscription;
+    
     name: string = '';
     today: Date = new Date(); 
-
+    
     //Icons 
     waterIcon = faDroplet;
     fertilizeIcon = faPlantWilt; 
@@ -33,9 +35,10 @@ export class PlantsStatsComponent {
     constructor(
         private store: Store<fromStore.ProductsState>,
         private localStorageService: LocalStorageService) {
-
-    }
+            
+        }
     ngOnInit(){
+        this.plantSubscription = new Subscription();
         this.userId$ = this.store.select(fromStore.getUserId); 
         this.plantsStats$ = this.store.select(fromStore.getPlantsStats); 
         this.loaded$ = this.store.select(fromStore.getPlantsStatsLoaded); 
@@ -43,15 +46,16 @@ export class PlantsStatsComponent {
         this.loadPlatStats(); 
         this.mapPlantsStats(); 
     }
-
+    
     loadPlatStats(){
-        this.userId$.subscribe(x => {
+        var userIdSubscription = this.userId$.subscribe(x => {
             if (x == undefined) {
                 this.store.dispatch(new fromStore.LoadPlantsStats(this.localStorageService.retrieveKey(USER_ID)));
                 return;
             }
             this.store.dispatch(new fromStore.LoadPlantsStats(x))
         }); 
+        this.plantSubscription.add(userIdSubscription)
     }
 
     mapPlantsStats(){

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 @Component({
     selector: 'page-failed', 
     templateUrl: './pageFailed.component.html', 
-    styleUrls: [],
+    styleUrls: ['./pageFailed.component.css'],
     providers: []
 })
 

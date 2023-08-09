@@ -4,20 +4,19 @@ import { Observable } from 'rxjs';
 @Component({
     selector: 'page-delete-prompt', 
     templateUrl: './pageDeletePrompt.component.html', 
-    styleUrls: [],
+    styleUrls: ['./pageDeletePrompt.component.css'],
     providers: []
 })
 
 export class PageDeletePromptComponent{
     
-    @Input() plantName: string | undefined;
+    @Input() plantName: string | null | undefined;
     @Output("yesFunction") yesFunction: EventEmitter<any> = new EventEmitter();
     @Output("noFunction") noFunction: EventEmitter<any> = new EventEmitter();
     componentMessage: string;  
-    message: string; 
 
     ngOnInit(){
-        this.componentMessage = `Are you sure you want to delete plant ${this.plantName} `; 
+        this.componentMessage = `Are you sure you want to delete plant ${this.plantName}?`; 
     }
 
     emitNoFunction(){

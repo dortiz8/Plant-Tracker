@@ -6,6 +6,7 @@ import { PlantNoteLoad } from "../../models/PlantNoteLoad";
 import { UserLoad } from "../../models/UserLoad";
 import { AuthResponseBody } from "../../models/IAuthResponse";
 
+
 export class ObjectMapper{
 
     static mapUserForAuthentication(login: any){
@@ -24,6 +25,7 @@ export class ObjectMapper{
         }
         return userLoad;
     }
+
     static mapPlantNoteToDelete(Id: string | null | undefined, plantId: string | null | undefined, userId: string | null | undefined): PlantNoteDelete{
         var plantToDelete: PlantNoteDelete = {
             Id: Id,

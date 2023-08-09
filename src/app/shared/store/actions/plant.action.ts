@@ -49,7 +49,7 @@ export class LoadPlantInfoSuccess implements Action {
 
 export class EditPlant implements Action {
     readonly type = EDIT_PLANT; 
-    constructor(public payload: Plant) { } 
+    constructor(public payload: PlantCreation) { } 
 } 
 
 export class EditExistingPlant implements Action{
@@ -70,7 +70,7 @@ export class ResetPlant implements Action {
 
 export class AddPlant implements Action {
     readonly type = ADD_PLANT;
-    constructor(public payload: Plant) { }
+    constructor(public payload: PlantCreation) { }
 } 
 export class AddPlantFail implements Action {
     readonly type = ADD_PLANT_FAIL;

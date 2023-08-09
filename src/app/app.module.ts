@@ -39,6 +39,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlantsStatsComponent } from './Components/PlantsStats/plantsStats.component';
 import { TopNavigationComponent } from './Components/Navigation/TopNavigation/topNav.component';
 import { BottomNavigationComponent } from './Components/Navigation/BottomNavigation/bottomNav.component';
+import { FilterPipe } from './shared/services/utils/lisFilter';
+import { GoogleLoginProvider, SocialLoginModule } from 'angularx-social-login';
+import { AuthGuard } from './shared/services/authentication/AuthGuard';
+import { LoginFormGoogleComponent } from './Components/Login/loginFormGoogle.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +52,7 @@ import { BottomNavigationComponent } from './Components/Navigation/BottomNavigat
     PlantEditFormComponent,
     PlantFormComponent,
     LoginFormComponent, 
+    LoginFormGoogleComponent, 
     PlantDetailsComponent,
     TopNavigationComponent,
     BottomNavigationComponent, 
@@ -59,7 +64,8 @@ import { BottomNavigationComponent } from './Components/Navigation/BottomNavigat
     PageLoadingComponent, 
     PageFailedComponent, 
     PageSuccessComponent, 
-    PageDeletePromptComponent
+    PageDeletePromptComponent, 
+    FilterPipe
   ],
   imports: [
     BrowserModule, 
@@ -75,6 +81,7 @@ import { BottomNavigationComponent } from './Components/Navigation/BottomNavigat
     MatFormFieldModule, 
     MatDatepickerModule, 
     MatNativeDateModule, 
+    SocialLoginModule,
     StoreModule.forRoot({}), 
     StoreModule.forFeature('user', userReducers),
     StoreModule.forFeature('products', reducers),  
@@ -84,7 +91,18 @@ import { BottomNavigationComponent } from './Components/Navigation/BottomNavigat
     FontAwesomeModule
     
   ],
-  providers: [],
+  providers: [{
+    provide: 'SocialAuthServiceConfig',
+    useValue: {
+      autoLogin: true, //keeps the user signed in
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider('683573935998-g2aveu6e7n98au5umaqvq8nbap9j4v7k.apps.googleusercontent.com') // your client id
+        }
+      ]
+    }
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 // Route information
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { from, Observable } from 'rxjs';
+import { from, Observable, Subscription } from 'rxjs';
 import { Plant } from 'src/app/shared/models/Plant';
 import * as fromStore from '../../../shared/store';
 
@@ -22,13 +22,13 @@ import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 export class PlantNotesComponent {
     @Input() plantId: string | null | undefined; 
 //    plantId: string | null | undefined;
-   plantNotes$: Observable<PlantNote[]>;
-   loading$: Observable<boolean>; 
-   loaded$: Observable<boolean>; 
-   
+    plantNotes$: Observable<PlantNote[]>;
+    loaded$: Observable<boolean>; 
+    plantLoaded$: Observable<boolean>; 
     isAddingNewNote$: Observable<boolean>;
     loadingFailed$: Observable<boolean>;
     errMessage$: Observable<string>;
+    noteSubscription: Subscription; 
     showError: boolean;
     addIcon = faSquarePlus; 
     
@@ -37,23 +37,27 @@ export class PlantNotesComponent {
     }
     
     ngOnInit() {
+        this.noteSubscription = new Subscription(); 
         this.errMessage$ = this.store.select(fromStore.getPlantNotesErrMessage);
         //this.plantId = this.route.parent?.snapshot.paramMap.get('plantId');
         this.isAddingNewNote$ = this.store.select(fromStore.getPlantNotesAddingChildNote); 
         //console.log('notes ', this.plantId)
-        this.loading$ = this.store.select(fromStore.getPlantNotesLoading); 
         this.plantNotes$ = this.store.select(fromStore.getPlantNotes); 
         this.store.dispatch(new fromStore.LoadPlantNotes(ObjectMapper.mapPlantNoteLoad(this.plantId, localStorage.getItem('userId')))); 
         this.loaded$ = this.store.select(fromStore.getPlantNotesLoaded); 
-        
+        this.plantLoaded$ = this.store.select(fromStore.getPlantLoaded); 
         //this.plantNotes$.subscribe(note => console.log(note))
     };
+    ngOnDestroy(){
+        this.noteSubscription.unsubscribe(); 
+    }
     
     isNewNote() {
         var isNewNote = false;
-        this.isAddingNewNote$.subscribe((x) => {
+        var isAddingNewNoteSubscription = this.isAddingNewNote$.subscribe((x) => {
             isNewNote = x;
         });
+        this.noteSubscription.add(isAddingNewNoteSubscription); 
         return isNewNote;
     }
 

@@ -53,6 +53,9 @@ export function reducer(state: PlantState = initialState,
         case fromPlant.LOAD_PLANT_SUCCESS: {
            const data = action.payload; 
            console.log(data, ' from reducer')
+      
+            console.log(state.editSuccess, ' edit success')
+
             return {
                 ...state,
                 loading: false, 
@@ -102,6 +105,7 @@ export function reducer(state: PlantState = initialState,
         }
         // Reset 
         case fromPlant.RESET_PLANT: {
+            console.log(state, ' plant reducer')
             return {
                 ...state,
                 loading: false, 
@@ -109,7 +113,8 @@ export function reducer(state: PlantState = initialState,
                 editSuccess: false,
                 addSuccess: false, 
                 addSame: false, 
-                editExisting: false
+                editExisting: false, 
+                errMessage: ''
             }
         }
         // Add 

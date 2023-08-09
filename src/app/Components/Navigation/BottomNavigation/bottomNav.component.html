@@ -1,10 +1,10 @@
 <nav class="main-nav navbar fixed-bottom navbar-light bg-light">
-    <div class="main-container  container-fluid">
+    <div *ngIf="userAuthenticated" class="main-container  container-fluid">
             <li class="nav-item active">
-                <a class="nav-button nav-link" [routerLink]="'/home'"><fa-icon class="specialIcon homeIcon" [icon]="homeIcon"></fa-icon>Home</a>
+                <a class="nav-button nav-link" [routerLink]="homeRoute"><fa-icon class="specialIcon homeIcon" [icon]="homeIcon"></fa-icon>Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-button nav-link" routerLink="/addPlant" routerLinkActivate="active" ariaCurrentWhenActive="page"><fa-icon class="specialIcon addIcon" [icon]="addIcon"></fa-icon>Add
+                <a class="nav-button nav-link" (click)="addPlant()" routerLinkActivate="active" ariaCurrentWhenActive="page"><fa-icon class="specialIcon addIcon" [icon]="addIcon"></fa-icon>Add
                     Plant</a>
             </li>
             <li class="nav-item" *ngIf="!userAuthenticated">

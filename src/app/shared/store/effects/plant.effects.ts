@@ -30,7 +30,7 @@ export class PlantEffects {
                 }),
                 catchError((err) => of(new plantActions.LoadPlantFail(err)))
             ))));
-    editPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.EDIT_PLANT), delay(1000),
+    editPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.EDIT_PLANT),
         mergeMap(({payload}) => this.plantService.putPlantById(payload)
             .pipe(
                 map(data => {

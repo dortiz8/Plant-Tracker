@@ -4,15 +4,20 @@
 <div *ngIf="(errMessage$ | async)"><page-failed [componentMessage]="errMessage$"></page-failed></div>
 <div  class="plant-list-conatiner container">
 
-  <div class="main-row row">
+  <div *ngIf="(plants$ | async)?.length && !(loading$ | async)" class="main-row row">
     <div class="default-col col-sm ">
       <plants-stats></plants-stats>
     </div>
-    <div *ngIf="(plants$ | async) && !(loading$ | async)" class="default-col col-sm ">
-      
+    <div  class="default-col col-sm ">
+      <div class="searchArea">
+        <form class="d-flex">
+            <input class="form-control mr-sm-2" [(ngModel)]='searchValue' type="search" placeholder="Search" aria-label="Search" name="searchBar">
+            <a class="btn" (click)="search()"><fa-icon class="specialIcon searchIcon" [icon]="searchIcon"></fa-icon></a>
+        </form>
+      </div>
       <ul  class="list-group list-group-light">
         <li><span class="list-title">My Plants</span></li>
-        <li *ngFor="let plant of (plants$ | async)">
+        <li *ngFor="let plant of plants | listFilter: searchValue">
           <plant-card [plant]="plant"></plant-card>
         </li>
       </ul>

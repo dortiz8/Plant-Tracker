@@ -1,3 +1,6 @@
+
+import { PlantImageEdit } from "./PlantImageEdit";
+
 export class PlantEdit {
     name: string | undefined;
     genusId: number | undefined;
@@ -5,4 +8,5 @@ export class PlantEdit {
     dateFertilized: Date | undefined;
     fertilizeInterval: number | undefined;
     waterInterval: number | undefined;
+    image: PlantImageEdit
 }

@@ -1,4 +1,5 @@
 export class PlantDelete{
-    userId: number | undefined; 
-    plantId: number | undefined; 
+    userId: string | undefined; 
+    plantId: number | undefined;
+    plantName: string | undefined;  
 }

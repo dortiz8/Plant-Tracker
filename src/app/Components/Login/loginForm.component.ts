@@ -5,11 +5,12 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import * as fromStore from '../../shared/store';
 import { AuthResponseBody } from "src/app/shared/models/IAuthResponse";
-import { UserForAuthentication } from "src/app/shared/models/UserForAuthentication";
+import { UserForAuthentication, UserForAuthenticationEncrypt } from "src/app/shared/models/UserForAuthentication";
 import { AuthenticationService } from "src/app/shared/services/authentication/AuthenticationService";
 import { ObjectMapper } from "src/app/shared/services/utils/objectMapper";
 import { Observable } from "rxjs";
 import { Auth } from "src/app/shared/models/Auth";
+import { HOME_ROUTE } from "src/app/shared/constants/routes";
 
 
 @Component({
@@ -26,8 +27,7 @@ export class LoginFormComponent implements OnInit {
     errorMessage$: Observable<string>;
     showError: boolean;
     user$: Observable<Auth>; 
-    //@Output() isAuthenticated = new EventEmitter<boolean>();
-
+    encrypedtUser: UserForAuthenticationEncrypt; 
     constructor(private store: Store<fromStore.UserState>, private authService: AuthenticationService, private router: Router, private route: ActivatedRoute) { }
     
     ngOnInit(): void {
@@ -35,9 +35,8 @@ export class LoginFormComponent implements OnInit {
             username: new FormControl("username", [Validators.required]),
             password: new FormControl("password", [Validators.required])
         })
-        this.returnUrl = '/home'; 
+        this.returnUrl = HOME_ROUTE; 
         this.errorMessage$ = this.store.select(fromStore.getUserErrMessage); 
-       //this.authService.expirationCheck(); 
     }
 
     validateControl = (controlName: string) => {
@@ -51,19 +50,35 @@ export class LoginFormComponent implements OnInit {
     loginUser = (loginFormValue: any) => {
         this.showError = false; 
         const login = {...loginFormValue}; 
+        //this.encryptPwdAndLoadUser(loginFormValue); 
+        // if(this.encrypedtUser != null){
+
+        // }
+        // this.loadUser(); 
         const userForAuthentication = ObjectMapper.mapUserLoad(login, "api/authentication/authenticate"); 
         console.log(userForAuthentication)
         this.store.dispatch(new fromStore.LoadUser(userForAuthentication)); 
+    }; 
 
-        //var authorized = this.authService.authenticateUser("api/authentication/authenticate", userForAuthentication); 
-        // console.log(authorized); 
-        // if (authorized.isAuthSuccessful){
-        //     this.router.navigate([this.returnUrl]).then(() => window.location.reload());
-        // }else{
-        //     this.errorMessage = authorized.errorMessage; 
-        //     this.showError = true;
-        // }
-    }
+    // encryptPwdAndLoadUser = (loginFormValue: any) => {
+    //     const login = { ...loginFormValue };
+    //     const encryptedPwd = AuthenticationService.encryptPwd(login.password); 
 
+    //     encryptedPwd.then((result) => {
+    //         const encryptUser = new UserForAuthenticationEncrypt(login.username, result);
+    //         this.encrypedtUser = encryptUser; 
+    //         console.log(this.encrypedtUser, ' encrypted user'); 
+    //         this.loadUser(); 
+    //     }).catch((err) => {
+    //         this.showError = true; 
+    //         return err; 
+    //     });
+
+    // }
+    // loadUser = () =>{
+    //     const userForAuthentication = ObjectMapper.mapUserLoad(this.encrypedtUser, "api/authentication/authenticate");
+    //     console.log(userForAuthentication)
+    //     this.store.dispatch(new fromStore.LoadUser(userForAuthentication));
+    // }
     
  }

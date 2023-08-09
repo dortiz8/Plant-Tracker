@@ -1,7 +1,10 @@
 // Helps with handling actions and changing state
 
+import { USER_ID } from "../../constants/auth";
 import { Plant } from "../../models/Plant";
+import { PlantDelete } from "../../models/PlantDelete";
 import * as fromPlants from "../actions/plants.action"; 
+import { DeletePlant } from "../actions/plants.action";
 import * as fromPlantsStats from "../actions/plantsStats.action"; 
 //import * as fromPlant from "../actions/plant.action"; 
 
@@ -10,7 +13,8 @@ export interface PlantsState {
     loaded: boolean, 
     loading: boolean, 
     errMessage: string, 
-  
+    deletingStarted: boolean, 
+    plantToDelete: any
 }
 // const plant1: Plant = {
 //     id: 1,
@@ -31,8 +35,9 @@ export const initialState: PlantsState ={
     data: [],
     loaded: false,
     loading: false,
-    errMessage: ''
- 
+    errMessage: '', 
+    deletingStarted: false,
+    plantToDelete: {}
 }; 
 
 export function reducer(state: PlantsState = initialState, action: fromPlants.PlantsAction): PlantsState {
@@ -45,7 +50,6 @@ export function reducer(state: PlantsState = initialState, action: fromPlants.Pl
         }
         case fromPlants.LOAD_PLANTS_FAIL:{
             const {status, statusText} = action.payload; 
-            console.log(`${status}: ${statusText} from reducer`); 
             return {
                 ...state,
                 loading: false,
@@ -62,12 +66,35 @@ export function reducer(state: PlantsState = initialState, action: fromPlants.Pl
                 data,
             }
         }
+        case fromPlants.BEGIN_DELETE_PLANT_PROCESS: {
+            const data = action.payload;
+            const plantToDelete: PlantDelete = {userId: data.userId, plantId: data.plantId, plantName: data.plantName}
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                deletingStarted: true,
+                plantToDelete: plantToDelete
+            }
+        }
+        case fromPlants.CANCEL_DELETE_PLANT_PROCESS: {
+           
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                deletingStarted: false,
+                plantToDelete: {}
+            }
+        }
         case fromPlants.DELETE_PLANT: {
             const data = action.payload;
             return {
                 ...state,
                 loading: true,
                 loaded: false,
+                deletingStarted: false, 
+                plantToDelete: {}
             }
         }
         case fromPlants.DELETE_PLANT_FAIL: {
@@ -76,6 +103,8 @@ export function reducer(state: PlantsState = initialState, action: fromPlants.Pl
                 ...state,
                 loading: false,
                 loaded: true,
+                deletingStarted: false,
+                plantToDelete: {},
                 errMessage: `${status}: ${statusText}`
             }
         }
@@ -88,6 +117,8 @@ export function reducer(state: PlantsState = initialState, action: fromPlants.Pl
                 ...state,
                 loading: false,
                 loaded: true,
+                deletingStarted: false,
+                plantToDelete: {},
                 data
             }
         }
@@ -99,3 +130,6 @@ export const getPlantsLoading = (state: PlantsState) => state.loading;
 export const getPlantsLoaded = (state: PlantsState) => state.loaded; 
 export const getPlants = (state: PlantsState) => state.data;
 export const getPlantsErrMessage = (state: PlantsState) => state.errMessage;
+export const getPlantsDeletingStarted= (state: PlantsState) => state.deletingStarted;
+export const getPlantsPlantToDelete= (state: PlantsState) => state.plantToDelete;
+
