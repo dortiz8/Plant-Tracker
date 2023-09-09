@@ -40,9 +40,10 @@ import { PlantsStatsComponent } from './Components/PlantsStats/plantsStats.compo
 import { TopNavigationComponent } from './Components/Navigation/TopNavigation/topNav.component';
 import { BottomNavigationComponent } from './Components/Navigation/BottomNavigation/bottomNav.component';
 import { FilterPipe } from './shared/services/utils/lisFilter';
-import { GoogleLoginProvider, SocialLoginModule } from 'angularx-social-login';
+import { GoogleLoginProvider, GoogleSigninButtonDirective, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { AuthGuard } from './shared/services/authentication/AuthGuard';
 import { LoginFormGoogleComponent } from './Components/Login/loginFormGoogle.component';
+import { AccountCreateFormComponent } from './Components/AccountCreate/accountCreateForm.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { LoginFormGoogleComponent } from './Components/Login/loginFormGoogle.com
     PlantFormComponent,
     LoginFormComponent, 
     LoginFormGoogleComponent, 
+    AccountCreateFormComponent, 
     PlantDetailsComponent,
     TopNavigationComponent,
     BottomNavigationComponent, 
@@ -91,18 +93,24 @@ import { LoginFormGoogleComponent } from './Components/Login/loginFormGoogle.com
     FontAwesomeModule
     
   ],
-  providers: [{
-    provide: 'SocialAuthServiceConfig',
-    useValue: {
-      autoLogin: true, //keeps the user signed in
-      providers: [
-        {
-          id: GoogleLoginProvider.PROVIDER_ID,
-          provider: new GoogleLoginProvider('683573935998-g2aveu6e7n98au5umaqvq8nbap9j4v7k.apps.googleusercontent.com') // your client id
-        }
-      ]
-    }
-  }],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false, //keeps the user signed in
+        providers: [
+            {
+              id: GoogleLoginProvider.PROVIDER_ID,
+              provider: new GoogleLoginProvider('683573935998-g2aveu6e7n98au5umaqvq8nbap9j4v7k.apps.googleusercontent.com') // your client id
+            }
+          ], 
+          onError: (err) => {
+            console.log(err); 
+          }  
+        } as SocialAuthServiceConfig, 
+    },
+    GoogleSigninButtonDirective,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

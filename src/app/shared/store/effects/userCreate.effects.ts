@@ -9,35 +9,39 @@ import { HOME_ROUTE } from '../../constants/routes';
 import { AuthResponseBody } from '../../models/IAuthResponse';
 import { AuthenticationService } from '../../services/authentication/AuthenticationService';
 import { LocalStorageService } from '../../services/authentication/LocalStorageService';
+import { UserService } from '../../services/user/userService';
+
 import { ObjectMapper } from '../../services/utils/objectMapper';
 
-import * as userActions from '../actions/user.action'; 
+import * as userActions from '../actions/user.action';
 
 @Injectable()
-export class UserEffects{
+export class UserCreateEffects {
     /**
      *
      */
     constructor(private actions$: Actions, private readonly store: Store,
-        private readonly router: Router, private authService: AuthenticationService, 
+        private readonly router: Router, private authService: AuthenticationService,
+        private readonly userService: UserService,
         private localStorageService: LocalStorageService) {
     }
-
-    loadUser$ = createEffect(() => this.actions$.pipe(ofType(userActions.LOAD_USER), delay(2000),
-        mergeMap(({ payload }) => this.authService.postAuthenticationCredentials(payload)
+    createUser$ = createEffect(() => this.actions$.pipe(ofType(userActions.CREATE_USER), delay(2000),
+        mergeMap(({ payload }) => this.userService.postCreateUser(payload)
             .pipe(
-                map(user => {
-                    this.localStorageService.storeKeys(ObjectMapper.mapUserToLocalStorageObject(user)); 
-                    this.router.navigate([HOME_ROUTE]);
-                    return new userActions.LoadUserSuccess(user)
+                map(result => {
+                    return new userActions.CreateUserSuccess(result); 
                 }),
-                catchError((err) => of(new userActions.LoadUserFail(err)))
+                catchError((err) =>{
+                    console.log(err, ' from reducer ')
+                    return of(new userActions.CreateUserFail(err))
+                } )
             ))));
-
-    logOffUser$ = createEffect(() => this.actions$.pipe(ofType(userActions.LOG_OFF_USER),
-        tap(() => {
-            this.authService.logOut(); 
-            this.router.navigate(['/login']).then(() => window.location.reload());
-        })),
-        { dispatch: false });
 }
+
+
+
+
+
+
+
+

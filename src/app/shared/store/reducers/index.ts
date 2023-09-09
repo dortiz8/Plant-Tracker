@@ -6,9 +6,11 @@ import * as fromPlant from './plant.reducer';
 import * as fromPlantNotes from './plantNotes.reducer'; 
 import * as fromPlantsStats from './plantsStats.reducer'; 
 import * as fromUser from './user.reducer'; 
+import * as fromCreateUser from './userCreate.reducer'; 
 
 export interface UserState{
     user: fromUser.AuthState; 
+    userCreate: fromCreateUser.UserCreateState; 
 }
 
 export interface ProductsState{
@@ -19,7 +21,8 @@ export interface ProductsState{
 }
 
 export const userReducers: ActionReducerMap<UserState, any> = {
-    user: fromUser.reducer
+    user: fromUser.reducer, 
+    userCreate: fromCreateUser.reducer
 }
 
 // Register our reducers 
@@ -39,6 +42,11 @@ export const getUserSelectorState = createSelector(
     getUserState,
     (state: UserState) => state.user
 ); 
+
+export const getUserCreateSelectorState = createSelector(
+    getUserState, 
+    (state: UserState) => state.userCreate
+)
 
 // Create a top level selector for plants state
 export const getPlantsState =  createSelector(
@@ -66,6 +74,11 @@ export const getUserLoaded = createSelector(getUserSelectorState, fromUser.getUs
 export const getUser = createSelector(getUserSelectorState, fromUser.getUser); 
 export const getUserId = createSelector(getUserSelectorState, fromUser.getUserId); 
 export const getUserErrMessage = createSelector(getUserSelectorState, fromUser.getUserErrMessage); 
+
+export const getCreateUserLoading = createSelector(getUserCreateSelectorState, fromCreateUser.getCreateUserLoading);
+export const getCreateUserLoaded = createSelector(getUserCreateSelectorState, fromCreateUser.getCreateUserLoaded);
+export const getCreateUser = createSelector(getUserCreateSelectorState, fromCreateUser.getCreateUser);
+export const getCreateUserErrMessage = createSelector(getUserCreateSelectorState, fromCreateUser.getCreateUserErrMessage);
 
 
 // set the top level individual exports from the plants state

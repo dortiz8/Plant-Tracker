@@ -5,6 +5,7 @@ import { PlantNoteDelete } from "../../models/PlantNoteDelete";
 import { PlantNoteLoad } from "../../models/PlantNoteLoad";
 import { UserLoad } from "../../models/UserLoad";
 import { AuthResponseBody } from "../../models/IAuthResponse";
+import { UserCreate, UserCreateLoad } from "../../models/UserCreate";
 
 
 export class ObjectMapper{
@@ -69,5 +70,20 @@ export class ObjectMapper{
     }
     static mapUserToLocalStorageObject(authResponse: AuthResponseBody){
         return Object.entries(authResponse); 
+    }
+
+    static mapUserCreateToUserCreateLoad(login: any){
+        var userCreate: UserCreate ={
+            name: login.name, 
+            lname: login.lname, 
+            userName: login.userName,
+            email: login.email,
+            password: login.password,
+            repeatPassword: login.repeatPassword
+        }
+        var userCreateLoad: UserCreateLoad = {
+            user: userCreate, 
+        }
+        return userCreateLoad; 
     }
 }

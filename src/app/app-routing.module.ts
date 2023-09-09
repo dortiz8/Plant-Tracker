@@ -11,6 +11,7 @@ import { PlantGeneralInformationComponent } from './Components/PlantDetails/Plan
 import { PlantNotesComponent } from './Components/PlantDetails/PlantNotes/plantNotes.component';
 import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm.component';
 import { LoginFormGoogleComponent } from './Components/Login/loginFormGoogle.component';
+import { AccountCreateFormComponent } from './Components/AccountCreate/accountCreateForm.component';
 
 const routes: Routes = [
   // have your most specific routes at the top
@@ -40,7 +41,8 @@ const routes: Routes = [
     path: 'addPlant', title: 'Plant Form Component', component: PlantFormComponent, 
     //canActivate: [AuthGuard] 
   },
-  { path: 'login', title: 'Login Component',  component: LoginFormComponent},
+  { path: 'accountCreate', title: 'Account Create Component', component: AccountCreateFormComponent },
+  { path: 'login', title: 'Login Component', component: LoginFormGoogleComponent},
   // This route is a redirect route if user tries to acces
   // the intial relative URL localhost:**/
   { path: '', pathMatch: 'full', redirectTo: 'login' }, 

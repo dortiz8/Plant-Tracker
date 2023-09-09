@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
+import { catchError, empty, map, Observable, of, tap, throwError } from 'rxjs';
 import {JwtHelperService} from '@auth0/angular-jwt'; 
 import { AuthResponseBody } from 'src/app/shared/models/IAuthResponse';
 import { UserForAuthentication, UserForAuthenticationEncrypt } from 'src/app/shared/models/UserForAuthentication';
@@ -13,6 +13,8 @@ import { ObjectMapper } from '../utils/objectMapper';
 import * as forge from 'node-forge'; 
 import { FileHandler } from '../utils/filesParser';
 import { TOKEN_REFRESH_ROUTE } from '../../constants/routes';
+import { UserCreate, UserCreateLoad } from '../../models/UserCreate';
+import { GoogleAuthLoad } from '../../models/GoogleAuthLoad';
 
 
 
@@ -66,10 +68,22 @@ export class AuthenticationService {
         return encryptedData; 
     }
             
-    public postAuthenticationCredentials = (userLoad: UserLoad): Observable<any> => {
-        const {user, route} = userLoad; 
-        return this.httpClient.post<AuthResponseBody>(route, user); 
+    public postAuthenticationCredentials = (userLoad: any): Observable<any> => {
+        //var route = this.GetRouteForLoginProvider(userLoad); 
+        var requestBody = {idToken: userLoad?.idToken, email: userLoad?.email}; 
+        var route = 'https://localhost:7235/api/authentication/googleAuthenticate'; 
+        return this.httpClient.post<AuthResponseBody>(route, requestBody);
     }
+
+    // private  GetRouteForLoginProvider(userLoad: any): string{
+    //     let route = ''; 
+    //     console.log(typeof userLoad)
+    //     if(typeof userLoad == typeof GoogleAuthLoad){
+    //         return 'https://localhost:7235/api/authentication/googleAuthenticate'; 
+    //     }
+
+    //     return route; 
+    // }
 
     public  tryRefeshTokenAsync(): Observable<boolean>{
         const token = this.localStorageService.retrieveKey(TOKEN);

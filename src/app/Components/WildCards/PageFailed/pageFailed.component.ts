@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core'; 
+
 import { Observable } from 'rxjs';
 
 @Component({
@@ -12,8 +13,9 @@ export class PageFailedComponent{
     @Input() componentMessage: Observable<string>; 
     message: string; 
 
+
+
     ngOnInit(){
         this.componentMessage.subscribe((str)=> this.message = str); 
     }
-   
 }

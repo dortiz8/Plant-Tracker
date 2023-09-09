@@ -49,10 +49,12 @@
     font-size: small;
 }
 .signin-buttons{
-    display: grid; 
-    grid-template-columns: 3rem 3rem;
+    /* display: grid; 
+    grid-template-columns: 1rem 1rem;
     column-gap: 15px;
-    row-gap: 15px;
+    row-gap: 15px; */
+    display: flex;
+    flex-direction: column;
 }
 
 .flower-head {
@@ -75,4 +77,10 @@
 
 .flower-head::before {
   transform: rotate(-60deg);
+}
+.nav-link{
+    color: blue !important;
+}
+.account-create{
+    display: inline-block;
 }

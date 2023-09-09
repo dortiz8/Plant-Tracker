@@ -1,25 +1,27 @@
 <div class="google-card">
-    <div class="header">
+    <!-- <div class="header">
         <p>Sign in with email: </p>
         <h5>Or</h5>
-    </div>
+    </div> -->
 
     <div class="">
 
         <div class="signin-buttons">
-            <button (click)="loginWithGoogle()" class="google-btn btn btn-lg">
+            <h2>Log in with</h2>
+            <asl-google-signin-button type='icon' size='medium'></asl-google-signin-button>
+            <!-- <button (click)="login()" class="google-btn btn btn-lg">
+                <fa-icon class="specialIcon googleIcon" [icon]="googleIcon"></fa-icon>
+            </button> -->
+            <!-- <button (click)="loginWithGoogle()" class="google-btn btn btn-lg">
                 <fa-icon class="specialIcon googleIcon" [icon]="googleIcon"></fa-icon>
             </button>
             <button (click)="loginWithGoogle()" class="google-btn btn btn-lg">
                 <fa-icon class="specialIcon googleIcon" [icon]="googleIcon"></fa-icon>
-            </button>
-            <button (click)="loginWithGoogle()" class="google-btn btn btn-lg">
-                <fa-icon class="specialIcon googleIcon" [icon]="googleIcon"></fa-icon>
-            </button>
-            <div id="g_id_onload" data-client_id="683573935998-g2aveu6e7n98au5umaqvq8nbap9j4v7k.apps.googleusercontent.com"
+            </button> -->
+            <!-- <div id="g_id_onload" data-client_id="683573935998-g2aveu6e7n98au5umaqvq8nbap9j4v7k.apps.googleusercontent.com"
                 data-context="use" data-ux_mode="popup" data-login_uri="https://localhost:7235/api/authentication/googleAuthenticate"
                 data-auto_prompt="false">
-            </div>
+            </div> -->
             
             <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with"
                 data-size="medium" data-logo_alignment="left">

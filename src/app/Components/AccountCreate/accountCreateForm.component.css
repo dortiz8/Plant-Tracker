@@ -1,0 +1,39 @@
+ form, .form-control{
+    font-size: small;
+    
+ }
+
+  .form-group{
+    margin: .2rem 0;
+ }
+
+ .container{
+    margin-top: 1rem;
+    width: 90%;
+    max-width: 425px;
+    padding: 2rem; 
+   
+    background-color: rgba(255, 255, 255, 0.884);
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    border-radius: 5px;
+ }
+
+ .btn-create{
+     background-color: rgb(52, 161, 130);
+ }
+
+.form-actions{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+em{
+   color: red;
+}
+.form-title{
+   margin: 1rem 0;
+   font-weight: bold;
+   color: rgb(52, 161, 130); 
+}
