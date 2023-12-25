@@ -38,3 +38,13 @@ th, td{
     color: rgb(52, 161, 130);
     margin-right: .5rem;
 }
+
+.collapse-btn span{
+    display:  flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.specialIcon{
+    margin: 0;
+}

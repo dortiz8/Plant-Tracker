@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { GoogleLoginProvider, SocialAuthService, SocialUser} from "@abacritt/angularx-social-login";
 import * as fromStore from '../../shared/store';
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { HOME_ROUTE } from "src/app/shared/constants/routes";
 import { Store } from "@ngrx/store";
 
@@ -18,6 +18,7 @@ export class LoginFormGoogleComponent {
     
     user: SocialUser | null; 
     public showError = false; 
+    loading$: Observable<boolean>;
     // private clientID = '683573935998-g2aveu6e7n98au5umaqvq8nbap9j4v7k.apps.googleusercontent.com'; 
     // private authRoute = 'https://localhost:7235/api/authentication/googleAuthenticate'; 
     private googleLoginOptions = {
@@ -29,6 +30,7 @@ export class LoginFormGoogleComponent {
     }
 
     ngOnInit(){
+        this.loading$ = this.store.select(fromStore.getUserLoading);
         this.socialAuthService.authState.subscribe((user)=>{
             this.user = user; 
             this.store.dispatch(new fromStore.LoadUser(user))

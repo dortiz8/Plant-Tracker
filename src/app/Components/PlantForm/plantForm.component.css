@@ -12,7 +12,7 @@
  }
  .form-container{
    
-    padding: 2rem; 
+    padding: 1rem; 
    
     background-color: rgba(255, 255, 255, 0.884);
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
@@ -37,26 +37,46 @@
     background-color:rgb(52, 161, 130);
     color: white;
 }
-.imageBtn{
-    width: 2.5rem;
-        padding: .5rem;
-        font-size: small;
-        
-}
+
+
 .selected-image{
     font-size: small;
     font-weight: bold;
     color: rgb(52, 161, 130);
 }
-.image-button-area{
-    display: flex;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+
 
 .image-form-group{
     margin: 1rem 0;
    
+}
+.form-image{
+    display: flex;
+    justify-content: space-evenly;
+    /* border: 1px solid black; */
+    padding: 0;
+}
+.form-image > .image-button-side{
+ 
+   /* border: 1px solid blue; */
+        width: 15%;
+}
+.form-image > .image-side {
+       /* border: 1px solid red; */
+        width: 85%;
+        display: flex;
+    justify-content: center;
+    
+}
+.form-image > .image-side > .main-image{
+    width: 13rem;
+    /* border: 1px solid red; */
+}
+.form-image > .image-button-side > .imageBtn{
+  
+        padding: .2rem;
+        font-size: small;
+         background-color:rgb(52, 161, 130);
+         color: white;
+       width: 2rem;
 }

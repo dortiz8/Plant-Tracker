@@ -1,6 +1,6 @@
 
 
-<div class="container">
+<div class="container" style="max-width: 500px;">
     <div *ngIf="!(deletingStarted$ | async); else deletePrompt">
         <plant-general-information [plantId]="plantId"></plant-general-information>
         <plant-notes [plantId]="plantId"></plant-notes>

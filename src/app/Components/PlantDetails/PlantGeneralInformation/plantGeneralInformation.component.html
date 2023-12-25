@@ -7,10 +7,13 @@
     <page-loading></page-loading>
 </div>
 <div *ngIf="(loaded$ | async) && (plant$ | async)" class="container" style="margin-top: 1rem;">
-    <div class="row">
-        <div class="col-sm-12 col-md-7 col-lg-7">
-            <div class="default-card card">
-                <div class="card-tile">
+    <!-- <div class="row"> -->
+        <!-- <div class="col-sm-12 col-md-7 col-lg-7"> -->
+            <div class="card">
+                <div class="image-container">
+                    <a class="edit-img-btn btn btn-sm" (click)="navigateToPlantEditPage()">
+                        <fa-icon class="specialIcon editIcon" [icon]="editIcon"></fa-icon>
+                    </a>
                     <img [src]="plantImage" class="main-image rounded-circle shadow-4-strong"
                         alt="plant-avatar">
                 </div>
@@ -52,12 +55,12 @@
                     </ul>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <a class="btn btn-sm btn-secondary" (click)="navigateBackHome()"><fa-icon class="specialIcon returnIcon" [icon]="returnIcon"></fa-icon></a>
+                    <!-- <a class="btn btn-sm btn-secondary" (click)="navigateBackHome()"><fa-icon class="specialIcon returnIcon" [icon]="returnIcon"></fa-icon></a> -->
                     <a class="similar-btn btn btn-sm" (click)="navigateToAddPlantPage()">Add Similar</a>
-                    <a class="btn btn-sm btn-dark" (click)="navigateToPlantEditPage()"><fa-icon class="specialIcon editIcon" [icon]="editIcon"></fa-icon></a>
+                    <!-- <a class="btn btn-sm btn-dark" (click)="navigateToPlantEditPage()"><fa-icon class="specialIcon editIcon" [icon]="editIcon"></fa-icon></a> -->
                     <a class="btn btn-sm btn-danger" (click)="promptDeletePanel()"><fa-icon class="specialIcon deleteIcon" [icon]="deleteIcon"></fa-icon></a>
                 </div>
             </div>
-        </div>
-    </div>
+        <!-- </div> -->
+    <!-- </div> -->
 </div>

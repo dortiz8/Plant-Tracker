@@ -15,24 +15,32 @@ import { PlantDateService } from '../dates/PlantDateService';
 import { IPlantService } from './IPlantService';
 import { PlantImageEdit } from '../../models/PlantImageEdit';
 import { BASE_PLANT_ROUTE } from '../../constants/routes';
+import { LocalStorageService } from '../authentication/LocalStorageService';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlantService implements IPlantService {
-  constructor(private readonly http: HttpClient, private readonly dateService: PlantDateService) {
+  private tokenVal: string  ; 
+  headers_object: any; 
+  constructor(private readonly http: HttpClient, private readonly dateService: PlantDateService, private localStorageService: LocalStorageService) {
+    var token = localStorageService.retrieveKey('token'); 
+    this.tokenVal =  token != null ? token : ''; 
+    
+    this.headers_object = {
+      headers: new HttpHeaders().set("Authorization", `Bearer ${this.tokenVal}`)
+    };
+  
   }
   
   
-  // var headerDict ={
-    //   'Content-Type': 'application/json', 
-    //   'Accept': 'application/json', 
-    //   'Access-Control-Allow-Headers': 'Content-Type', 
-    // }; 
-    headers_object = new HttpHeaders().set("Authorization", "Bearer " + localStorage.getItem('token'));
+  
+  //headers_object = new HttpHeaders().set("Authorization", "Bearer " + );
+  //headers_object = new HttpHeaders().set("Authorization", "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6IkRhbnRlIiwibmJmIjoxNzAzMTEyNjA4LCJleHAiOjE3MDMxMTYyMDgsImlhdCI6MTcwMzExMjYwOCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6ODA4MCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDIwMCJ9.IdkGLbgZkHRP_bnjDoCvhsOW2yWGn0cwh5iDOlCQT6M");
+
     
     deletePlantById(plant: PlantDelete): Observable<any> {
-      return this.http.delete(`${BASE_PLANT_ROUTE}${plant.userId}/plants/${plant.plantId}`, { headers: this.headers_object })
+      return this.http.delete(`${BASE_PLANT_ROUTE}${plant.userId}/plants/${plant.plantId}`, this.headers_object)
     }
     
     
@@ -56,11 +64,12 @@ export class PlantService implements IPlantService {
         image: image,
       }
       console.log(body)
-      return this.http.post(`${BASE_PLANT_ROUTE}${plant.userId}/plants`, body, { headers: this.headers_object });
+      return this.http.post(`${BASE_PLANT_ROUTE}${plant.userId}/plants`, body, this.headers_object);
     }
     getPlantById(plantLoad: PlantLoad): Observable<any>{
       const { plantId , info, userId} = plantLoad; 
-      return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants/${plantId}?info=${info}`, { headers: this.headers_object });
+    
+      return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants/${plantId}?info=${info}`, this.headers_object);
     }; 
     
     putPlantById(plant: PlantCreation): Observable<any>{
@@ -75,35 +84,44 @@ export class PlantService implements IPlantService {
         
       }
       
-      return this.http.put(`${BASE_PLANT_ROUTE}${plant.userId}/plants/${plant.id}`, body, { headers: this.headers_object });
+      return this.http.put(`${BASE_PLANT_ROUTE}${plant.userId}/plants/${plant.id}`, body, this.headers_object);
     }
     
     
     getPlantList(userId: string | null): Observable<any> { 
-      return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants`, {headers: this.headers_object}); 
+
+      try {
+        console.log("jwt token: " + this.tokenVal);
+        
+        return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants`, this.headers_object); 
+        
+      } catch (error) {
+        console.log(error, " error from console ")
+        throw error; 
+      }
     }
     
     patchWaterOrFertilizePlant(patchListObject: PatchListObject): Observable<any>{
       var body = patchListObject.patchArray; 
-      return this.http.patch(`${BASE_PLANT_ROUTE}${patchListObject.userId}/plants/${patchListObject.plantId}`, body , { headers: this.headers_object} )
+      return this.http.patch(`${BASE_PLANT_ROUTE}${patchListObject.userId}/plants/${patchListObject.plantId}`, body, this.headers_object)
     }
     
     getPlantNotesById(plantNoteLoad: PlantNoteLoad): Observable<any> {
-      return this.http.get(`${BASE_PLANT_ROUTE}${plantNoteLoad.userId}/plants/${plantNoteLoad.plantId}/notes`, { headers: this.headers_object }); 
+      return this.http.get(`${BASE_PLANT_ROUTE}${plantNoteLoad.userId}/plants/${plantNoteLoad.plantId}/notes`, this.headers_object); 
     }
     
     deletePlantNoteById(note: PlantNoteDelete): Observable<any> {
       return this.http.delete(`${BASE_PLANT_ROUTE}${note.userId}/plants/${note.plantId}/notes/${note.Id}`)
     }
     addPlantNotebyId(note: PlantNoteCreation): Observable<any> {
-      return this.http.post(`${BASE_PLANT_ROUTE}${note.userId}/plants/${note.plantId}/notes`, note, { headers: this.headers_object })
+      return this.http.post(`${BASE_PLANT_ROUTE}${note.userId}/plants/${note.plantId}/notes`, note, this.headers_object)
     }
     patchPlantNotebyId(patchListObject: PatchListObject): Observable<any> {
       const body = patchListObject.patchArray; 
-      return this.http.patch(`${BASE_PLANT_ROUTE}${patchListObject.userId}/plants/${patchListObject.plantId}/notes/${patchListObject.noteId}`, body, { headers: this.headers_object })
+      return this.http.patch(`${BASE_PLANT_ROUTE}${patchListObject.userId}/plants/${patchListObject.plantId}/notes/${patchListObject.noteId}`, body, this.headers_object)
     }
     getPlantsStatsById(userId: string | null):Observable<any> {
-      return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants/stats`, { headers: this.headers_object }); 
+      return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants/stats`, this.headers_object); 
     };
     
   }

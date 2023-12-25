@@ -1,0 +1,24 @@
+
+    <div class="note-form-wrap">
+        <form  *ngIf="isEditing else descriptionSpan"  [formGroup]="editFormGroup" autocomplete="off" novalidate (ngSubmit)="saveNote(editFormGroup.value)" class="note-form">
+            <div class="note-textarea">
+                <textarea type="name" class="form-control" id="inputName" formControlName='descriptionFormControl' placeholder="{{noteDescription}}"  maxlength="200"></textarea>
+            </div>
+            <div class="note-actions" style="width: 100%">
+                <button class="save-btn btn btn-sm" type="submit"><fa-icon class="specialIcon checkMarkIcon" [icon]="checkMarkIcon"></fa-icon></button>
+                <button class="btn btn-danger btn-sm" type="button" (click)="cancelEdit()"><fa-icon class="specialIcon cancelIcon" [icon]="cancelIcon"></fa-icon></button>
+            </div>
+        </form>
+    </div>
+    <ng-template #descriptionSpan>
+        <div class="note-text">
+            {{noteDescription}}
+        </div>
+       
+        <div class="note-actions">
+            <a (click)="editNote()"><fa-icon class="specialIcon editIcon" [icon]="editIcon"></fa-icon></a>
+            <a (click)="deleteNote()"><fa-icon class="specialIcon deleteIcon" [icon]="deleteIcon"></fa-icon></a>
+            <!-- <button class="btn btn-primary btn-sm" type="button" (click)="editNote()">Edit</button>
+            <button class="btn btn-danger btn-sm" type="button" (click)="deleteNote()">Delete</button> -->
+        </div>
+    </ng-template>

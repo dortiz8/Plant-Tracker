@@ -1,10 +1,11 @@
-
-<div class="default-card card">
-    <div class="card-header">
-        <h3>{{componentMessage}}</h3>
-    </div>
-    <div class="card-body">
-        <a class="btn btn-success btn-sm" (click)="emitYesFunction()">Yes</a>
-        <a class="btn btn-danger btn-sm" (click)="emitNoFunction()">No</a>
+<div class="container">
+    <div class="default-card card">
+        <div class="card-header">
+            <h3>{{componentMessage}} <b>{{plantName}}</b>?</h3>
+        </div>
+        <div class="card-body">
+            <a class="btn btn-success btn-sm" (click)="emitYesFunction()">Yes</a>
+            <a class="btn btn-danger btn-sm" (click)="emitNoFunction()">No</a>
+        </div>
     </div>
 </div>

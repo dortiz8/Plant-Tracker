@@ -1,14 +1,17 @@
+
+<!-- <div *ngIf="(loading$ | async)">
+    <page-loading></page-loading>
+</div> -->
 <div class="google-card">
     <!-- <div class="header">
         <p>Sign in with email: </p>
         <h5>Or</h5>
     </div> -->
-
-    <div class="">
-
-        <div class="signin-buttons">
-            <h2>Log in with</h2>
-            <asl-google-signin-button type='icon' size='medium'></asl-google-signin-button>
+    <div class="signin-button">
+        <asl-google-signin-button type='standard' size='large'></asl-google-signin-button>
+    </div>
+    <!-- <div class=""> -->
+        <!-- <div class="signin-buttons"> -->
             <!-- <button (click)="login()" class="google-btn btn btn-lg">
                 <fa-icon class="specialIcon googleIcon" [icon]="googleIcon"></fa-icon>
             </button> -->
@@ -23,12 +26,13 @@
                 data-auto_prompt="false">
             </div> -->
             
-            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with"
+            <!-- <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with"
                 data-size="medium" data-logo_alignment="left">
-            </div>
-        </div>
-    </div>
-    <div class="footer">
+            </div> -->
+        <!-- </div> -->
+   
+    <!-- </div> -->
+    <!-- <div class="footer">
         Don't have an account? <button class="btn btn-sm btn-primary">Create</button>
-    </div>
+    </div> -->
 </div>

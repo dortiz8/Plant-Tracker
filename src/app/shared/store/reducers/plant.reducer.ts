@@ -32,7 +32,8 @@ export function reducer(state: PlantState = initialState,
     action: fromPlant.PlantAction): PlantState {
     switch(action.type){
         case fromPlant.LOAD_PLANT:
-        case fromPlant.WATER_PLANT: {
+        case fromPlant.WATER_PLANT:
+        case fromPlant.FERTILIZE_PLANT: {
             return {
                 ...state,
                 loading: true, 
@@ -79,8 +80,8 @@ export function reducer(state: PlantState = initialState,
            //console.log(data, ' from reducer')
             return {
                 ...state,
-                loading: false, 
-                loaded: true, 
+                loading: true, 
+                loaded: false, 
                 editSuccess: false
             }
         }
@@ -109,7 +110,7 @@ export function reducer(state: PlantState = initialState,
             return {
                 ...state,
                 loading: false, 
-                loaded: false, 
+                loaded: true, 
                 editSuccess: false,
                 addSuccess: false, 
                 addSame: false, 
@@ -123,8 +124,8 @@ export function reducer(state: PlantState = initialState,
             //console.log(data, ' from reducer')
             return {
                 ...state,
-                loading: false,
-                loaded: true,
+                loading: true,
+                loaded: false,
                 addSuccess: false
             }
         }

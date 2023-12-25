@@ -9,7 +9,7 @@ import { PlantDetailsComponent } from './Components/PlantDetails/plantDetails.co
 import { PageNotFoundComponent } from './Components/WildCards/PageNotFound/pageNotFound.component';
 import { PlantGeneralInformationComponent } from './Components/PlantDetails/PlantGeneralInformation/plantGeneralInformation.component';
 import { PlantNotesComponent } from './Components/PlantDetails/PlantNotes/plantNotes.component';
-import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm.component';
+//import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm.component';
 import { LoginFormGoogleComponent } from './Components/Login/loginFormGoogle.component';
 import { AccountCreateFormComponent } from './Components/AccountCreate/accountCreateForm.component';
 
@@ -17,7 +17,7 @@ const routes: Routes = [
   // have your most specific routes at the top
   // The route titles can be dinamic using a TitleStrategy
   // for more information visit: https://angular.io/guide/router
-  {path: 'editPlant/:plantId', title: 'Edit Plant Component', component: PlantEditFormComponent},
+  //{path: 'editPlant/:plantId', title: 'Edit Plant Component', component: PlantEditFormComponent},
   { 
     path: 'plantDetails/:plantId', 
     title: 'Plant Details',

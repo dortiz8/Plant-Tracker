@@ -1,27 +1,8 @@
-.mainNavBar {
-    top: 4rem; 
-    
-    
-    margin: 0;
-}
-.mainContainer{
-    padding: 10rem;
-}
 
-.navbarDiv{
-    width: 100%;
-}
-
-.navbarUl{
-    width: 100%;
+.main-container{
+    
     display: flex;
-    justify-content: space-evenly;
-   
-}
-
-
-
-.navlink{
-    
-    padding: 0%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

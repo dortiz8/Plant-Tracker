@@ -23,7 +23,7 @@ export class UserEffects{
         private localStorageService: LocalStorageService) {
     }
 
-    loadUser$ = createEffect(() => this.actions$.pipe(ofType(userActions.LOAD_USER), delay(2000),
+    loadUser$ = createEffect(() => this.actions$.pipe(ofType(userActions.LOAD_USER), //delay(2000),
         mergeMap(({ payload }) => this.authService.postAuthenticationCredentials(payload)
             .pipe(
                 map(user => {

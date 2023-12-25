@@ -2,12 +2,16 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+html{
+
+}
 html, body{
       height: 100%;
     padding: 0;
     margin: 0;
 }
 .main-body {
+    /* max-width: 570px; */
     width: 100%;
     /* min-height: 100vh; */
     background-color: #ddf1da;

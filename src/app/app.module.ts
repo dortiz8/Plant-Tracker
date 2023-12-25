@@ -22,7 +22,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { PlantEditFormComponent } from './Components/PlantEditForm/plantEditForm.component';
 //import { PlantsEffects } from './shared/store/effects/plant.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -34,7 +33,7 @@ import { PageSuccessComponent } from './Components/WildCards/PageSuccess/pageSuc
 import { PlantFormComponent } from './Components/PlantForm/plantForm.component';
 import { PageDeletePromptComponent } from './Components/WildCards/PageDeletePrompt/pageDeletePrompt.component';
 import { PlantNote } from './shared/models/PlantNote';
-import { PlantNoteComponent } from './Components/PlantDetails/PlantNote/plantNote.component';
+import { PlantNoteComponent } from './Components/PlantDetails/PlantGeneralInformation/PlantNote/plantNote.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlantsStatsComponent } from './Components/PlantsStats/plantsStats.component';
 import { TopNavigationComponent } from './Components/Navigation/TopNavigation/topNav.component';
@@ -50,7 +49,6 @@ import { AccountCreateFormComponent } from './Components/AccountCreate/accountCr
     AppComponent,
     PlantListComponent,
     PlantCardComponent,
-    PlantEditFormComponent,
     PlantFormComponent,
     LoginFormComponent, 
     LoginFormGoogleComponent, 

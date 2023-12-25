@@ -78,6 +78,7 @@ export class AddPlantFail implements Action {
 }
 export class AddPlantSuccess implements Action {
     readonly type = ADD_PLANT_SUCCESS;
+    constructor(public payload: string){}
 } 
 export class AddSamePlant implements Action {
     readonly type = ADD_SAME_PLANT;

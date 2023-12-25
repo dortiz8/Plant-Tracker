@@ -6,7 +6,7 @@ import { Plant } from "src/app/shared/models/Plant";
 import { PlantsStats } from "src/app/shared/models/PlantsStats";
 import { LocalStorageService } from "src/app/shared/services/authentication/LocalStorageService";
 import * as fromStore from '../../shared/store';
-import { faDroplet, faPlantWilt, faSmile } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretUp, faDroplet, faPlantWilt, faSmile } from "@fortawesome/free-solid-svg-icons";
 import { Subscription } from "rxjs";
 
 @Component({
@@ -24,6 +24,8 @@ export class PlantsStatsComponent {
     loadingFailed$: Observable<boolean>;
     errMessage$: Observable<string>;
     plantSubscription: Subscription;
+
+    collapseMenu: boolean = true; 
     
     name: string = '';
     today: Date = new Date(); 
@@ -32,6 +34,8 @@ export class PlantsStatsComponent {
     waterIcon = faDroplet;
     fertilizeIcon = faPlantWilt; 
     smileIcon = faSmile; 
+    unCollapseIcon = faCaretDown; 
+    collapseIcon = faCaretUp; 
     constructor(
         private store: Store<fromStore.ProductsState>,
         private localStorageService: LocalStorageService) {

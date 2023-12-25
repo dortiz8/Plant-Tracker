@@ -44,10 +44,13 @@ export class PlantEffects {
             .pipe(
                 map(data => {
                     console.log(data, ' from effects after put request')
-                    return new plantActions.AddPlantSuccess()
+                    return new plantActions.AddPlantSuccess(data.id)
                 }),
                 catchError((err) => of(new plantActions.EditPlantFail(err)))
             ))));
+    addPlantSuccess$ = createEffect(() => this.actions$.pipe(ofType(plantActions.ADD_PLANT_SUCCESS),
+        tap((prop: plantActions.AddPlantSuccess) => this.router.navigate([`/plantDetails/${prop.payload}`]))),
+        { dispatch: false });
 
     // This action constitutes a side effect after changing the store with. 
     editExistingPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.EDIT_EXISTING_PLANT),
@@ -63,7 +66,6 @@ export class PlantEffects {
                 map(plant => {
                     // We may need to move this logic moved at db level, but it is mainly used to change the state of 
                     const updatedPlant = this.dateService.changeSinglePlantStateBasedOnDateAndReturn(plant);
-                    console.log(updatedPlant);
                     return new plantActions.WaterPlantSuccess(updatedPlant)
                 }),
                 catchError((err) => of(new plantActions.WaterPlantFail(err)))

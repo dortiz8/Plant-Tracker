@@ -16,7 +16,7 @@ export class PageDeletePromptComponent{
     componentMessage: string;  
 
     ngOnInit(){
-        this.componentMessage = `Are you sure you want to delete plant ${this.plantName}?`; 
+        this.componentMessage = `Are you sure you want to delete plant `; 
     }
 
     emitNoFunction(){

@@ -5,14 +5,28 @@
         <tbody>
             <tr>
                 <th scope="row" value="">Plant Collection </th>
-                <td style="width: 40%;">
-                    <ul class="genus-list list-group-small align-items-start">
-                        <li *ngFor="let genus of (plantsStats$ | async)?.genusList"
-                            class="list-group-item d-flex justify-content-between align-items-center">
-                            {{genus.genusName}}
-                            <span class="badge">{{genus.total}}</span>
-                        </li>
-                    </ul>
+                <td style="width: 40%; min-height: 120px;">
+                    <div class="accordion" id="accordionExample">
+                    <button type="button" class="collapse-btn btn btn-success btn-sm" (click)="collapse.toggle()" [attr.aria-expanded]="!collapseMenu"
+                        aria-controls="collapseExample">
+                        <span *ngIf="collapseMenu">
+                            <fa-icon class="specialIcon unCollapseIcon" [icon]="unCollapseIcon"></fa-icon>
+                        </span>
+                        <span *ngIf="!collapseMenu">
+                            <fa-icon class="specialIcon collapseIcon" [icon]="collapseIcon"></fa-icon>
+                        </span>
+                    </button>
+                    </div>
+                    <div #collapse="ngbCollapse" [(ngbCollapse)]="collapseMenu">
+                        <ul class="genus-list list-group-small align-items-start">
+                            <li *ngFor="let genus of (plantsStats$ | async)?.genusList"
+                                class="list-group-item d-flex justify-content-between align-items-center">
+                                {{genus.genusName}}
+                                <span class="badge">{{genus.total}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                  
                 </td>
             </tr>
             <tr>
@@ -28,7 +42,6 @@
                 <th scope="row" value=""><fa-icon class="specialIcon fertilizeIcon" [icon]="fertilizeIcon"></fa-icon>Need Fertilizing </th>
                 <td class="stat">{{(plantsStats$ | async)?.totalPlantsThatNeedFertilizing}}</td>
             </tr>
-           
         </tbody>
     </table>
 </div>

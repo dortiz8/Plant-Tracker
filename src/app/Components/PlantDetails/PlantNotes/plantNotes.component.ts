@@ -11,7 +11,7 @@ import { PlantNoteDelete } from 'src/app/shared/models/PlantNoteDelete';
 import { PlantNoteCreation } from 'src/app/shared/models/PlantNoteCreation';
 import { PatchListObject, PatchObject } from 'src/app/shared/models/PatchObject';
 import { ObjectMapper } from 'src/app/shared/services/utils/objectMapper';
-import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'plant-notes',
@@ -30,7 +30,7 @@ export class PlantNotesComponent {
     errMessage$: Observable<string>;
     noteSubscription: Subscription; 
     showError: boolean;
-    addIcon = faSquarePlus; 
+    addIcon = faAdd; 
     
     constructor(private readonly route: ActivatedRoute, private store: Store<fromStore.ProductsState>) {
     

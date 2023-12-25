@@ -5,28 +5,29 @@
     position: absolute;
         left: 25%;
         top: -24%;
-        z-index: 1;
+        z-index: 0;
         box-shadow: 1px -1px 1px #CCC;
 }
-.image-container{
+/* .image-container{
     background-image: linear-gradient(to bottom, #ddf1da 50%, white 0%);
 position: relative;
     left: 0%;
     top: -50px;
     z-index: 1;
+} */
+.edit-img-btn{
+    position: absolute;
+    background-color: rgb(52, 161, 130);
+    color: white;
+    z-index: 1;
+    left: 70%;
 }
 .card-title{
     height: 20px;
 }
-.default-card {
-    max-width: 600px;
-    
-    /* background: linear-gradient(to right,
-                rgb(252, 192, 143) 0%,
-                rgb(252, 192, 143)65%,
-                #eeeeee 65%,
-                #eeeeee 100%); */
-    
+.card {
+    /* max-width: 600px; */
+    width:  100%;
     margin-top: 6rem;
     margin-bottom: .5rem;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
@@ -47,4 +48,9 @@ position: relative;
 .similar-btn{
     background-color: rgb(52, 161, 130);
         color: white;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
 }

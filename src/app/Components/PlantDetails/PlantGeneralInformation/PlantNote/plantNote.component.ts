@@ -4,12 +4,12 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { from, Observable } from 'rxjs';
 import { Plant } from 'src/app/shared/models/Plant';
-import * as fromStore from '../../../shared/store';
+import * as fromStore from '../../../../shared/store';
 
 import { PlantNote } from 'src/app/shared/models/PlantNote';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlantNoteCreation } from 'src/app/shared/models/PlantNoteCreation';
-import { faEllipsis, faSquarePlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCancel, faCheck, faEllipsis, faSquarePlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'plant-note',
@@ -31,6 +31,8 @@ export class PlantNoteComponent {
     // Icons
     editIcon = faEllipsis; 
     deleteIcon = faXmark; 
+    checkMarkIcon = faCheck; 
+    cancelIcon = faCancel
     
     constructor(private readonly route: ActivatedRoute, private store: Store<fromStore.ProductsState>) {
        

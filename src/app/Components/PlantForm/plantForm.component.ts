@@ -17,6 +17,7 @@ import { PlantImage } from "src/app/shared/models/PlantImage";
 import { PlantInfo } from "src/app/shared/models/PlantInfo";
 import { ADDING_SIMILAR_PLANT_MESSAGE, EDITING_PLANT_MESSAGE, NEW_PLANT_MESSAGE } from "src/app/shared/constants/plant";
 import { EDIT_EXISTING_PLANT } from "../../shared/store";
+import { GENERIC_ERROR_MESSAGE } from "src/app/shared/constants/common";
 
 @Component({
   selector: 'plant-form',
@@ -34,6 +35,7 @@ export class PlantFormComponent {
     showError: boolean;
     userId: string | undefined; 
     selectedImage: PlantImage; 
+    plantImage: string; 
 
     loading$: Observable<boolean>; 
     loaded$: Observable<boolean>; 
@@ -52,6 +54,7 @@ export class PlantFormComponent {
   
   //Icons
   cameraIcon = faCamera; 
+  
   
   constructor(private store: Store<fromStore.ProductsState>,
     private readonly route: ActivatedRoute,
@@ -76,6 +79,7 @@ export class PlantFormComponent {
     }
 
     ngOnDestroy(){
+      this.persistPlantData(false); 
       this.formSubscription.unsubscribe(); 
     }
 
@@ -94,21 +98,10 @@ export class PlantFormComponent {
        }); 
       console.log(this.isAddSamePlant, this.isEditExistingPlant, ' issame or edit')
       if (this.isAddSamePlant || this.isEditExistingPlant){
-        this.plant$.subscribe(plant => {
-          this.plant = plant;
-          
-          this.persistPlantData(true);
-          this.addingMessage = this.isAddSamePlant ? ADDING_SIMILAR_PLANT_MESSAGE : EDITING_PLANT_MESSAGE;
-        })
+        this.setPlant()
+        this.addingMessage = this.isAddSamePlant ? ADDING_SIMILAR_PLANT_MESSAGE : EDITING_PLANT_MESSAGE;
       }else{
-        var localStorageSavedPlant = localStorage.getItem('plantState');
-
-        if (localStorageSavedPlant != null) {
-          this.plant = JSON.parse(localStorageSavedPlant)
-        } else {
-          this.plant = new PlantInfo();
-        }
-        this.addingMessage = NEW_PLANT_MESSAGE;
+        this.getPlantFromLocalStorage(); 
       }
       this.mapPlantEditFormGroup();
       this.getGenusMenu();
@@ -131,6 +124,7 @@ export class PlantFormComponent {
       })
       this.editForm.controls['genusId'].setValue(this.plant.genusId, { onlySelf: true }); 
       this.selectedImage = this.plant.image; 
+      this.plantImage = this.plant.image?.base64
     }
 
     getGenusMenu() {
@@ -139,7 +133,7 @@ export class PlantFormComponent {
           this.genusList = res;
         },
         error: (err: HttpErrorResponse) => {
-          this.showError = true;
+          this.showGenericError(GENERIC_ERROR_MESSAGE)
         }
       }); 
       this.formSubscription.add(genusServiceSubscription); 
@@ -165,14 +159,19 @@ export class PlantFormComponent {
     submitEdit(editFormValue: any) {
       this.isEditExistingPlant = false;
       
-      var editExistingPlantSubscription = this.editExistingPlant$.subscribe(x => {
-        this.isEditExistingPlant = x
-      }); 
-     
+      var editExistingPlantSubscription = this.editExistingPlant$.subscribe({
+        next: (x)=>{
+          this.isEditExistingPlant = x
+        }, 
+        error: (err: HttpErrorResponse)=>{
+          this.showGenericError(GENERIC_ERROR_MESSAGE);
+        }
+      })
       if(!this.isEditExistingPlant){
         var image: PlantImage = {...this.selectedImage, id: undefined}; 
         var plant: PlantCreation = { ...editFormValue, userId: this.userId, id: undefined, image: image}; 
         console.log(plant, " is new");
+       
         this.store.dispatch(new fromStore.AddPlant(plant));
       }
       else{
@@ -190,11 +189,42 @@ export class PlantFormComponent {
     
     fileObj.then((res)=>{
       this.selectedImage = res; 
+      this.plantImage = this.selectedImage.base64
     }); 
     fileObj.catch((err)=>{
       // Implement
-      console.log(err)
+      this.showGenericError(GENERIC_ERROR_MESSAGE)
     })
+  }
+
+  setPlant(){
+    var setPlantSubscription = this.plant$.subscribe({
+      next: (plant)=>{
+        this.plant = plant;
+        this.persistPlantData(true);
+      }, 
+      error: (err: HttpErrorResponse)=>{
+        this.showGenericError(GENERIC_ERROR_MESSAGE)
+      }
+    }); 
+    this.formSubscription.add(setPlantSubscription);
+  }
+
+  getPlantFromLocalStorage(){
+    
+    var localStorageSavedPlant = localStorage.getItem('plantState');
+
+    if (localStorageSavedPlant != null) {
+      this.plant = JSON.parse(localStorageSavedPlant)
+    } else {
+      this.plant = new PlantInfo();
+    }
+    this.addingMessage = NEW_PLANT_MESSAGE;
+  }
+
+  showGenericError(errorMessage: string){
+    this.errMessage = errorMessage
+    this.showError = true;
   }
 
   

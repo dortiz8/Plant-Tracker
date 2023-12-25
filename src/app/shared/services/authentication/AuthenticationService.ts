@@ -70,20 +70,11 @@ export class AuthenticationService {
             
     public postAuthenticationCredentials = (userLoad: any): Observable<any> => {
         //var route = this.GetRouteForLoginProvider(userLoad); 
-        var requestBody = {idToken: userLoad?.idToken, email: userLoad?.email}; 
-        var route = 'https://localhost:7235/api/authentication/googleAuthenticate'; 
+        var requestBody = {idToken: userLoad?.idToken, email: userLoad?.email, firstName: userLoad?.firstName, lastName: userLoad?.lastName, provider: userLoad?.provider}; 
+        console.log(requestBody, ' request body')
+        var route = 'https://localhost:36322/api/authentication/googleAuthenticate'; 
         return this.httpClient.post<AuthResponseBody>(route, requestBody);
     }
-
-    // private  GetRouteForLoginProvider(userLoad: any): string{
-    //     let route = ''; 
-    //     console.log(typeof userLoad)
-    //     if(typeof userLoad == typeof GoogleAuthLoad){
-    //         return 'https://localhost:7235/api/authentication/googleAuthenticate'; 
-    //     }
-
-    //     return route; 
-    // }
 
     public  tryRefeshTokenAsync(): Observable<boolean>{
         const token = this.localStorageService.retrieveKey(TOKEN);
@@ -100,19 +91,7 @@ export class AuthenticationService {
 
         let isRefeshSuccess: boolean = false;        
 
-        // this.refreshToken('api/token/refresh', { token: token, refreshToken: refreshToken }).subscribe({
-        //     next: (res: AuthResponseBody) => {
-        //         this.localStorageService.storeKeys(ObjectMapper.mapUserToLocalStorageObject(res)); 
-        //         isRefeshSuccess = res.isAuthSuccessful; 
-        //         return of(isRefeshSuccess);
-        //     },
-        //     error: (err: HttpErrorResponse) => {
-        //         isRefeshSuccess = false;
-        //         console.log(err.message, 'from refresh token'); 
-        //     }
-        // }); 
         return of(isRefeshSuccess); 
-        //return of(true); 
     }
 
     private refreshToken = (route: string, credentials: any): Observable<boolean> => {

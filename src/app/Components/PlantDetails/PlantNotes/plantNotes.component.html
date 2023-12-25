@@ -7,7 +7,9 @@
 <div *ngIf="(plantLoaded$ | async)" class="main-container container">
     <div>
         <div><h5>Notes</h5></div>
-        <a class="btn btn-sm" (click)="addNote()">Add</a>
+        <a class="edit-img-btn btn btn-sm" (click)="addNote()">
+            <fa-icon class="specialIcon addIcon" [icon]="addIcon"></fa-icon>
+        </a>
     </div>
     <div class="no-notes" *ngIf="(plantNotes$ | async)?.length == 0">No notes for this plant</div>
     <div class="plant-list" *ngIf="(plantNotes$ | async)">
