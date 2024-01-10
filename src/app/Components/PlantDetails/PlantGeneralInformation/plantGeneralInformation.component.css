@@ -1,12 +1,13 @@
 .main-image{
    width: 50%;
    height: 50%;
-    border-radius: 50%;
+    /* border-radius: 50%; */
     position: absolute;
         left: 25%;
-        top: -24%;
+        top: -25%;
         z-index: 0;
-        box-shadow: 1px -1px 1px #CCC;
+ 
+        /* box-shadow: 1px -1px 1px #CCC; */
 }
 /* .image-container{
     background-image: linear-gradient(to bottom, #ddf1da 50%, white 0%);
@@ -53,4 +54,9 @@ position: relative;
 .container{
     display: flex;
     justify-content: center;
+    /* border: 1px solid black;  */
+}
+
+.image-container{
+    /* height:  200px; */
 }

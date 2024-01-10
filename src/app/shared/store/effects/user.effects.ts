@@ -8,7 +8,7 @@ import { TOKEN, USER_ID } from '../../constants/auth';
 import { HOME_ROUTE } from '../../constants/routes';
 import { AuthResponseBody } from '../../models/IAuthResponse';
 import { AuthenticationService } from '../../services/authentication/AuthenticationService';
-import { LocalStorageService } from '../../services/authentication/LocalStorageService';
+import { LocalStorageService } from '../../services/utils/LocalStorageService';
 import { ObjectMapper } from '../../services/utils/objectMapper';
 
 import * as userActions from '../actions/user.action'; 
@@ -26,8 +26,9 @@ export class UserEffects{
     loadUser$ = createEffect(() => this.actions$.pipe(ofType(userActions.LOAD_USER), //delay(2000),
         mergeMap(({ payload }) => this.authService.postAuthenticationCredentials(payload)
             .pipe(
-                map(user => {
-                    this.localStorageService.storeKeys(ObjectMapper.mapUserToLocalStorageObject(user)); 
+                map((user: AuthResponseBody) => {
+                    this.localStorageService.storeKeys(ObjectMapper.mapUserToLocalStorageObject(user));
+                    this.authService.saveTokens(user.token, user.refreshToken); 
                     this.router.navigate([HOME_ROUTE]);
                     return new userActions.LoadUserSuccess(user)
                 }),

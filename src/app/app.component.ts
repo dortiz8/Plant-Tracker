@@ -4,7 +4,7 @@ import { ngbCarouselTransitionOut } from '@ng-bootstrap/ng-bootstrap/carousel/ca
 import { Store } from '@ngrx/store';
 import * as fromStore from './shared/store';
 import { IS_AUTH } from './shared/constants/auth';
-import { LocalStorageService } from './shared/services/authentication/LocalStorageService';
+import { LocalStorageService } from './shared/services/utils/LocalStorageService';
 import { Observable } from 'rxjs';
 
 

@@ -39,12 +39,19 @@ th, td{
     margin-right: .5rem;
 }
 
+.collapse-btn{
+background-color: rgb(52, 161, 130);
+color:  white;
+}
+
 .collapse-btn span{
     display:  flex;
     align-items: center;
     justify-content: center;
+    
 }
 
-.specialIcon{
+ .unCollapseIcon, .collapseIcon{
     margin: 0;
+    color: white;
 }

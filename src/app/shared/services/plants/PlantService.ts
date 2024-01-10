@@ -15,7 +15,9 @@ import { PlantDateService } from '../dates/PlantDateService';
 import { IPlantService } from './IPlantService';
 import { PlantImageEdit } from '../../models/PlantImageEdit';
 import { BASE_PLANT_ROUTE } from '../../constants/routes';
-import { LocalStorageService } from '../authentication/LocalStorageService';
+import { LocalStorageService } from '../utils/LocalStorageService';
+import { AuthenticationService } from '../authentication/AuthenticationService';
+import { TOKEN } from '../../constants/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -23,12 +25,14 @@ import { LocalStorageService } from '../authentication/LocalStorageService';
 export class PlantService implements IPlantService {
   private tokenVal: string  ; 
   headers_object: any; 
-  constructor(private readonly http: HttpClient, private readonly dateService: PlantDateService, private localStorageService: LocalStorageService) {
-    var token = localStorageService.retrieveKey('token'); 
-    this.tokenVal =  token != null ? token : ''; 
-    
+  constructor(private readonly http: HttpClient, private readonly dateService: PlantDateService, private localStorageService: LocalStorageService, 
+    private readonly authService: AuthenticationService) {
+
+    // var token = localStorageService.retrieveKey('token'); 
+    // this.tokenVal =  token != null ? token : ''; 
+
     this.headers_object = {
-      headers: new HttpHeaders().set("Authorization", `Bearer ${this.tokenVal}`)
+      headers: new HttpHeaders().set("Authorization", `Bearer ${this.authService.getToken(TOKEN)}`)
     };
   
   }
@@ -91,7 +95,6 @@ export class PlantService implements IPlantService {
     getPlantList(userId: string | null): Observable<any> { 
 
       try {
-        console.log("jwt token: " + this.tokenVal);
         
         return this.http.get(`${BASE_PLANT_ROUTE}${userId}/plants`, this.headers_object); 
         

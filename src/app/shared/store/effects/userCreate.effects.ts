@@ -8,7 +8,7 @@ import { TOKEN, USER_ID } from '../../constants/auth';
 import { HOME_ROUTE } from '../../constants/routes';
 import { AuthResponseBody } from '../../models/IAuthResponse';
 import { AuthenticationService } from '../../services/authentication/AuthenticationService';
-import { LocalStorageService } from '../../services/authentication/LocalStorageService';
+import { LocalStorageService } from '../../services/utils/LocalStorageService';
 import { UserService } from '../../services/user/UserService';
 
 import { ObjectMapper } from '../../services/utils/objectMapper';

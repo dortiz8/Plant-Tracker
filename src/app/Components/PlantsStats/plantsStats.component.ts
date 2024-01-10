@@ -4,7 +4,7 @@ import { from, Observable } from "rxjs";
 import { USER_ID } from "src/app/shared/constants/auth";
 import { Plant } from "src/app/shared/models/Plant";
 import { PlantsStats } from "src/app/shared/models/PlantsStats";
-import { LocalStorageService } from "src/app/shared/services/authentication/LocalStorageService";
+import { LocalStorageService } from "src/app/shared/services/utils/LocalStorageService";
 import * as fromStore from '../../shared/store';
 import { faCaretDown, faCaretUp, faDroplet, faPlantWilt, faSmile } from "@fortawesome/free-solid-svg-icons";
 import { Subscription } from "rxjs";

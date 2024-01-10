@@ -14,7 +14,7 @@ import * as fromStore from '../../../shared/store';
 import { faAdd, faTrash, faPen, faDroplet, faPlantWilt, faTriangleExclamation, faCircleInfo, faCircleArrowLeft, faSeedling } from '@fortawesome/free-solid-svg-icons'
 import { PlantDelete } from 'src/app/shared/models/PlantDelete';
 import { DeletePlant } from '../../../shared/store';
-import { LocalStorageService } from 'src/app/shared/services/authentication/LocalStorageService';
+import { LocalStorageService } from 'src/app/shared/services/utils/LocalStorageService';
 import { Subscription } from 'rxjs';
 import { HOME_ROUTE } from 'src/app/shared/constants/routes';
 

@@ -5,7 +5,7 @@ import { Plant } from '../../shared/models/Plant';
 import { from, Observable } from 'rxjs';
 import { Store, createAction } from '@ngrx/store';
 import * as fromStore from '../../shared/store'; 
-import { LocalStorageService } from 'src/app/shared/services/authentication/LocalStorageService';
+import { LocalStorageService } from 'src/app/shared/services/utils/LocalStorageService';
 import { USER_ID } from 'src/app/shared/constants/auth';
 import { PlantsStats } from 'src/app/shared/models/PlantsStats';
 import { Subscription } from 'rxjs';

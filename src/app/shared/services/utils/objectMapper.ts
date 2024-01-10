@@ -6,6 +6,7 @@ import { PlantNoteLoad } from "../../models/PlantNoteLoad";
 import { UserLoad } from "../../models/UserLoad";
 import { AuthResponseBody } from "../../models/IAuthResponse";
 import { UserCreate, UserCreateLoad } from "../../models/UserCreate";
+import { LocalStorageObject } from "../../models/LocalStorage";
 
 
 export class ObjectMapper{
@@ -68,8 +69,13 @@ export class ObjectMapper{
         }
         return noteToLoad;
     }
-    static mapUserToLocalStorageObject(authResponse: AuthResponseBody){
-        return Object.entries(authResponse); 
+    static mapUserToLocalStorageObject(authResponse: AuthResponseBody){ // change object to not include token and refresh token on local storage. 
+        var localStorageObject: LocalStorageObject = {
+            isAuthSuccessful: authResponse.isAuthSuccessful, 
+            errorMessage: authResponse.errorMessage, 
+            userId: authResponse.userId
+        }
+        return Object.entries(localStorageObject); 
     }
 
     static mapUserCreateToUserCreateLoad(login: any){
@@ -86,4 +92,6 @@ export class ObjectMapper{
         }
         return userCreateLoad; 
     }
+
+   
 }
