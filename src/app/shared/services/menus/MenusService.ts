@@ -6,6 +6,7 @@ import { IMenuService } from './IMenuService';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationService } from '../authentication/AuthenticationService';
 import { TOKEN } from '../../constants/auth';
+import { MENU_GENUS_ROUTE } from '../../constants/routes';
 
 @Injectable({
     providedIn: 'root',
@@ -20,13 +21,11 @@ export class GenusService implements IMenuService{
     }
     
     getGenusList(): Observable<any>{
-        //var headers_object = new HttpHeaders().set("Authorization", "Bearer " + this.authService.getToken());
-         return this.http.get(`api/menus/genus`, this.headers_object ); 
+         return this.http.get(`${MENU_GENUS_ROUTE}`, this.authService.getRequestHeaders() ); 
     };
     getGenus(genusId: number | null | undefined): Observable<any> {
-        console.log(genusId)
-        var headers_object = new HttpHeaders().set("Authorization", "Bearer " + this.authService.getToken(TOKEN));
-        return this.http.get(`api/menus/genus/${genusId?.toString()}`, { headers: headers_object, responseType: 'text' });
+        var headers_object = this.authService.getRequestHeaders(); 
+        return this.http.get(`${MENU_GENUS_ROUTE}${genusId?.toString()}`, { headers: headers_object.headers, responseType: 'text' });
     };
 
    

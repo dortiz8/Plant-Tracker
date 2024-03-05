@@ -1,12 +1,13 @@
 
 <div *ngIf="(errMessage$ | async)">
     <page-failed [componentMessage]="errMessage$"></page-failed>
+    <!-- <page-failed [componentMessage]="notesErrMessage$"></page-failed> -->
     <button class="btn btn-secondary btn-sm" type="button" (click)="reload()">Reload</button>
 </div>
 <div *ngIf="(loading$ | async)">
     <page-loading></page-loading>
 </div>
-<div *ngIf="(loaded$ | async) && (plant$ | async)" class="container" style="margin-top: 1rem;">
+<div *ngIf="(loaded$ | async) && (plant$ | async)" class="container" style="margin-top: 4rem;">
     <!-- <div class="row"> -->
         <!-- <div class="col-sm-12 col-md-7 col-lg-7"> -->
             <div class="card">

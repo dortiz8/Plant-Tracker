@@ -20,7 +20,8 @@ export class FileHandler {
             name: selectedFile.name,
             type: selectedFile.type,
             size: selectedFile.size,
-            base64: await this.toBase64(selectedFile)
+            base64: await this.toBase64(selectedFile),
+            url: undefined
         } 
     
         return plantImageObj; 

@@ -5,6 +5,6 @@ export interface IAuthenticationService{
      postAuthenticationCredentials(userLoad: any): Observable<any>
      logOut(): void
      saveTokens(token: string, refreshToken: string): void
-     getToken(tokenName: string): string 
-
+     getToken(tokenName: string): string
+     getRequestHeaders(): any
     }

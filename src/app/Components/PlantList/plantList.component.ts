@@ -61,7 +61,7 @@ export class PlantListComponent {
       if (userId != null) {
         this.userId = userId
       } else {
-        var retrievedUserId = this.localStorageService.retrieveKey('userId');
+        var retrievedUserId = this.localStorageService.retrieveKey(USER_ID);
         if (retrievedUserId != null) {
           this.userId = retrievedUserId
         }

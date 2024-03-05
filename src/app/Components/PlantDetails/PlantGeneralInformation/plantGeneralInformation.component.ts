@@ -17,6 +17,8 @@ import { DeletePlant } from '../../../shared/store';
 import { LocalStorageService } from 'src/app/shared/services/utils/LocalStorageService';
 import { Subscription } from 'rxjs';
 import { HOME_ROUTE } from 'src/app/shared/constants/routes';
+import { DATE_FERTILIZED, DATE_WATERED, DEFAULT_PLANT_IMAGE } from 'src/app/shared/constants/plant';
+import { USER_ID } from 'src/app/shared/constants/auth';
 
 @Component({
     selector: 'plant-general-information',
@@ -36,6 +38,8 @@ export class PlantGeneralInformationComponent {
     loading$: Observable<boolean>; 
     showError: boolean; 
     errMessage$: Observable<string>;
+    notesErrMessage$: Observable<string>;
+
     userId$: Observable<string>;
 
     plantImage: string; 
@@ -66,7 +70,8 @@ export class PlantGeneralInformationComponent {
         this.plant$ = this.store.select(fromStore.getPlant);
         this.loaded$ = this.store.select(fromStore.getPlantLoaded);
         this.loading$ = this.store.select(fromStore.getPlantLoading);
-        this.errMessage$ = this.store.select(fromStore.getPlantNotesErrMessage);
+        this.errMessage$ = this.store.select(fromStore.getPlantErrMessage);
+        this.notesErrMessage$ = this.store.select(fromStore.getPlantNotesErrMessage);
         this.userId$ = this.store.select(fromStore.getUserId); 
         this.loadUserId(); 
         this.loadPlant(); 
@@ -84,7 +89,7 @@ export class PlantGeneralInformationComponent {
             if(userId !=null){
                 this.userId = userId
             }else{
-                var retrievedUserId =  this.localStorageService.retrieveKey('userId'); 
+                var retrievedUserId =  this.localStorageService.retrieveKey(USER_ID); 
                 if(retrievedUserId != null){
                     this.userId = retrievedUserId 
                 }
@@ -106,7 +111,7 @@ export class PlantGeneralInformationComponent {
     mapPlant(){
         var plantSubscription = this.plant$.subscribe(plant => {
             this.plant = plant;
-            this.plantImage = this.plant.image != null ? this.plant.image.base64 : '../../../../assets/generic_plant_image2.jpeg';
+            this.plantImage = this.plant?.image?.url != null ? this.plant.image.url : DEFAULT_PLANT_IMAGE;
         });
 
         this.plantSubscription.add(plantSubscription); 
@@ -126,8 +131,8 @@ export class PlantGeneralInformationComponent {
 
     waterFertilizePlantPatch(actionName: string) {
         var formattedDate = this.dateService.getNewFormattedDate();
-        var patchInfo = ObjectMapper.mapPatchObject("replace", actionName == 'water' ? '/dateWatered' : '/dateFertilized', formattedDate);
-        var patchListObject = ObjectMapper.mapPatchListObject([patchInfo], null, this.plant.id?.toString(), localStorage.getItem('userId')?.toString())
+        var patchInfo = ObjectMapper.mapPatchObject("replace", actionName == 'water' ? DATE_WATERED : DATE_FERTILIZED, formattedDate);
+        var patchListObject = ObjectMapper.mapPatchListObject([patchInfo], null, this.plant.id?.toString(), localStorage.getItem(USER_ID)?.toString())
         actionName == 'water' ? this.store.dispatch(new fromStore.WaterPlant(patchListObject)) : this.store.dispatch(new fromStore.FertilizePlant(patchListObject));
     }
 

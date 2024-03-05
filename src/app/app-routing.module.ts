@@ -35,11 +35,11 @@ const routes: Routes = [
   },
   { 
     path: 'home', title: 'Home Component', component: PlantListComponent, 
-      //canActivate: [AuthGuard]
+      canActivate: [AuthGuard]
     },
   { 
     path: 'addPlant', title: 'Plant Form Component', component: PlantFormComponent, 
-    //canActivate: [AuthGuard] 
+    canActivate: [AuthGuard] 
   },
   { path: 'accountCreate', title: 'Account Create Component', component: AccountCreateFormComponent },
   { path: 'login', title: 'Login Component', component: LoginFormGoogleComponent},

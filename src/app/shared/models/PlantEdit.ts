@@ -2,11 +2,10 @@
 import { PlantImageEdit } from "./PlantImageEdit";
 
 export class PlantEdit {
-    name: string | undefined;
-    genusId: number | undefined;
-    dateWatered: Date | undefined;
-    dateFertilized: Date | undefined;
-    fertilizeInterval: number | undefined;
-    waterInterval: number | undefined;
-    image: PlantImageEdit
+    Name: string | undefined;
+    GenusId: number | undefined;
+    DateWatered: Date | undefined;
+    DateFertilized: Date | undefined;
+    FertilizeInterval: number | undefined;
+    WaterInterval: number | undefined;
 }

@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core'; 
 import { Observable } from 'rxjs';
+import { GENERIC_PRE_DELETE_MESSAGE } from 'src/app/shared/constants/common';
 
 @Component({
     selector: 'page-delete-prompt', 
@@ -16,7 +17,7 @@ export class PageDeletePromptComponent{
     componentMessage: string;  
 
     ngOnInit(){
-        this.componentMessage = `Are you sure you want to delete plant `; 
+        this.componentMessage = GENERIC_PRE_DELETE_MESSAGE; 
     }
 
     emitNoFunction(){

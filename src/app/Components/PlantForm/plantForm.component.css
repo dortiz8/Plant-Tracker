@@ -14,7 +14,7 @@
    
     padding: 1rem; 
    
-    background-color: rgba(255, 255, 255, 0.884);
+    background-color: var(--main-white-color); 
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     border-radius: 5px;
     
@@ -34,7 +34,7 @@
 }
 .save-btn {
     
-    background-color:rgb(52, 161, 130);
+    background-color:var(--main-green-color);
     color: white;
 }
 
@@ -42,7 +42,7 @@
 .selected-image{
     font-size: small;
     font-weight: bold;
-    color: rgb(52, 161, 130);
+    color: var(--main-green-color); 
 }
 
 
@@ -76,7 +76,7 @@
   
         padding: .2rem;
         font-size: small;
-         background-color:rgb(52, 161, 130);
+         background-color:var(--main-green-color); 
          color: white;
        width: 2rem;
 }

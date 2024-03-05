@@ -3,5 +3,5 @@ import { PlantImage } from "./PlantImage";
 
 export class PlantInfo extends Plant{
     genusName: string | undefined; 
-    image: PlantImage
+    image: PlantImage | undefined; 
 }

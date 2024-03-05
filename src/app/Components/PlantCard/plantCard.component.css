@@ -7,7 +7,6 @@
 }
 
 .plant-card-details{
-    
     color: rgb(110, 110, 110);
 }
 
@@ -23,7 +22,8 @@
     font-size: small;
 }
 .card-title-link {
-    color: rgb(70, 70, 70);
+    /* color: rgb(70, 70, 70); */
+    color: var(--main-text-color);
     font-size: small;
     text-decoration: none;
 }

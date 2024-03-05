@@ -9,13 +9,7 @@
  
         /* box-shadow: 1px -1px 1px #CCC; */
 }
-/* .image-container{
-    background-image: linear-gradient(to bottom, #ddf1da 50%, white 0%);
-position: relative;
-    left: 0%;
-    top: -50px;
-    z-index: 1;
-} */
+
 .edit-img-btn{
     position: absolute;
     background-color: rgb(52, 161, 130);
@@ -55,8 +49,4 @@ position: relative;
     display: flex;
     justify-content: center;
     /* border: 1px solid black;  */
-}
-
-.image-container{
-    /* height:  200px; */
 }

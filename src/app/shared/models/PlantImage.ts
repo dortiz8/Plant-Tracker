@@ -6,4 +6,5 @@ export class PlantImage{
     type: string | undefined;
     size: number | undefined;
     base64: any | undefined;
+    url: string | undefined; 
 }

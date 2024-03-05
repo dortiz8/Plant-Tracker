@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { of } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { map, mergeMap, catchError, withLatestFrom, delay, tap } from 'rxjs/operators';
 import { PlantInfo } from '../../models/PlantInfo';
 import { PlantDateService } from '../../services/dates/PlantDateService';
@@ -30,24 +30,43 @@ export class PlantEffects {
                 }),
                 catchError((err) => of(new plantActions.LoadPlantFail(err)))
             ))));
-    editPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.EDIT_PLANT),
-        mergeMap(({payload}) => this.plantService.putPlantById(payload)
+    // editPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.EDIT_PLANT),
+    //     mergeMap(({payload}) => this.plantService.putPlantById(payload)
+    //         .pipe(
+    //             map(data => {
+    //                 console.log(data, ' from effects after put request')
+    //                 return new plantActions.EditPlantSuccess()
+    //             }),
+    //             catchError((err) => of(new plantActions.EditPlantFail(err)))
+    //         ))));
+    editPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.EDIT_PLANT), delay(1000),
+        mergeMap(({ payload }) => this.plantService.putPlantById(payload)
+            .pipe(
+                map(data => ({ payload, data }))
+            )),
+        mergeMap(({ payload, data }) => this.plantService.addNewPlantImage(payload, data)
             .pipe(
                 map(data => {
-                    console.log(data, ' from effects after put request')
-                    return new plantActions.EditPlantSuccess()
-                }),
-                catchError((err) => of(new plantActions.EditPlantFail(err)))
+                    return new plantActions.EditPlantSuccess(payload) // Add an effect to return to previous page
+                }), catchError((err) => of(new plantActions.EditPlantFail(err)))
             ))));
+
+    editPlantSuccess$ = createEffect(() => this.actions$.pipe(ofType(plantActions.EDIT_PLANT_SUCCESS),
+        tap((prop: plantActions.EditPlantSuccess) => this.router.navigate([`/plantDetails/${prop.payload.id}`]))),
+        { dispatch: false });
+    
     addPlant$ = createEffect(() => this.actions$.pipe(ofType(plantActions.ADD_PLANT), delay(1000),
         mergeMap(({ payload }) => this.plantService.addPlantbyId(payload)
             .pipe(
+                map(data => ({ payload, data }))
+            )), 
+        mergeMap(({ payload, data }) => this.plantService.addNewPlantImage(payload, data)
+            .pipe(
                 map(data => {
-                    console.log(data, ' from effects after put request')
                     return new plantActions.AddPlantSuccess(data.id)
-                }),
-                catchError((err) => of(new plantActions.EditPlantFail(err)))
+                }), catchError((err) => of(new plantActions.AddPlantFail(err)))
             ))));
+
     addPlantSuccess$ = createEffect(() => this.actions$.pipe(ofType(plantActions.ADD_PLANT_SUCCESS),
         tap((prop: plantActions.AddPlantSuccess) => this.router.navigate([`/plantDetails/${prop.payload}`]))),
         { dispatch: false });

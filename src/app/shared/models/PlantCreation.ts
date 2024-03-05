@@ -10,5 +10,5 @@ export class PlantCreation {
     dateFertilized: Date | undefined;
     waterInterval: number | undefined;
     fertilizeInterval: number | undefined;
-    image: PlantImage
+    image: any; 
 }

@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { PlantDelete } from 'src/app/shared/models/PlantDelete';
 import * as fromStore from '../../shared/store';
+import { PLANT_DETAILS } from 'src/app/shared/constants/routes';
 
 @Component({
     selector: 'plant-details',
@@ -40,7 +41,7 @@ export class PlantDetailsComponent {
 
     navigateToFragment(fragment: string): void{
         
-        this.router.navigateByUrl('/plantDetails/' + this.plantId + '#' + fragment); 
+        this.router.navigateByUrl(PLANT_DETAILS + this.plantId + '#' + fragment); 
     }
 
     cancelDelete() {

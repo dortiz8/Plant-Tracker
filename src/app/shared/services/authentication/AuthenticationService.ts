@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, empty, map, Observable, of, tap, throwError } from 'rxjs';
 import {JwtHelperService} from '@auth0/angular-jwt'; 
@@ -12,7 +12,7 @@ import { ERROR_MESSAGE, IS_AUTH, PUB_KEY, REFRESH_TOKEN, SSH_PUB_KEY, TOKEN, USE
 import { ObjectMapper } from '../utils/objectMapper';
 import * as forge from 'node-forge'; 
 import { FileHandler } from '../utils/filesParser';
-import { TOKEN_REFRESH_ROUTE } from '../../constants/routes';
+import { GOOGLE_AUTH_ROUTE, TOKEN_REFRESH_ROUTE } from '../../constants/routes';
 import { UserCreate, UserCreateLoad } from '../../models/UserCreate';
 import { GoogleAuthLoad } from '../../models/GoogleAuthLoad';
 import { CookiesService } from './CookiesService'
@@ -26,11 +26,13 @@ import { IAuthenticationService } from './Interfaces/IAuthenticationService';
 
 export class AuthenticationService implements IAuthenticationService {
     isLoggedIn = false; 
+    public headers_object: any
     
     constructor(private readonly httpClient: HttpClient, private jwtHelper: JwtHelperService, 
         private router: Router, private localStorageService: LocalStorageService, private cookiesService: CookiesService) {
 
     }
+    
 
     //#region Private Methods 
 
@@ -77,6 +79,12 @@ export class AuthenticationService implements IAuthenticationService {
     //#endregion
 
     //#region Public Methods 
+
+    getRequestHeaders(): any {
+        return {
+            headers: new HttpHeaders().set("Authorization", `Bearer ${this.getToken(TOKEN)}`)
+        };
+    }
     
     public isAuthenticated(): Observable<boolean>{
         // Check token expiration if expired try to renew. 
@@ -90,7 +98,8 @@ export class AuthenticationService implements IAuthenticationService {
         //var route = this.GetRouteForLoginProvider(userLoad); 
         var requestBody = {idToken: userLoad?.idToken, email: userLoad?.email, firstName: userLoad?.firstName, lastName: userLoad?.lastName, provider: userLoad?.provider}; 
         console.log(requestBody, ' request body')
-        var route = 'https://localhost:36322/api/authentication/googleAuthenticate'; 
+       // var route = 'https://localhost:36322/api/authentication/googleAuthenticate'; 
+        var route = `${GOOGLE_AUTH_ROUTE}`
         return this.httpClient.post<AuthResponseBody>(route, requestBody);
     }
 

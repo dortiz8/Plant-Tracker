@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { CookieService } from 'ngx-cookie-service';
 import { ICookiesService } from "./Interfaces/ICookiesService";
-
+import { environment } from "src/environments/environment";
 
 @Injectable({
     providedIn: 'root'
@@ -11,8 +11,8 @@ export class CookiesService implements ICookiesService  {
 
     }
     
-    private tokenKey = 'jwtToken';
-    private refreshTokenKey = 'jwtRefreshToken';
+    private tokenKey = environment.tokenKey;
+    private refreshTokenKey = environment.refreshTokenKey;
     
     
     GetToken(): string | null{

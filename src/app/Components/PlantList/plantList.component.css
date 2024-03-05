@@ -31,7 +31,7 @@
 }
 
 span{
-    color: rgb(70, 70, 70);
+    color: var(--main-text-color);
     font-size: small;
     font-weight: bold;
 }
@@ -41,6 +41,6 @@ span{
 }
 
 .searchArea .form-control{
-    color: rgb(70, 70, 70);
+    color: var(--main-text-color); 
     font-size: small;
 }

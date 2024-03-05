@@ -29,6 +29,12 @@ export const FERTILIZE_PLANT = '[Products] Fertilize Plant';
 export const FERTILIZE_PLANT_FAIL = '[Products] Fertilize Plant Fail';
 export const FERTILIZE_PLANT_SUCCESS = '[Products] Fertilize Plant Success';
 
+export const ADD_PLANT_IMAGE = '[Products] Add Plant Image';
+export const ADD_PLANT_IMAGE_FAIL = '[Products] Add Plant Image Fail';
+export const ADD_PLANT_IMAGE_SUCCESS = '[Products] Add Plant Image Success';
+
+
+
 export class LoadPlant implements Action {
     readonly type = LOAD_PLANT;
     constructor(public payload: PlantLoad) { }
@@ -63,6 +69,8 @@ export class EditPlantFail implements Action {
 } 
 export class EditPlantSuccess implements Action {
     readonly type = EDIT_PLANT_SUCCESS; 
+    constructor(public payload: PlantCreation) { } 
+
 } 
 export class ResetPlant implements Action {
     readonly type = RESET_PLANT; 
@@ -119,10 +127,28 @@ export class FertilizePlantSuccess implements Action {
     constructor(public payload: PlantInfo) { }
 }
 
+export class AddPlantImage implements Action {
+    readonly type = ADD_PLANT_IMAGE;
+    constructor(public payload: Plant) { }
+} 
+export class AddPlantImageFail implements Action {
+    readonly type = ADD_PLANT_IMAGE_FAIL;
+    // Will hold error 
+    constructor(public payload: any) { }
+}
+
+export class AddPlantImageSuccess implements Action {
+    readonly type = ADD_PLANT_IMAGE_SUCCESS;
+    // Will hold error 
+    constructor(public payload: any) { }
+}
+
+
 
 
 // Action Types
 export type PlantAction = LoadPlant | LoadPlantFail | 
     LoadPlantSuccess | LoadPlantInfoSuccess |EditPlant | EditExistingPlant | EditPlantFail | EditPlantSuccess | 
 ResetPlant | AddPlant | AddPlantFail | AddPlantSuccess | AddSamePlant | WaterPlant |
-WaterPlantFail | WaterPlantSuccess | FertilizePlant | FertilizePlantFail | FertilizePlantSuccess; 
+WaterPlantFail | WaterPlantSuccess | FertilizePlant | FertilizePlantFail | FertilizePlantSuccess |
+    AddPlantImage | AddPlantImageFail | AddPlantImageSuccess; 

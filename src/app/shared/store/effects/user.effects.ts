@@ -27,8 +27,9 @@ export class UserEffects{
         mergeMap(({ payload }) => this.authService.postAuthenticationCredentials(payload)
             .pipe(
                 map((user: AuthResponseBody) => {
-                    this.localStorageService.storeKeys(ObjectMapper.mapUserToLocalStorageObject(user));
                     this.authService.saveTokens(user.token, user.refreshToken); 
+                    this.authService.getRequestHeaders(); 
+                    this.localStorageService.storeKeys(ObjectMapper.mapUserToLocalStorageObject(user));
                     this.router.navigate([HOME_ROUTE]);
                     return new userActions.LoadUserSuccess(user)
                 }),

@@ -15,7 +15,7 @@ import { PlantCreation } from "src/app/shared/models/PlantCreation";
 import { FileHandler } from "src/app/shared/services/utils/filesParser";
 import { PlantImage } from "src/app/shared/models/PlantImage";
 import { PlantInfo } from "src/app/shared/models/PlantInfo";
-import { ADDING_SIMILAR_PLANT_MESSAGE, EDITING_PLANT_MESSAGE, NEW_PLANT_MESSAGE } from "src/app/shared/constants/plant";
+import { ADDING_SIMILAR_PLANT_MESSAGE, EDITING_PLANT_MESSAGE, NEW_PLANT_MESSAGE, PLANT_STATE } from "src/app/shared/constants/plant";
 import { EDIT_EXISTING_PLANT } from "../../shared/store";
 import { GENERIC_ERROR_MESSAGE } from "src/app/shared/constants/common";
 
@@ -34,8 +34,9 @@ export class PlantFormComponent {
     genusList: Genus[];  
     showError: boolean;
     userId: string | undefined; 
-    selectedImage: PlantImage; 
-    plantImage: string; 
+    selectedFile: any; 
+    selectedImage: PlantImage | undefined; 
+    plantImage: string | undefined; 
 
     loading$: Observable<boolean>; 
     loaded$: Observable<boolean>; 
@@ -66,48 +67,84 @@ export class PlantFormComponent {
     
     ngOnInit(){
       this.formSubscription = new Subscription(); 
-      this.addSamePlant$ = this.store.select(fromStore.getAddSamePlant); 
-      this.editExistingPlant$ = this.store.select(fromStore.getEditExistingPlant); 
+      this.setObservables(); 
+      this.determinePlantAction();
+      this.setHeaderMessage(); 
+      this.stagePlant(); 
+    }
+
+    setObservables(){
+      this.addSamePlant$ = this.store.select(fromStore.getAddSamePlant);
+      this.editExistingPlant$ = this.store.select(fromStore.getEditExistingPlant);
       this.editPlantSuccess$ = this.store.select(fromStore.getEditPlantSuccess);
-      this.userId =  localStorage.getItem('userId')?.toString(); 
+      this.userId = localStorage.getItem('userId')?.toString();
       this.loading$ = this.store.select(fromStore.getPlantLoading);
       this.loaded$ = this.store.select(fromStore.getPlantLoaded);
       this.errMessage$ = this.store.select(fromStore.getPlantErrMessage);
-      this.addPlantSuccess$ = this.store.select(fromStore.getAddPlantSuccess); 
+      this.addPlantSuccess$ = this.store.select(fromStore.getAddPlantSuccess);
       this.plant$ = this.store.select(fromStore.getPlant); 
-      this.mapPlant(); 
     }
 
     ngOnDestroy(){
       this.persistPlantData(false); 
+     // this.showError = false;
       this.formSubscription.unsubscribe(); 
     }
 
-    persistPlantData(persist: boolean){
-      console.log(' calling cleanup')
-      if (!persist) localStorage.removeItem('plantState')
-      else localStorage.setItem('plantState', JSON.stringify(this.plant)); 
+    persistPlantData(persist: boolean, plant: PlantInfo | null = null){
+      if (!persist){
+        localStorage.removeItem(PLANT_STATE)
+        localStorage.removeItem('isEditing'); 
+      }
+      else localStorage.setItem(PLANT_STATE, JSON.stringify(plant)); 
     }
 
-    mapPlant(){
-       var addSamePlantSubscription = this.addSamePlant$.subscribe(x =>{
-          this.isAddSamePlant = x
-       }); 
-       var editExistingPlantSubscription = this.editExistingPlant$.subscribe(x => {
-         this.isEditExistingPlant = x
-       }); 
-      console.log(this.isAddSamePlant, this.isEditExistingPlant, ' issame or edit')
-      if (this.isAddSamePlant || this.isEditExistingPlant){
-        this.setPlant()
-        this.addingMessage = this.isAddSamePlant ? ADDING_SIMILAR_PLANT_MESSAGE : EDITING_PLANT_MESSAGE;
+    stagePlant(){
+      if (this.isAddSamePlant || this.isEditExistingPlant) {
+        if (this.isEditExistingPlant && localStorage.getItem(PLANT_STATE) != null){
+          this.getPlantFromLocalStorage(true); 
+        }else{
+          this.setPlant(); 
+        }
       }else{
         this.getPlantFromLocalStorage(); 
       }
+
+      this.mapPlant(); 
+    }
+
+    determinePlantAction(){
+      var addSamePlantSubscription = this.addSamePlant$.subscribe(x => {
+        this.isAddSamePlant = x
+      });
+
+      var editExistingPlantSubscription 
+
+      var isEdit = localStorage.getItem('isEditing');
+      if(isEdit != null){
+        this.isEditExistingPlant =  isEdit == 'true' ? true : false; 
+      }else {
+        editExistingPlantSubscription = this.editExistingPlant$.subscribe(x => {
+          this.isEditExistingPlant = x
+          localStorage.setItem('isEditing', this.isEditExistingPlant.toString());
+        });
+      }
+   
+      this.formSubscription.add(addSamePlantSubscription);
+      this.formSubscription.add(editExistingPlantSubscription); 
+    }
+
+    setHeaderMessage(){
+      if (this.isAddSamePlant || this.isEditExistingPlant) {
+        this.addingMessage = this.isAddSamePlant ? ADDING_SIMILAR_PLANT_MESSAGE : EDITING_PLANT_MESSAGE;
+        return; 
+      } 
+      this.addingMessage = NEW_PLANT_MESSAGE;
+    }
+
+    mapPlant(){
       this.mapPlantEditFormGroup();
       this.getGenusMenu();
-
-      this.formSubscription.add(addSamePlantSubscription); 
-      this.formSubscription.add(editExistingPlantSubscription); 
     }
 
     mapPlantEditFormGroup() {
@@ -124,7 +161,7 @@ export class PlantFormComponent {
       })
       this.editForm.controls['genusId'].setValue(this.plant.genusId, { onlySelf: true }); 
       this.selectedImage = this.plant.image; 
-      this.plantImage = this.plant.image?.base64
+      this.plantImage = this.plant?.image?.url
     }
 
     getGenusMenu() {
@@ -152,7 +189,7 @@ export class PlantFormComponent {
       this.location.back(); 
     }
     clearForm(){
-      localStorage.removeItem('plantState'); 
+      localStorage.removeItem(PLANT_STATE); 
       this.store.dispatch(new fromStore.ResetPlant());
       window.location.reload(); 
     }
@@ -168,15 +205,13 @@ export class PlantFormComponent {
         }
       })
       if(!this.isEditExistingPlant){
-        var image: PlantImage = {...this.selectedImage, id: undefined}; 
-        var plant: PlantCreation = { ...editFormValue, userId: this.userId, id: undefined, image: image}; 
-        console.log(plant, " is new");
+        //var image: PlantImage = {...this.selectedImage, id: undefined}; 
+        var plant: PlantCreation = { ...editFormValue, userId: this.userId, id: undefined, image: this.selectedFile != null ? this.selectedFile : this.plant.image}; 
        
         this.store.dispatch(new fromStore.AddPlant(plant));
       }
       else{
-        var plant: PlantCreation = { ...editFormValue, userId: this.userId, id: this.plant.id, image: this.selectedImage }
-        console.log(plant, " is edit");
+        var plant: PlantCreation = { ...editFormValue, userId: this.userId, id: this.plant.id, image: this.selectedFile != null ? this.selectedFile : this.plant.image }
         this.store.dispatch(new fromStore.EditPlant(plant));
       }
 
@@ -197,29 +232,52 @@ export class PlantFormComponent {
     })
   }
 
+  setFileChange(event: any){
+    this.selectedFile = event.target.files[0];
+    var fileObj = FileHandler.setFileSelection(this.selectedFile, this.plant.userId, this.plant.id); 
+    
+    fileObj.then((res) => {
+      this.selectedImage = res; 
+      this.plantImage = this.selectedImage.base64
+    });
+    fileObj.catch((err) => {
+      // Implement
+      this.showGenericError(GENERIC_ERROR_MESSAGE)
+    })
+    //var targetFile = event.target.files[0]; 
+    //
+    //const formData: FormData = new FormData(); 
+    //formData.append(targetFile.name, targetFile)
+    //
+    //this.selectedFile = formData; 
+  }
+
   setPlant(){
     var setPlantSubscription = this.plant$.subscribe({
       next: (plant)=>{
         this.plant = plant;
-        this.persistPlantData(true);
       }, 
       error: (err: HttpErrorResponse)=>{
         this.showGenericError(GENERIC_ERROR_MESSAGE)
       }
     }); 
+    
+   
+    if(this.plant != null) this.persistPlantData(true, this.plant);
+    
     this.formSubscription.add(setPlantSubscription);
   }
 
-  getPlantFromLocalStorage(){
+  getPlantFromLocalStorage(isEditing: boolean = false){
     
-    var localStorageSavedPlant = localStorage.getItem('plantState');
+    var localStorageSavedPlant = localStorage.getItem(PLANT_STATE);
 
     if (localStorageSavedPlant != null) {
       this.plant = JSON.parse(localStorageSavedPlant)
-    } else {
-      this.plant = new PlantInfo();
+      return; 
     }
-    this.addingMessage = NEW_PLANT_MESSAGE;
+
+    this.plant = new PlantInfo();
   }
 
   showGenericError(errorMessage: string){
